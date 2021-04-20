@@ -12,12 +12,17 @@ import {
 
 class Header extends Component {
     getSubmitterNavItems() {
-        return (
-            <Fragment>
-                <NavItem className='left'>Units/Budgets/People</NavItem>
-                <NavItem className='left'>Search Orders</NavItem>
-            </Fragment>
-        );
+        const { login, role } = this.props;
+        if (login) {
+            if (role === 'system administrator') {
+                return (
+                    <Fragment>
+                        <NavItem className='left'>Units/Budgets/People</NavItem>
+                        <NavItem className='left'>Search Orders</NavItem>
+                    </Fragment>
+                );
+            }
+        }
     }
     
     render() {
@@ -45,6 +50,7 @@ class Header extends Component {
 const mapStateToProps = (state) => {
     return {
         login: state.getIn(['login', 'login']),
+        role: state.getIn(['login', 'user', 'role']),
     }
 }
 

@@ -6,6 +6,7 @@ import { GlobalIcon } from './statics/iconfont/iconfont';
 import { Globalstyle } from './style';
 import Header from './common/header';
 import Login from './common/login';
+import SystemAdminMainpage from './pages/systemadmin/mainpage';
 
 class App extends Component {
   render() {
@@ -15,9 +16,11 @@ class App extends Component {
           <Globalstyle />
           <GlobalIcon/>
           <BrowserRouter>
+            {/* common header */}
             <Header />
             <Route path='/login' exact component={Login}></Route>
-            
+            {/* system administrator */}
+            <Route path='/system-administrator/mainpage' exact component={SystemAdminMainpage}></Route>
           </BrowserRouter>
         </div>
       </Provider>

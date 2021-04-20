@@ -38,7 +38,10 @@ class Login extends Component {
             return this.getLoginBox();
         } else {
             if (role === '') return this.getLoginBox();
-            else if (role === 'system administrator') return <Redirect to='/system-administrator' />
+            else if (role === 'system administrator') {
+                console.log('here')
+                return <Redirect to='/system-administrator/mainpage' />
+            }
             else return <Redirect to='/' />
         }
     }
@@ -46,7 +49,8 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        
+        login: state.getIn(['login', 'login']),
+        role: state.getIn(['login', 'user', 'role']),
     }
 }
 

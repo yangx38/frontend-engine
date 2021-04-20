@@ -27,14 +27,15 @@ export const Nav = styled.div`
     margin: 0 auto;
 `
 export const NavItem = styled.div`
-    line-height: 56px;
+    line-height: 54px;
     padding: 0 12px;
     margin: 0 5px;
     cursor: pointer;
-    font-size: 17px;
+    font-size: 16px;
     color: #626262;
     background: #f6f5ff;
     border-radius: 5px;
+    border-bottom: 2px solid #F0F0F0;
     &.left {
         float: left;
     }
