@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
 import store from './store';
-import Header from './common/header';
-import Login from './common/login';
 import { GlobalIcon } from './statics/iconfont/iconfont';
 import { Globalstyle } from './style';
+import Header from './common/header';
+import Login from './common/login';
 
 class App extends Component {
   render() {
@@ -17,7 +17,7 @@ class App extends Component {
           <BrowserRouter>
             {/* common header */}
             <Header />
-            {/* <Route path='/login' exact component={Login}></Route> */}
+            <Route path='/login' exact component={Login}></Route>
             
           </BrowserRouter>
         </div>
