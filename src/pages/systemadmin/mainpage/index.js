@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Table, Card, Button, Message, Form } from 'semantic-ui-react';
 
 import {
     // ContentWrapper,
