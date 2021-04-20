@@ -7,6 +7,7 @@ import { Globalstyle } from './style';
 import Header from './common/header';
 import Login from './common/login';
 import SystemAdminMainpage from './pages/systemadmin/mainpage';
+import SystemAdminUnitsBudgetsPeople from './pages/systemadmin/unitsbudgetspeople';
 
 class App extends Component {
   render() {
@@ -20,7 +21,8 @@ class App extends Component {
             <Header />
             <Route path='/login' exact component={Login}></Route>
             {/* system administrator */}
-            <Route path='/system-administrator/mainpage' exact component={SystemAdminMainpage}></Route>
+            <Route path='/systemadministrator/mainpage' exact component={SystemAdminMainpage}></Route>
+            <Route path='/systemadministrator/unitsbudgetspeople' exact component={SystemAdminUnitsBudgetsPeople}></Route>
           </BrowserRouter>
         </div>
       </Provider>

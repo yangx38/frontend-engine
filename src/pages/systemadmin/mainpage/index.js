@@ -15,17 +15,21 @@ import {
 
 class SystemAdminMainpage extends Component {
     render() {
-        return (
-            <Fragment>
-                SystemAdminMainpageSystemAdminMainpageSystemAdminMainpageSystemAdminMainpage
-            </Fragment>
-        );
+        const { login, role } = this.props;
+        if (login && role === 'system administrator') {
+            return (
+                <Fragment>
+                    SystemAdminMainpageSystemAdminMainpageSystemAdminMainpageSystemAdminMainpage
+                </Fragment>
+            );
+        } else return <Redirect to='/' />
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        
+        login: state.getIn(['login', 'login']),
+        role: state.getIn(['login', 'user', 'role']),
     }
 }
 

@@ -40,7 +40,7 @@ class Login extends Component {
             if (role === '') return this.getLoginBox();
             else if (role === 'system administrator') {
                 console.log('here')
-                return <Redirect to='/system-administrator/mainpage' />
+                return <Redirect to='/systemadministrator/mainpage' />
             }
             else return <Redirect to='/' />
         }

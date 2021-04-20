@@ -17,7 +17,9 @@ class Header extends Component {
             if (role === 'system administrator') {
                 return (
                     <Fragment>
-                        <NavItem className='left'>Units/Budgets/People</NavItem>
+                        <Link to={'/systemadministrator/unitsbudgetspeople'}>
+                            <NavItem className='left'>Units/Budgets/People</NavItem>
+                        </Link>
                         <NavItem className='left'>Search Orders</NavItem>
                     </Fragment>
                 );

@@ -42,6 +42,10 @@ export const NavItem = styled.div`
     &.right {
         float: right;
     }
+    &.login {
+        width: 100px !important;
+        text-align: center !important;
+    }
     &:hover {
         background-color: #d1ccff;
     }
