@@ -15,7 +15,6 @@ class App extends Component {
           <Globalstyle />
           <GlobalIcon/>
           <BrowserRouter>
-            {/* common header */}
             <Header />
             <Route path='/login' exact component={Login}></Route>
             

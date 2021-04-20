@@ -11,8 +11,7 @@ import {
 } from './style';
 
 class Login extends Component {
-
-    render() {
+    getLoginBox() {
         // https://dev.to/sivaneshs/add-google-login-to-your-react-apps-in-10-mins-4del
         const clientId = '767966548929-ghusim71l8qt3jv5ub8bhomtfg8t7787.apps.googleusercontent.com';
         return (
@@ -32,6 +31,17 @@ class Login extends Component {
             </LoginWrapper>
         );
     }
+
+    render() {
+        const { login, role } = this.props;
+        if (!login) {
+            return this.getLoginBox();
+        } else {
+            if (role === '') return this.getLoginBox();
+            else if (role === 'system administrator') return <Redirect to='/system-administrator' />
+            else return <Redirect to='/' />
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -45,7 +55,9 @@ const mapDispatchToProps = (dispatch) => {
         onSuccess(res) {
             console.log('Login, onSuccess, res.profileObj', res.profileObj);
             const profile = res.profileObj;
+            const netId = profile.email.split('@')[0];
             dispatch(actionCreators.changeLogin(profile));
+            dispatch(actionCreators.initializeUserData(netId));
         },
         onFailure(error) {
             console.log('Login, onFailure, error',error);
