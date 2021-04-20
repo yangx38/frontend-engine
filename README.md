@@ -1,5 +1,5 @@
 -- API 所有用的
-http://localhost:8080/api/checkWhetherUserIsSystemAdministrator/${netId}
+http://localhost:8080/api/login/checkWhetherUserIsSystemAdministrator/${netId}
 
 
 -- semantic UI 不知道用不用

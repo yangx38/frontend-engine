@@ -39,7 +39,7 @@ export const initializeUserData = (netId) => {
     }
 }
 const checkWhetherUserIsSystemAdministrator = (netId) => {
-    return axios.get(`http://localhost:8080/api/checkWhetherUserIsSystemAdministrator/${netId}`)
+    return axios.get(`http://localhost:8080/api/login/checkWhetherUserIsSystemAdministrator/${netId}`)
         .then(res => {
             return res.data;
         })

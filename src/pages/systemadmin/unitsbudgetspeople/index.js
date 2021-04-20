@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
+import { Table } from 'antd';
 
 import {
     HomeWrapper,
@@ -11,12 +12,26 @@ import {
 } from './style';
 
 class SystemAdminUnitsBudgetsPeople extends Component {
+    componentDidMount() {
+        this.props.getAllUnitSubunit();
+    }
+
     render() {
-        const { login, role } = this.props;
+        const { login, role, unitSubunits } = this.props;
+        const unitSubunitTableColumns = [
+            {
+                title: 'Units & Subunits', 
+                dataIndex: 'name',
+                key: 'name'
+            }
+        ];
+        const unitSubunitsJS = Immutable.List(unitSubunits).toJS();
         if (login && role === 'system administrator') {
             return (
                 <HomeWrapper>
-                    <HomeLeft>left</HomeLeft>
+                    <HomeLeft>
+                        <Table columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} />
+                    </HomeLeft>
                     <HomeRight>right</HomeRight>
                 </HomeWrapper>
             );
@@ -28,12 +43,15 @@ const mapStateToProps = (state) => {
     return {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
+        unitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'unitsubunit']),
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-       
+        getAllUnitSubunit() {
+            dispatch(actionCreators.getAllUnitSubunit());
+        },
     }
 }
 

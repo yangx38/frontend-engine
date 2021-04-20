@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { actionCreators as loginActionCreators } from '../login/store';
+import { actionCreators as sysmtemAdminUnitsBudgetsPeopleActionCreators } from '../../pages/systemadmin/unitsbudgetspeople/store';
 
 import {
     HeaderWrapper,
@@ -60,6 +61,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         logout() {
             dispatch(loginActionCreators.logout());
+            dispatch(sysmtemAdminUnitsBudgetsPeopleActionCreators.logout());
         }, 
     }
 }
