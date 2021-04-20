@@ -1,4 +1,10 @@
+th {
+    font-weight: bold !important;
+}
 .importantText {
     font-weight: bold;
     text-decoration: underline;
+}
+.treeStyleTable {
+    cursor: default !important;
 }

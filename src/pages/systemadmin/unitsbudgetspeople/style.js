@@ -7,12 +7,11 @@ export const HomeWrapper = styled.div`
 `
 export const HomeLeft = styled.div`
     float: left;
-    padding-top: 30px;
+    padding-top: 10px;
     width: 350px;
 `
 export const HomeRight = styled.div`
-    padding-top: 30px;
+    padding-top: 19px;
     width: 625px;
     float: right;
-    background: yellow;
 `
