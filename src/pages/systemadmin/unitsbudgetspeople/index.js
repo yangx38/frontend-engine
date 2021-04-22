@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Table, Tabs } from 'antd';
+import { Table, Tabs, Button, Modal, Input } from 'antd';
 
 import {
     HomeWrapper,
@@ -13,21 +13,32 @@ import {
 
 class SystemAdminUnitsBudgetsPeople extends Component {
     componentDidMount() {
-        this.props.getAllUnitSubunit();
+        const { login, getAllUnitSubunit } = this.props;
+        if (login) {
+            getAllUnitSubunit();
+        }
     }
 
+    // Apr 22: FOCUS HERE
     getUnitSubunitTable() {
-        const { unitSubunits } = this.props;
+        const { unitSubunits, showModal, isModalVisible, handleOk, handleCancel } = this.props;
         const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name' }];
         const unitSubunitsJS = Immutable.List(unitSubunits).toJS();
         return (
-            <Table className='treeStyleTable'columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
-                onRow={(record, rowIndex) => ({
-                        onClick: event => {
-                            console.log(record)
-                            console.log(rowIndex)
-                        }, // click row
-                })} />
+            <Fragment>
+                <Table className='treeStyleTable'columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
+                    onRow={(record, rowIndex) => ({
+                                onClick: event => {
+                                    console.log(record)
+                                    console.log(rowIndex)
+                                }, // click row
+                            })} />
+                <Button className='unitSubunitBtn'type='primary' onClick={showModal}>Edit</Button>
+                <Modal title='Basic Modal' visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                    <p>Some contents...</p>
+                    <Input placeholder="Basic usage" />
+                </Modal>
+            </Fragment>
         );
     }
 
@@ -77,6 +88,7 @@ const mapStateToProps = (state) => {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
         unitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'unitsubunit']),
+        isModalVisible: state.getIn(['systemadmin_unitsbudgetspeople', 'isModalVisible']),
     }
 }
 
@@ -87,6 +99,15 @@ const mapDispatchToProps = (dispatch) => {
         },
         changeTabs() {
             console.log('a')
+        },
+        showModal() {
+            dispatch(actionCreators.setIsModalVisible(true));
+        },
+        handleOk() {
+            dispatch(actionCreators.setIsModalVisible(false));
+        },
+        handleCancel() {
+            dispatch(actionCreators.setIsModalVisible(false));
         }
     }
 }

@@ -8,3 +8,6 @@ th {
 .treeStyleTable {
     cursor: default !important;
 }
+.unitSubunitBtn {
+    float: right !important;
+}

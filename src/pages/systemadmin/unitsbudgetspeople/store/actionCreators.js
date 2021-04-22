@@ -3,9 +3,14 @@ import { fromJS } from 'immutable';
 
 export const GET_ALL_UNIT_SUBUNIT = 'pages/unitsbudgetspeople/GET_ALL_UNIT_SUBUNIT';
 export const CHANGE_TO_LOGOUT = 'pages/unitsbudgetspeople/CHANGE_TO_LOGOUT';
+export const CHANGE_IS_MODAL_VISIBLE = 'pages/unitsbudgetspeople/CHANGE_IS_MODAL_VISIBLE';
 
 export const logout = () => ({
     type: CHANGE_TO_LOGOUT
+})
+export const setIsModalVisible = (visible) => ({
+    type: CHANGE_IS_MODAL_VISIBLE,
+    visible
 })
 const getAllUnitSubunitAction = (data) => ({
     type: GET_ALL_UNIT_SUBUNIT,
