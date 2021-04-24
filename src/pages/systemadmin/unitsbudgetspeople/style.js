@@ -15,3 +15,33 @@ export const HomeRight = styled.div`
     width: 625px;
     float: right;
 `
+export const ModalWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+`
+export const AddMoalBox = styled.div`
+    background-color: #fff;
+    width: 500px;
+    height: 430px;
+    margin: 80px auto;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+`
+export const ModalTitle = styled.div`
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    font-weight: bold;
+    text-align: center;
+`
