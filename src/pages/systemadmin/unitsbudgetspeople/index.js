@@ -24,7 +24,7 @@ class SystemAdminUnitsBudgetsPeople extends Component {
 
     // Apr 22: FOCUS HERE
     getUnitSubunitTable() {
-        const { unitSubunits, showModal, isModalVisible, handleOk, handleCancel, showAddModal } = this.props;
+        const { unitSubunits, showModal, editModalVisible, handleOk, handleCancel, showAddModal } = this.props;
         const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name' }];
         const unitSubunitsJS = Immutable.List(unitSubunits).toJS();
         return (
@@ -36,9 +36,9 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                                     console.log(rowIndex)
                                 }, // click row
                             })} />
-                <Button onClick={showAddModal}> Add </Button> 
-                <Button className='unitSubunitBtn'type='primary' onClick={showModal}>Edit</Button>
-                <Modal title='Basic Modal' visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <Button type='primary' onClick={showAddModal}> Add </Button> 
+                <Button className='unitSubunitBtn'type='primary' onClick={showModal} disabled>Edit</Button>
+                <Modal title='Basic Modal' visible={editModalVisible} onOk={handleOk} onCancel={handleCancel}>
                     <p>Some contents...</p>
                     <Input placeholder="Basic usage" />
                 </Modal>
@@ -73,23 +73,8 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     }
 
     render() {
-        const { login, role, addMoal, changeTabs } = this.props;
+        const { login, role, addMoal } = this.props;
         const { TabPane } = Tabs;
-        
-        const budgetTableColumns = [ { title: "Budget Number", dataIndex: "number"}, { title: "Budget Name", dataIndex: "name" },
-            { title: "Subunit", dataIndex: "subunit" }, { title: "Expires", dataIndex: "expires" }, 
-          ];
-          
-        const data = [];
-        for (let i = 0; i < 100; i++) {
-            data.push({
-                key: i,
-                number: `Budget Number ${i}`,
-                name: `Budget Number ${i}`,
-                subunit: 32,
-                expires: `02/${i}`
-            });
-        }
         
         if (login && role === 'system administrator') {
             return (
@@ -100,9 +85,9 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                             {this.getUnitSubunitTable()}
                         </HomeLeft>
                         <HomeRight>
-                            <Tabs defaultActiveKey="1" onChange={() => changeTabs()}>
+                            <Tabs defaultActiveKey="1">
                                 <TabPane tab="Budgets" key="1">
-                                    <Table columns={budgetTableColumns} dataSource={data} />
+                                    Content of Tab Pane 1
                                 </TabPane>
                                 <TabPane tab="People" key="2">
                                     Content of Tab Pane 2
@@ -131,21 +116,10 @@ const mapDispatchToProps = (dispatch) => {
         getAllUnitSubunit() {
             dispatch(actionCreators.getAllUnitSubunit());
         },
-        changeTabs() {
-            console.log('a')
-        },
-        showModal() {
-            dispatch(actionCreators.setIsModalVisible(true));
-        },
-        handleOk() {
-            dispatch(actionCreators.setIsModalVisible(false));
-        },
-        handleCancel() {
-            dispatch(actionCreators.setIsModalVisible(false));
-        },
         showAddModal() {
             dispatch(actionCreators.showAddModal(true));
         },
+        // getAddModal()
         addModalCancel() {
             dispatch(actionCreators.showAddModal(false));
         }

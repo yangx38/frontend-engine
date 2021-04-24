@@ -3,7 +3,6 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
     unitsubunit: [],
-    isModalVisible: false,
     addMoal: false,
 });
 
@@ -11,14 +10,11 @@ const reducer = (state = defaultState, action) => {
     switch (action.type) {
         case constants.GET_ALL_UNIT_SUBUNIT:
             return state.set('unitsubunit', action.data);
-        case constants.CHANGE_IS_MODAL_VISIBLE:
-            return state.set('isModalVisible', action.visible);
         case constants.SHOW_ADD_MODAL: 
             return state.set('addMoal', action.visible);
         case constants.CHANGE_TO_LOGOUT: 
             return state.merge({
                 unitsubunit: [],
-                isModalVisible: false,
                 addMoal: false,
             })
         default:
