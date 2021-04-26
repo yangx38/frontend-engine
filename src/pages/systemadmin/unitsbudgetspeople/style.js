@@ -44,4 +44,5 @@ export const ModalTitle = styled.div`
     line-height: 50px;
     font-weight: bold;
     text-align: center;
+    padding-left: 40px;
 `

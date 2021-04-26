@@ -1,5 +1,6 @@
 -- API 所有用的
-http://localhost:8080/api/login/checkWhetherUserIsSystemAdministrator/${netId}
+axios.get(`http://localhost:8080/api/login/checkWhetherUserIsSystemAdministrator/${netId}`)
+axios.get(`http://localhost:8080/api/systemadmin/getAllUnitSubunit`)
 
 
 -- semantic UI 不知道用不用

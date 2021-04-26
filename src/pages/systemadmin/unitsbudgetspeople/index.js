@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Table, Tabs, Button, Modal, Input, Form } from 'antd';
+import { Table, Tabs, Button, Input, Form, Tag } from 'antd';
 
 import {
     HomeWrapper,
@@ -64,10 +64,25 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     }
 
     getEditModal() {
-        const { editModalCancel } = this.props;
+        const { editModalCancel, selectedUnit } = this.props;
+        const tags= ['Tag1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9'];
+        const layout = { labelCol: { span: 8 }, wrapperCol: { span: 16 }, };
+        const tailLayout = { wrapperCol: { offset: 8, span: 16, },};
         return (
             <ModalWrapper>
                 <AddMoalBox>
+                    <ModalTitle>Modify Unit - {selectedUnit}</ModalTitle>
+                    {
+                        tags.map((tag, index) => {
+                            return (
+                                <div><Tag key={tag}> {tag} </Tag></div>
+                            );
+                        })
+                    }
+                    <Input /> 
+                    <Button>Add</Button>
+                    <Button>Update</Button>
+                    <Button>Remove</Button>
                     <Button onClick={editModalCancel}>Cancel</Button>
                 </AddMoalBox>
             </ModalWrapper>
@@ -112,6 +127,7 @@ const mapStateToProps = (state) => {
         isModalVisible: state.getIn(['systemadmin_unitsbudgetspeople', 'isModalVisible']),
         addMoal: state.getIn(['systemadmin_unitsbudgetspeople', 'addMoal']),
         editModal: state.getIn(['systemadmin_unitsbudgetspeople', 'editModal']),
+        selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'selectedUnit']),
     }
 }
 
