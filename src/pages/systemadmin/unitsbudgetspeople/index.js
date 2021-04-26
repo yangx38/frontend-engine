@@ -22,26 +22,17 @@ class SystemAdminUnitsBudgetsPeople extends Component {
         }
     }
 
-    // Apr 22: FOCUS HERE
+    // Apr 24: FOCUS HERE
     getUnitSubunitTable() {
-        const { unitSubunits, showModal, editModalVisible, handleOk, handleCancel, showAddModal } = this.props;
+        const { unitSubunits, showAddModal, showEditModal, changeSelectedUnitSubunit } = this.props;
         const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name' }];
         const unitSubunitsJS = Immutable.List(unitSubunits).toJS();
         return (
             <Fragment>
-                <Table className='treeStyleTable'columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
-                    onRow={(record, rowIndex) => ({
-                                onClick: event => {
-                                    console.log(record)
-                                    console.log(rowIndex)
-                                }, // click row
-                            })} />
+                <Table className='treeStyleTable' columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
+                    onRow={(record, rowIndex) => ({ onClick: event => changeSelectedUnitSubunit(record, rowIndex), })} />
                 <Button type='primary' onClick={showAddModal}> Add </Button> 
-                <Button className='unitSubunitBtn'type='primary' onClick={showModal} disabled>Edit</Button>
-                <Modal title='Basic Modal' visible={editModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                    <p>Some contents...</p>
-                    <Input placeholder="Basic usage" />
-                </Modal>
+                <Button type='primary' onClick={showEditModal} className='unitSubunitBtn'>Edit</Button>
             </Fragment>
         );
     }
@@ -62,24 +53,36 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                         <Form.Item label="Subunit Name" name="subunitname">
                             <TextArea rows={10} placeholder='TODO'/>
                         </Form.Item>
-                    <Form.Item {...tailLayout}>
-                        <Button className='unitSubunitBtn' type='primary' htmlType="submit">Submit</Button>
-                        <Button onClick={addModalCancel}>Cancel</Button>
-                    </Form.Item>
+                        <Form.Item {...tailLayout}>
+                            <Button className='unitSubunitBtn' type='primary' htmlType="submit">Submit</Button>
+                            <Button onClick={addModalCancel}>Cancel</Button>
+                        </Form.Item>
                     </Form> 
                 </AddMoalBox>
             </ModalWrapper>
         );
     }
 
+    getEditModal() {
+        const { editModalCancel } = this.props;
+        return (
+            <ModalWrapper>
+                <AddMoalBox>
+                    <Button onClick={editModalCancel}>Cancel</Button>
+                </AddMoalBox>
+            </ModalWrapper>
+        );
+    }
+
     render() {
-        const { login, role, addMoal } = this.props;
+        const { login, role, addMoal, editModal } = this.props;
         const { TabPane } = Tabs;
         
         if (login && role === 'system administrator') {
             return (
                 <Fragment>
                     { addMoal ? this.getAddModal() : null }
+                    { editModal ? this.getEditModal() : null }
                     <HomeWrapper>
                         <HomeLeft>
                             {this.getUnitSubunitTable()}
@@ -108,20 +111,37 @@ const mapStateToProps = (state) => {
         unitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'unitsubunit']),
         isModalVisible: state.getIn(['systemadmin_unitsbudgetspeople', 'isModalVisible']),
         addMoal: state.getIn(['systemadmin_unitsbudgetspeople', 'addMoal']),
+        editModal: state.getIn(['systemadmin_unitsbudgetspeople', 'editModal']),
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        // componentDidMount()
         getAllUnitSubunit() {
             dispatch(actionCreators.getAllUnitSubunit());
-        },
-        showAddModal() {
-            dispatch(actionCreators.showAddModal(true));
         },
         // getAddModal()
         addModalCancel() {
             dispatch(actionCreators.showAddModal(false));
+        },
+        // getEditModal()
+        editModalCancel() {
+            dispatch(actionCreators.showEditModal(false));
+        },
+        // getUnitSubunitTable()
+        showAddModal() {
+            dispatch(actionCreators.showAddModal(true));
+        },
+        showEditModal() {
+            dispatch(actionCreators.showEditModal(true));
+        },
+        changeSelectedUnitSubunit(record, rowIndex) {
+            if (record.children === undefined) {
+                dispatch(actionCreators.changeSelectedSubunit(record.key));
+            } else {
+                dispatch(actionCreators.changeSelectedUnit(record.key));
+            }
         }
     }
 }

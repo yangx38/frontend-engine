@@ -35,7 +35,7 @@ export const AddMoalBox = styled.div`
     box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
     padding-top: 10px;
     padding-bottom: 20px;
-    padding-left: 40px;
+    padding-left: 0;
     padding-right: 40px;
 `
 export const ModalTitle = styled.div`
