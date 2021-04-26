@@ -6,6 +6,8 @@ const defaultState = fromJS({
     addMoal: false,
     editModal: false,
     selectedUnit: '',
+    modifyUnitSubunits: [],
+    modifyUnitSubunit: '',
     selectedSubunit: '',
 });
 
@@ -13,6 +15,10 @@ const reducer = (state = defaultState, action) => {
     switch (action.type) {
         case constants.GET_ALL_UNIT_SUBUNIT:
             return state.set('unitsubunit', action.data);
+        case constants.GET_ALL_SUBUNIT:
+            return state.set('modifyUnitSubunits', action.data);
+        case constants.CHANGE_MODIFY_UNIT_SUBUNIT:
+            return state.set('modifyUnitSubunit', action.subunitname);
         case constants.SHOW_ADD_MODAL:
             return state.set('addMoal', action.visible);
         case constants.SHOW_EDIT_MODAL:
@@ -33,6 +39,8 @@ const reducer = (state = defaultState, action) => {
                 addMoal: false,
                 editModal: false,
                 selectedUnit: '',
+                modifyUnitSubunits: [],
+                modifyUnitSubunit: '',
                 selectedSubunit: '',
             })
         default:

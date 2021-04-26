@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
 import { Table, Tabs, Button, Input, Form, Tag } from 'antd';
+import { Input as SemanticInput } from 'semantic-ui-react';
+
 
 import {
     HomeWrapper,
@@ -24,15 +26,18 @@ class SystemAdminUnitsBudgetsPeople extends Component {
 
     // Apr 24: FOCUS HERE
     getUnitSubunitTable() {
-        const { unitSubunits, showAddModal, showEditModal, changeSelectedUnitSubunit } = this.props;
+        const { unitSubunits, showAddModal, showEditModal, changeSelectedUnitSubunit, selectedUnit } = this.props;
         const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name' }];
         const unitSubunitsJS = Immutable.List(unitSubunits).toJS();
         return (
             <Fragment>
                 <Table className='treeStyleTable' columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
+                    rowSelection={{ type: 'radio', }}
                     onRow={(record, rowIndex) => ({ onClick: event => changeSelectedUnitSubunit(record, rowIndex), })} />
-                <Button type='primary' onClick={showAddModal}> Add </Button> 
-                <Button type='primary' onClick={showEditModal} className='unitSubunitBtn'>Edit</Button>
+                <Button type='primary' onClick={showAddModal}>Add Unit</Button> 
+                { 
+                    selectedUnit ? <Button type='primary' onClick={() => showEditModal(selectedUnit)} className='unitSubunitBtn'>Edit Unit</Button> : <Button disabled className='unitSubunitBtn'> Edit Unit </Button> 
+                }
             </Fragment>
         );
     }
@@ -64,23 +69,23 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     }
 
     getEditModal() {
-        const { editModalCancel, selectedUnit } = this.props;
-        const tags= ['Tag1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9'];
-        const layout = { labelCol: { span: 8 }, wrapperCol: { span: 16 }, };
-        const tailLayout = { wrapperCol: { offset: 8, span: 16, },};
+        const { editModalCancel, selectedUnit, modifyUnitSubunits, modifyUnitSubunit, changeModifyUnitSubunit, appendSubunit, } = this.props;
+        const modifyUnitSubunitsJS = Immutable.List(modifyUnitSubunits).toJS();
         return (
             <ModalWrapper>
                 <AddMoalBox>
                     <ModalTitle>Modify Unit - {selectedUnit}</ModalTitle>
                     {
-                        tags.map((tag, index) => {
+                        modifyUnitSubunitsJS.map((subunit, index) => {
                             return (
-                                <div><Tag key={tag}> {tag} </Tag></div>
+                                <div>
+                                    <Tag key={subunit.name} onClick={() => changeModifyUnitSubunit(subunit.name)}> {subunit.name} </Tag>
+                                </div>
                             );
                         })
                     }
-                    <Input /> 
-                    <Button>Add</Button>
+                    <SemanticInput value={modifyUnitSubunit} onChange={(e, data) => changeModifyUnitSubunit(data.value)}/>
+                    <Button onClick={() => appendSubunit(modifyUnitSubunitsJS, modifyUnitSubunit, selectedUnit)}>Add</Button>
                     <Button>Update</Button>
                     <Button>Remove</Button>
                     <Button onClick={editModalCancel}>Cancel</Button>
@@ -128,6 +133,8 @@ const mapStateToProps = (state) => {
         addMoal: state.getIn(['systemadmin_unitsbudgetspeople', 'addMoal']),
         editModal: state.getIn(['systemadmin_unitsbudgetspeople', 'editModal']),
         selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'selectedUnit']),
+        modifyUnitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunits']),
+        modifyUnitSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunit']),
     }
 }
 
@@ -149,8 +156,9 @@ const mapDispatchToProps = (dispatch) => {
         showAddModal() {
             dispatch(actionCreators.showAddModal(true));
         },
-        showEditModal() {
+        showEditModal(selectedUnit) {
             dispatch(actionCreators.showEditModal(true));
+            dispatch(actionCreators.getAllSubunits(selectedUnit));
         },
         changeSelectedUnitSubunit(record, rowIndex) {
             if (record.children === undefined) {
@@ -158,6 +166,12 @@ const mapDispatchToProps = (dispatch) => {
             } else {
                 dispatch(actionCreators.changeSelectedUnit(record.key));
             }
+        },
+        appendSubunit(modifyUnitSubunitsJS, subunitname, selectedUnit) {
+            dispatch(actionCreators.appendSubunit(modifyUnitSubunitsJS, subunitname, selectedUnit));
+        },
+        changeModifyUnitSubunit(subunitname) {
+            dispatch(actionCreators.changeModifyUnitSubunit(subunitname))
         }
     }
 }
