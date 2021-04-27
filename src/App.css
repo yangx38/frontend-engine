@@ -11,3 +11,6 @@ th {
 .unitSubunitBtn {
     float: right !important;
 }
+.subunitTag {
+    display: block !important;
+}

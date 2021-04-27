@@ -34,6 +34,7 @@ const reducer = (state = defaultState, action) => {
             return state.merge({
                 modifyUnitSubunit: '',
                 selectedSubunit: '',
+                page: 1,
             })
         case constants.CHANGE_SELECTED_SUBUNIT:
             return state.merge({

@@ -77,7 +77,8 @@ class SystemAdminUnitsBudgetsPeople extends Component {
             for (let i = (page-1)*10; i < page*10; i++) {
                 if ( modifyUnitSubunitsJS[i] !== undefined) {
                     const subunitName = modifyUnitSubunitsJS[i].name
-                    pageList.push(<div><Tag key={subunitName} onClick={() => changeModifyUnitSubunit(subunitName)}> {subunitName} </Tag></div>);
+                    console.log(subunitName)
+                    pageList.push(<Tag className='subunitTag' key={subunitName} onClick={() => changeModifyUnitSubunit(subunitName)}> {subunitName} </Tag>);
                 }
             }
         }
@@ -88,7 +89,12 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                     <ModalTitle>Modify Unit - {selectedUnit}</ModalTitle>
                     { pageList }
                     <div>
-                        { page === 1 ? 
+                        { page === 1 && totalPage === 1 ? 
+                        <Fragment>
+                        <Button disabled>Prev</Button>
+                        <Button disabled>Next</Button>
+                    </Fragment> : 
+                    page === 1 ?
                          <Fragment>
                          <Button disabled>Prev</Button>
                          <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button>
