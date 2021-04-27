@@ -89,27 +89,12 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                     <ModalTitle>Modify Unit - {selectedUnit}</ModalTitle>
                     { pageList }
                     <div>
-                        { page === 1 && totalPage === 1 ? 
-                        <Fragment>
-                        <Button disabled>Prev</Button>
-                        <Button disabled>Next</Button>
-                    </Fragment> : 
-                    page === 1 ?
-                         <Fragment>
-                         <Button disabled>Prev</Button>
-                         <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button>
-                     </Fragment>
-                            : 
-                            page === totalPage ?
-                            <Fragment>
-                                <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button>
-                                <Button disabled>Next</Button>
-                            </Fragment>
-                            : <Fragment>
-                                <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button>
-                                <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button>
-                            </Fragment>}
-                            
+                        { 
+                            page === 1 && totalPage === 1 ? <Fragment> <Button disabled>Prev</Button> <Button disabled>Next</Button> </Fragment> : 
+                            page === 1 ? <Fragment> <Button disabled>Prev</Button> <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button> </Fragment> : 
+                            page === totalPage ? <Fragment> <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button> <Button disabled>Next</Button> </Fragment> : 
+                            <Fragment> <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button> <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button> </Fragment>
+                        }    
                     </div>
                     <SemanticInput value={modifyUnitSubunit} onChange={(e, data) => changeModifyUnitSubunit(data.value)}/>
                     <Button onClick={() => appendSubunit(modifyUnitSubunitsJS, modifyUnitSubunit, selectedUnit)}>Add</Button>
