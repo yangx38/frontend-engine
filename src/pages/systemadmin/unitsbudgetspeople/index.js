@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Table, Tabs, Button, Input, Form, Tag } from 'antd';
+import { Table, Tabs, Button, Input, Form, Tag, Select } from 'antd';
 import { Input as SemanticInput } from 'semantic-ui-react';
 
 
@@ -97,7 +97,7 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                     <Button onClick={() => appendSubunit(modifyUnitSubunitsJS, modifyUnitSubunit, selectedUnit)}>Add</Button>
                     <Button>Update</Button>
                     <Button>Remove</Button>
-                    <Button onClick={editModalCancel}>Cancel</Button>
+                    <Button onClick={() => editModalCancel()}>Cancel</Button>
                 </AddMoalBox>
             </ModalWrapper>
         );
@@ -151,14 +151,100 @@ class SystemAdminUnitsBudgetsPeople extends Component {
         );
     }
 
+    getAddPeopleModal() {
+        const { addPeopleModalCancel } = this.props;
+        const layout = { labelCol: { span: 8 }, wrapperCol: { span: 16 }, };
+        const tailLayout = { wrapperCol: { offset: 8, span: 16, },};
+        const { Option } = Select;
+        return (
+            <ModalWrapper>
+                <AddMoalBox>
+                    <Form {...layout}>
+                        <Form.Item label="Name" name="name" rules={[ {required: true, message: 'Please input Name!',},]} >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item label="Type" name="type" rules={[ { required: true, }, ]} >
+                            <Select
+                                placeholder="Select Submitter / Fiscal Staff"
+                                onChange={this.onGenderChange}
+                                allowClear
+                            >
+                                <Option value="submitter">Submitter</Option>
+                                <Option value="fiscalstaff">Fiscal Staff</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item {...tailLayout}>
+                            <Button className='unitSubunitBtn' type='primary' htmlType="submit">Submit</Button>
+                        </Form.Item>
+                    </Form> 
+                    <Button onClick={() => addPeopleModalCancel()}>Cancel</Button>
+                </AddMoalBox>
+            </ModalWrapper>
+        );
+    }
+
+    getPeopleTable() {
+        const { changeSelectedPeople, showAddPeopleModal, selectedSubunit } = this.props;
+        const dataSource = [
+            {
+              key: 'NetID1',
+              subunitName: 'Subunit 1',
+              peopleName: 'People 1',
+              peopleNetID: 'NetID1',
+              peopleType: 'Submitter',
+            },
+            {
+              key: 'NetID2',
+              subunitName: 'Subunit 2',
+              peopleName: 'People 2',
+              peopleNetID: 'NetID2',
+              peopleType: 'Approver',
+            },
+          ];
+          
+          const columns = [
+            {
+                title: 'Subunit',
+                dataIndex: 'subunitName',
+                key: 'subunitName',
+            },
+            {
+              title: 'Name',
+              dataIndex: 'peopleName',
+              key: 'peopleName',
+            },
+            {
+              title: 'NetID',
+              dataIndex: 'peopleNetID',
+              key: 'peopleNetID',
+            },
+            {
+              title: 'Type',
+              dataIndex: 'peopleType',
+              key: 'peopleType',
+            },
+          ];
+        return (
+            <Fragment>
+                <Table className='treeStyleTable' columns={columns} dataSource={dataSource}  
+                    rowSelection={{ 
+                    type: 'radio', 
+                    onChange: (selectedRowKeys, selectedRows) => { changeSelectedPeople(selectedRowKeys, selectedRows) }}} />
+                { selectedSubunit ? <Button type='primary' onClick={() => showAddPeopleModal()}>Add People</Button> : <Button disabled>Add People</Button>}
+                <Button disabled className='unitSubunitBtn'> Edit People </Button> 
+            </Fragment>
+        );
+    }
+
     render() {
-        const { login, role, addMoal, editModal } = this.props;
+        const { login, role, addMoal, editModal, addPeopleModal } = this.props;
         const { TabPane } = Tabs;
         if (login && role === 'system administrator') {
             return (
                 <Fragment>
                     { addMoal ? this.getAddModal() : null }
                     { editModal ? this.getEditModal() : null }
+                    { addPeopleModal ? this.getAddPeopleModal() : null }
                     <HomeWrapper>
                         <HomeLeft>
                             {this.getUnitSubunitTable()}
@@ -169,7 +255,7 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                                     {this.getBudgetTable()}
                                 </TabPane>
                                 <TabPane tab="People" key="2">
-                                    Content of Tab Pane 2
+                                    {this.getPeopleTable()}
                                 </TabPane>
                             </Tabs>
                         </HomeRight>
@@ -188,10 +274,12 @@ const mapStateToProps = (state) => {
         addMoal: state.getIn(['systemadmin_unitsbudgetspeople', 'addMoal']),
         editModal: state.getIn(['systemadmin_unitsbudgetspeople', 'editModal']),
         selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'selectedUnit']),
+        selectedSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'selectedSubunit']),
         modifyUnitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunits']),
         page: state.getIn(['systemadmin_unitsbudgetspeople', 'page']),
         totalPage: state.getIn(['systemadmin_unitsbudgetspeople', 'totalPage']),
         modifyUnitSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunit']),
+        addPeopleModal: state.getIn(['systemadmin_unitsbudgetspeople', 'addPeopleModal']),
     }
 }
 
@@ -245,7 +333,17 @@ const mapDispatchToProps = (dispatch) => {
         // getBudgetTable()
         changeSelectedBudget() {
 
-        }
+        },
+        // getPeopleTable()
+        showAddPeopleModal() {
+            dispatch(actionCreators.showAddPeopleModal(true));
+        },
+        changeSelectedPeople() {
+            
+        },
+        addPeopleModalCancel() {
+            dispatch(actionCreators.showAddPeopleModal(false));
+        },
     }
 }
 

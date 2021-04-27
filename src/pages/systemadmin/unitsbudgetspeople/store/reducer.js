@@ -11,6 +11,7 @@ const defaultState = fromJS({
     selectedSubunit: '',
     page: 1,
     totalPage: 1,
+    addPeopleModal: false,
 });
 
 const reducer = (state = defaultState, action) => {
@@ -30,6 +31,8 @@ const reducer = (state = defaultState, action) => {
             return state.set('addMoal', action.visible);
         case constants.SHOW_EDIT_MODAL:
             return state.set('editModal', action.visible);
+        case constants.SHOW_ADD_PEOPLE_MODAL:
+            return state.set('addPeopleModal', action.visible);
         case constants.CLEAR_SELECTED:
             return state.merge({
                 modifyUnitSubunit: '',

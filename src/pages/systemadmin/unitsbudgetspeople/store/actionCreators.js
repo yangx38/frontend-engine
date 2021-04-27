@@ -11,6 +11,7 @@ export const GET_ALL_SUBUNIT = 'pages/unitsbudgetspeople/GET_ALL_SUBUNIT';
 export const CHANGE_MODIFY_UNIT_SUBUNIT = 'pages/unitsbudgetspeople/CHANGE_MODIFY_UNIT_SUBUNIT';
 export const CLEAR_SELECTED = 'pages/unitsbudgetspeople/CLEAR_SELECTED';
 export const HANDLE_CHANGE_PAGE = 'pages/unitsbudgetspeople/HANDLE_CHANGE_PAGE';
+export const SHOW_ADD_PEOPLE_MODAL = 'pages/unitsbudgetspeople/SHOW_ADD_PEOPLE_MODAL';
 
 export const logout = () => ({
     type: CHANGE_TO_LOGOUT
@@ -35,6 +36,10 @@ export const getAllUnitSubunit = () => {
 // getUnitSubunitTable()
 export const showAddModal = (visible) => ({
     type: SHOW_ADD_MODAL,
+    visible
+})
+export const showAddPeopleModal = (visible) => ({
+    type: SHOW_ADD_PEOPLE_MODAL,
     visible
 })
 export const showEditModal = (visible) => ({
