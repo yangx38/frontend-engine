@@ -71,7 +71,6 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     getEditModal() {
         const { editModalCancel, selectedUnit, modifyUnitSubunits, modifyUnitSubunit, changeModifyUnitSubunit, appendSubunit, page, totalPage, handleChangePage } = this.props;
         const modifyUnitSubunitsJS = Immutable.List(modifyUnitSubunits).toJS();
-        console.log('modifyUnitSubunitsJS', modifyUnitSubunitsJS)
         const pageList = [];
         if (modifyUnitSubunitsJS.length > 0) {
             for (let i = (page-1)*10; i < page*10; i++) {
@@ -82,7 +81,6 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                 }
             }
         }
-        console.log('pageList', pageList)
         return (
             <ModalWrapper>
                 <AddMoalBox>
