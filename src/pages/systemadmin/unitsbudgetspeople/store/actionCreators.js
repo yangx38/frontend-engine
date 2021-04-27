@@ -79,6 +79,7 @@ export const handleChangePage = (page) => ({
     type: HANDLE_CHANGE_PAGE,
     page
 })
+var allUnitSubunit = [];
 export const appendSubunit = (modifyUnitSubunitsJS, subunitname, selectedUnit) => {
     return (dispatch) => {
         modifyUnitSubunitsJS.push({key: subunitname, name: subunitname})
@@ -96,8 +97,21 @@ export const appendSubunit = (modifyUnitSubunitsJS, subunitname, selectedUnit) =
                 dispatch(getAllSubunitsAction(modifyUnitSubunitsJS))
                 dispatch(changeModifyUnitSubunit(''))
             })
+            .then(res => getAllUnitSubunitAfterAppendSubunit())
+            .then(res => {
+                dispatch(getAllUnitSubunitAction(allUnitSubunit))
+            })
             .catch(error => {
                 console.log(error)
             })
     }
+}
+const getAllUnitSubunitAfterAppendSubunit = () => {
+    return axios.get(`http://localhost:8080/api/systemadmin/getAllUnitSubunit`)
+        .then(res => {
+            allUnitSubunit = res.data;
+        })
+        .catch(error => {
+            console.log(error)
+        })
 }

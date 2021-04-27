@@ -76,7 +76,6 @@ class SystemAdminUnitsBudgetsPeople extends Component {
             for (let i = (page-1)*10; i < page*10; i++) {
                 if ( modifyUnitSubunitsJS[i] !== undefined) {
                     const subunitName = modifyUnitSubunitsJS[i].name
-                    console.log(subunitName)
                     pageList.push(<Tag className='subunitTag' key={subunitName} onClick={() => changeModifyUnitSubunit(subunitName)}> {subunitName} </Tag>);
                 }
             }
@@ -104,6 +103,54 @@ class SystemAdminUnitsBudgetsPeople extends Component {
         );
     }
 
+    getBudgetTable() {
+        const { changeSelectedBudget } = this.props;
+        const dataSource = [
+            {
+              key: '1',
+              budgetnumber: '62-0372',
+              budgetname: 'TSUNAMI EVACUATION S',
+              startdate: '10/15/19',
+              enddate: '6/30/20'
+            },
+            {
+              key: '2',
+              budgetnumber: '66-2729',
+              budgetname: 'MIC KCMETRO COST SHARE',
+              startdate: '2/1/20',
+              enddate: '6/30/20'
+            },
+          ];
+          
+          const columns = [
+            {
+              title: 'Budget Number',
+              dataIndex: 'budgetnumber',
+              key: 'budgetnumber',
+            },
+            {
+              title: 'Budget Name',
+              dataIndex: 'budgetname',
+              key: 'budgetname',
+            },
+            {
+              title: 'Start Date',
+              dataIndex: 'startdate',
+              key: 'startdate',
+            },
+            {
+                title: 'End Date',
+                dataIndex: 'enddate',
+                key: 'enddate',
+              },
+          ];
+        return (
+            <Table dataSource={dataSource} columns={columns} rowSelection={{ 
+                type: 'radio', 
+                onChange: (selectedRowKeys, selectedRows) => { changeSelectedBudget(selectedRowKeys, selectedRows) }}} />
+        );
+    }
+
     render() {
         const { login, role, addMoal, editModal } = this.props;
         const { TabPane } = Tabs;
@@ -119,7 +166,7 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                         <HomeRight>
                             <Tabs defaultActiveKey="1">
                                 <TabPane tab="Budgets" key="1">
-                                    Content of Tab Pane 1
+                                    {this.getBudgetTable()}
                                 </TabPane>
                                 <TabPane tab="People" key="2">
                                     Content of Tab Pane 2
@@ -194,6 +241,10 @@ const mapDispatchToProps = (dispatch) => {
                     dispatch(actionCreators.handleChangePage(page-1))    
                 }
             }
+        },
+        // getBudgetTable()
+        changeSelectedBudget() {
+
         }
     }
 }

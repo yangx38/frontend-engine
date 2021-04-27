@@ -24,6 +24,15 @@ class Header extends Component {
                         <NavItem className='left'>Search Orders</NavItem>
                     </Fragment>
                 );
+            } else if (role === 'approver') {
+                return (
+                    <Fragment>
+                        <Link to={'/systemadministrator/unitsbudgetspeople'}>
+                            <NavItem className='left'>Approver Tickets</NavItem>
+                        </Link>
+                        
+                    </Fragment>
+                );
             }
         }
     }
