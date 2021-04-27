@@ -9,6 +9,8 @@ const defaultState = fromJS({
     modifyUnitSubunits: [],
     modifyUnitSubunit: '',
     selectedSubunit: '',
+    page: 1,
+    totalPage: 1,
 });
 
 const reducer = (state = defaultState, action) => {
@@ -16,13 +18,23 @@ const reducer = (state = defaultState, action) => {
         case constants.GET_ALL_UNIT_SUBUNIT:
             return state.set('unitsubunit', action.data);
         case constants.GET_ALL_SUBUNIT:
-            return state.set('modifyUnitSubunits', action.data);
+            return state.merge({
+                modifyUnitSubunits: action.data,
+                totalPage: action.totalPage  
+            })
+        case constants.HANDLE_CHANGE_PAGE:
+            return state.set('page', action.page);
         case constants.CHANGE_MODIFY_UNIT_SUBUNIT:
             return state.set('modifyUnitSubunit', action.subunitname);
         case constants.SHOW_ADD_MODAL:
             return state.set('addMoal', action.visible);
         case constants.SHOW_EDIT_MODAL:
             return state.set('editModal', action.visible);
+        case constants.CLEAR_SELECTED:
+            return state.merge({
+                modifyUnitSubunit: '',
+                selectedSubunit: '',
+            })
         case constants.CHANGE_SELECTED_SUBUNIT:
             return state.merge({
                 selectedUnit: '',

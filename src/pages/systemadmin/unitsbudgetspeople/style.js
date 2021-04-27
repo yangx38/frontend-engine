@@ -27,8 +27,8 @@ export const ModalWrapper = styled.div`
 `
 export const AddMoalBox = styled.div`
     background-color: #fff;
-    width: 500px;
-    height: 430px;
+    width: 600px;
+    height: 530px;
     margin: 80px auto;
     border: 0;
     border-radius: 2px;

@@ -24,7 +24,6 @@ class SystemAdminUnitsBudgetsPeople extends Component {
         }
     }
 
-    // Apr 24: FOCUS HERE
     getUnitSubunitTable() {
         const { unitSubunits, showAddModal, showEditModal, changeSelectedUnitSubunit, selectedUnit } = this.props;
         const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name' }];
@@ -32,11 +31,12 @@ class SystemAdminUnitsBudgetsPeople extends Component {
         return (
             <Fragment>
                 <Table className='treeStyleTable' columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
-                    rowSelection={{ type: 'radio', }}
-                    onRow={(record, rowIndex) => ({ onClick: event => changeSelectedUnitSubunit(record, rowIndex), })} />
+                    rowSelection={{ 
+                        type: 'radio', 
+                        onChange: (selectedRowKeys, selectedRows) => { changeSelectedUnitSubunit(selectedRowKeys, selectedRows) }}} />
                 <Button type='primary' onClick={showAddModal}>Add Unit</Button> 
                 { 
-                    selectedUnit ? <Button type='primary' onClick={() => showEditModal(selectedUnit)} className='unitSubunitBtn'>Edit Unit</Button> : <Button disabled className='unitSubunitBtn'> Edit Unit </Button> 
+                    selectedUnit ? <Button type='primary' onClick={() => showEditModal()} className='unitSubunitBtn'>Edit Unit</Button> : <Button disabled className='unitSubunitBtn'> Edit Unit </Button> 
                 }
             </Fragment>
         );
@@ -69,21 +69,42 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     }
 
     getEditModal() {
-        const { editModalCancel, selectedUnit, modifyUnitSubunits, modifyUnitSubunit, changeModifyUnitSubunit, appendSubunit, } = this.props;
+        const { editModalCancel, selectedUnit, modifyUnitSubunits, modifyUnitSubunit, changeModifyUnitSubunit, appendSubunit, page, totalPage, handleChangePage } = this.props;
         const modifyUnitSubunitsJS = Immutable.List(modifyUnitSubunits).toJS();
+        console.log('modifyUnitSubunitsJS', modifyUnitSubunitsJS)
+        const pageList = [];
+        if (modifyUnitSubunitsJS.length > 0) {
+            for (let i = (page-1)*10; i < page*10; i++) {
+                if ( modifyUnitSubunitsJS[i] !== undefined) {
+                    const subunitName = modifyUnitSubunitsJS[i].name
+                    pageList.push(<div><Tag key={subunitName} onClick={() => changeModifyUnitSubunit(subunitName)}> {subunitName} </Tag></div>);
+                }
+            }
+        }
+        console.log('pageList', pageList)
         return (
             <ModalWrapper>
                 <AddMoalBox>
                     <ModalTitle>Modify Unit - {selectedUnit}</ModalTitle>
-                    {
-                        modifyUnitSubunitsJS.map((subunit, index) => {
-                            return (
-                                <div>
-                                    <Tag key={subunit.name} onClick={() => changeModifyUnitSubunit(subunit.name)}> {subunit.name} </Tag>
-                                </div>
-                            );
-                        })
-                    }
+                    { pageList }
+                    <div>
+                        { page === 1 ? 
+                         <Fragment>
+                         <Button disabled>Prev</Button>
+                         <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button>
+                     </Fragment>
+                            : 
+                            page === totalPage ?
+                            <Fragment>
+                                <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button>
+                                <Button disabled>Next</Button>
+                            </Fragment>
+                            : <Fragment>
+                                <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button>
+                                <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button>
+                            </Fragment>}
+                            
+                    </div>
                     <SemanticInput value={modifyUnitSubunit} onChange={(e, data) => changeModifyUnitSubunit(data.value)}/>
                     <Button onClick={() => appendSubunit(modifyUnitSubunitsJS, modifyUnitSubunit, selectedUnit)}>Add</Button>
                     <Button>Update</Button>
@@ -97,7 +118,6 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     render() {
         const { login, role, addMoal, editModal } = this.props;
         const { TabPane } = Tabs;
-        
         if (login && role === 'system administrator') {
             return (
                 <Fragment>
@@ -129,11 +149,12 @@ const mapStateToProps = (state) => {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
         unitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'unitsubunit']),
-        isModalVisible: state.getIn(['systemadmin_unitsbudgetspeople', 'isModalVisible']),
         addMoal: state.getIn(['systemadmin_unitsbudgetspeople', 'addMoal']),
         editModal: state.getIn(['systemadmin_unitsbudgetspeople', 'editModal']),
         selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'selectedUnit']),
         modifyUnitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunits']),
+        page: state.getIn(['systemadmin_unitsbudgetspeople', 'page']),
+        totalPage: state.getIn(['systemadmin_unitsbudgetspeople', 'totalPage']),
         modifyUnitSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunit']),
     }
 }
@@ -151,20 +172,21 @@ const mapDispatchToProps = (dispatch) => {
         // getEditModal()
         editModalCancel() {
             dispatch(actionCreators.showEditModal(false));
+            dispatch(actionCreators.clearSelected(false));
         },
         // getUnitSubunitTable()
         showAddModal() {
             dispatch(actionCreators.showAddModal(true));
         },
-        showEditModal(selectedUnit) {
+        showEditModal() {
             dispatch(actionCreators.showEditModal(true));
-            dispatch(actionCreators.getAllSubunits(selectedUnit));
         },
-        changeSelectedUnitSubunit(record, rowIndex) {
-            if (record.children === undefined) {
-                dispatch(actionCreators.changeSelectedSubunit(record.key));
+        changeSelectedUnitSubunit(selectedRowKeys, selectedRows) {
+            if (selectedRows[0].children === undefined) {                
+                dispatch(actionCreators.changeSelectedSubunit(selectedRows[0].key));
             } else {
-                dispatch(actionCreators.changeSelectedUnit(record.key));
+                dispatch(actionCreators.getAllSubunits(selectedRows[0].key));
+                dispatch(actionCreators.changeSelectedUnit(selectedRows[0].key));
             }
         },
         appendSubunit(modifyUnitSubunitsJS, subunitname, selectedUnit) {
@@ -172,6 +194,17 @@ const mapDispatchToProps = (dispatch) => {
         },
         changeModifyUnitSubunit(subunitname) {
             dispatch(actionCreators.changeModifyUnitSubunit(subunitname))
+        },
+        handleChangePage(page, totalPage, nextPage) {
+            if (nextPage) {
+                if (page < totalPage) {
+                    dispatch(actionCreators.handleChangePage(page+1))    
+                }
+            } else {
+                if (page > 1) {
+                    dispatch(actionCreators.handleChangePage(page-1))    
+                }
+            }
         }
     }
 }

@@ -9,6 +9,8 @@ export const CHANGE_SELECTED_SUBUNIT = 'pages/unitsbudgetspeople/CHANGE_SELECTED
 export const CHANGE_SELECTED_UNIT = 'pages/unitsbudgetspeople/CHANGE_SELECTED_UNIT';
 export const GET_ALL_SUBUNIT = 'pages/unitsbudgetspeople/GET_ALL_SUBUNIT';
 export const CHANGE_MODIFY_UNIT_SUBUNIT = 'pages/unitsbudgetspeople/CHANGE_MODIFY_UNIT_SUBUNIT';
+export const CLEAR_SELECTED = 'pages/unitsbudgetspeople/CLEAR_SELECTED';
+export const HANDLE_CHANGE_PAGE = 'pages/unitsbudgetspeople/HANDLE_CHANGE_PAGE';
 
 export const logout = () => ({
     type: CHANGE_TO_LOGOUT
@@ -39,9 +41,13 @@ export const showEditModal = (visible) => ({
     type: SHOW_EDIT_MODAL,
     visible
 })
+export const clearSelected = () => ({
+    type: CLEAR_SELECTED,
+})
 const getAllSubunitsAction = (data) => ({
     type: GET_ALL_SUBUNIT,
-    data: fromJS(data)
+    data: fromJS(data),
+    totalPage: Math.ceil(data.length / 10)
 })
 export const getAllSubunits = (selectedUnit) => {
     return (dispatch) => {
@@ -68,6 +74,10 @@ export const changeSelectedUnit = (key) => ({
 export const changeModifyUnitSubunit = (subunitname) => ({
     type: CHANGE_MODIFY_UNIT_SUBUNIT,
     subunitname
+})
+export const handleChangePage = (page) => ({
+    type: HANDLE_CHANGE_PAGE,
+    page
 })
 export const appendSubunit = (modifyUnitSubunitsJS, subunitname, selectedUnit) => {
     return (dispatch) => {
