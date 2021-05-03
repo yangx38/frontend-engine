@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import Immutable from 'immutable';
+import { actionCreators } from './store';
 import { actionCreators as loginActionCreators } from '../login/store';
 import { actionCreators as sysmtemAdminUnitsBudgetsPeopleActionCreators } from '../../pages/systemadmin/unitsbudgetspeople/store';
 import { Menu } from 'antd';
@@ -19,16 +20,24 @@ class Header extends Component {
         const submitterSubunitsOfGivenNetIdJS = Immutable.List(submitterSubunitsOfGivenNetId).toJS();
         const fiscalStaffSubunitsOfGivenNetIdJS = Immutable.List(fiscalStaffSubunitsOfGivenNetId).toJS();
         const { SubMenu } = Menu;
-        const { readSb_SelectedSubunit, readFs_SelectedSubunit } = this.props;
-
+        const { readSu_selectedSubunitANDForm, readFs_SelectedSubunit } = this.props;
         const submitterSubunitsOfGivenNetIdList = [];
         submitterSubunitsOfGivenNetIdJS.map(item => {
             const { unit, subunits } = item;
-            submitterSubunitsOfGivenNetIdList.push(<Menu.ItemGroup key={unit} title={unit}> </Menu.ItemGroup>)
+            submitterSubunitsOfGivenNetIdList.push(<Menu.ItemGroup key={unit} title={unit}></Menu.ItemGroup>)
             for(let i = 0; i < subunits.length; i++) {
                 const subunit = subunits[i]
-                submitterSubunitsOfGivenNetIdList.push(<Menu.Item key={subunit} onClick={()=> readSb_SelectedSubunit(unit, subunit)}>{subunit}</Menu.Item>)
-            }      
+                submitterSubunitsOfGivenNetIdList.push(
+                    <SubMenu key={subunit} title={subunit}>
+                        <Menu.Item key={subunit.concat('in')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Pay an Invoice')}}>Pay an Invoice</Menu.Item>
+                        <Menu.Item key={subunit.concat('pro')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Procard Receipt')}}>Procard Receipt</Menu.Item>
+                        <Menu.Item key={subunit.concat('pur')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Purchase Request')}}>Purchase Request</Menu.Item>
+                        <Menu.Item key={subunit.concat('rei')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Reimbursement')}}>Reimbursement</Menu.Item>
+                        <Menu.Item key={subunit.concat('tra')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Travel Request')}}>Travel Request</Menu.Item>
+                        <Menu.Item key={subunit.concat('trarei')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Traval Reimbursement')}}>Traval Reimbursement</Menu.Item>
+                    </SubMenu>
+                )
+            }
         })
         const fiscalStaffSubunitsOfGivenNetIdList = [];
         fiscalStaffSubunitsOfGivenNetIdJS.map(item => {
@@ -54,7 +63,7 @@ class Header extends Component {
                     <Fragment>
                         <Link to={'/submitrequests'}>
                             <NavItem className='left fiscalstaffnav'>
-                                <Menu>
+                                <Menu mode="horizontal">
                                     <SubMenu key="SubMenu" title="Submit">
                                         { submitterSubunitsOfGivenNetIdList }
                                     </SubMenu>
@@ -63,7 +72,7 @@ class Header extends Component {
                         </Link>
                         <Link to={'/fiscalstaff/approverequests'}>
                             <NavItem className='left fiscalstaffnav'>
-                                <Menu>
+                                <Menu mode="horizontal">
                                     <SubMenu key="SubMenu" title="Approve">
                                         { fiscalStaffSubunitsOfGivenNetIdList }
                                     </SubMenu>
@@ -110,13 +119,17 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         logout() {
+            dispatch(actionCreators.logout());
             dispatch(loginActionCreators.logout());
             dispatch(sysmtemAdminUnitsBudgetsPeopleActionCreators.logout());
         }, 
-        readSb_SelectedSubunit(unit, subunit) {
-            console.log(unit)
-            console.log(subunit)
+        // getSubmitterNavItems()
+        readSu_selectedSubunitANDForm(unit, subunit, formType) {
+            dispatch(actionCreators.readSu_selectedSubunitANDForm(unit, subunit, formType))
         },
+
+
+        
         readFs_SelectedSubunit(unit, subunit) {
             console.log(unit)
             console.log(subunit)
