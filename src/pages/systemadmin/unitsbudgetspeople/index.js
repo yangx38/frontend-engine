@@ -163,9 +163,10 @@ const mapDispatchToProps = (dispatch) => {
         changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows) {
             if (selectedRows[0].children !== undefined) {           
                 dispatch(actionCreators.changeUSTSelectedUnit(selectedRows[0].key));
-                dispatch(actionCreators.changePTfromSelectedUnit(selectedRows[0].key));  
+                dispatch(actionCreators.changePTfromSelectedUnit(selectedRows[0].key));
             } else {
                 dispatch(actionCreators.changeUSTSelectedSubunit(selectedRows[0].key));
+                dispatch(actionCreators.changePTfromSelectedSubunit(selectedRowKeys));  
             }
         },
         showUSTEditModal() {

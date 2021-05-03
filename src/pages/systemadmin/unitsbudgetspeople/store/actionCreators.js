@@ -46,19 +46,31 @@ export const getAllPeople = () => {
     }
 }
 // getUnitSubunitTable()
-export const changeUSTSelectedSubunit = (data) => ({
-    type: CHANGE_UST_SELECTED_SUBUNIT,
-    data
-})
 export const changeUSTSelectedUnit = (data) => ({
     type: CHANGE_UST_SELECTED_UNIT,
     data
 })
 export const changePTfromSelectedUnit = (unitname) => {
     return (dispatch) => {
-        axios.get(`http://localhost:8080/api/systemadmin/getPeople/${unitname}`)
+        axios.get(`http://localhost:8080/api/systemadmin/getPeopleOfUnit/${unitname}`)
             .then(res => {
-                console.log('Pages, unitsbudgetspeople, getPeople, res.data', res.data);
+                console.log('Pages, unitsbudgetspeople, getPeopleOfUnit, res.data', res.data);
+                dispatch(getAllPeopleAction(res.data));
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+}
+export const changeUSTSelectedSubunit = (data) => ({
+    type: CHANGE_UST_SELECTED_SUBUNIT,
+    data
+})
+export const changePTfromSelectedSubunit = (subunitname) => {
+    return (dispatch) => {
+        axios.get(`http://localhost:8080/api/systemadmin/getPeopleOfSubunit/${subunitname}`)
+            .then(res => {
+                console.log('Pages, unitsbudgetspeople, getPeopleOfSubunit, res.data', res.data);
                 dispatch(getAllPeopleAction(res.data));
             })
             .catch(error => {
