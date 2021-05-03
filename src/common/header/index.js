@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Immutable from 'immutable';
 import { actionCreators } from './store';
 import { actionCreators as loginActionCreators } from '../login/store';
+import { actionCreators as formActionCreators } from '../form/store';
 import { actionCreators as sysmtemAdminUnitsBudgetsPeopleActionCreators } from '../../pages/systemadmin/unitsbudgetspeople/store';
 import { Menu } from 'antd';
 
@@ -62,18 +63,18 @@ class Header extends Component {
                 return (
                     <Fragment>
                         <Link to={'/submitrequests'}>
-                            <NavItem className='left fiscalstaffnav'>
+                            <NavItem className='left'>
                                 <Menu mode="horizontal">
-                                    <SubMenu key="SubMenu" title="Submit">
+                                    <SubMenu key="SubMenu" title="Submit Request">
                                         { submitterSubunitsOfGivenNetIdList }
                                     </SubMenu>
                                 </Menu>
                             </NavItem>
                         </Link>
                         <Link to={'/fiscalstaff/approverequests'}>
-                            <NavItem className='left fiscalstaffnav'>
+                            <NavItem className='left'>
                                 <Menu mode="horizontal">
-                                    <SubMenu key="SubMenu" title="Approve">
+                                    <SubMenu key="SubMenu" title="Approve Request">
                                         { fiscalStaffSubunitsOfGivenNetIdList }
                                     </SubMenu>
                                 </Menu>
@@ -121,6 +122,7 @@ const mapDispatchToProps = (dispatch) => {
         logout() {
             dispatch(actionCreators.logout());
             dispatch(loginActionCreators.logout());
+            dispatch(formActionCreators.logout());
             dispatch(sysmtemAdminUnitsBudgetsPeopleActionCreators.logout());
         }, 
         // getSubmitterNavItems()

@@ -20,12 +20,12 @@ const reducer = (state = defaultState, action) => {
         case constants.CHANGE_FISCAL_STAFF_SUBUNITS_OF_GIVEN_NETID:
             return state.setIn(['user', 'fiscalStaffSubunitsOfGivenNetId'], action.data);
         case constants.CHANGE_TO_LOGIN: 
-            return state.merge({
+        return state.merge(fromJS({
                 login: true,
                 profileObj: action.profile,
-            });
+            }));
         case constants.CHANGE_TO_LOGOUT: 
-            return state.merge({
+            return state.merge(fromJS({
                 login: false,
                 profileObj: {},
                 user: {
@@ -33,7 +33,7 @@ const reducer = (state = defaultState, action) => {
                     submitterSubunitsOfGivenNetId: '',
                     fiscalStaffSubunitsOfGivenNetId: ''
                 },
-            })
+            }))
         default:
             return state;
     }

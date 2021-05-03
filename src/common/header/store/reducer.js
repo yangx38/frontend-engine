@@ -12,21 +12,21 @@ const defaultState = fromJS({
 const reducer = (state = defaultState, action) => {
     switch (action.type) {
         case constants.READ_SU_SELECTED_SUBUNIT_AND_FORM:
-            return state.merge({
+            return state.merge(fromJS({
                 submit_form: {
                     unit: action.unit,
                     subunit: action.subunit,
                     formType: action.formType,
                 }
-            })
+            }))
         case constants.CHANGE_TO_LOGOUT:
-            return state.merge({
+            return state.merge(fromJS({
                 submit_form: {
                     unit: '',
                     subunit: '',
                     formType: '',
                 }
-            })
+            }))
         default:
             return state;
     }

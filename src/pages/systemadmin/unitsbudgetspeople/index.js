@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
 import { Table, Tabs, Button, Input, Form, Tag, Select } from 'antd';
-import { Input as SemanticInput } from 'semantic-ui-react';
+// import { Input as SemanticInput } from 'semantic-ui-react';
 
 
 import {

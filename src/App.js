@@ -5,7 +5,7 @@ import store from './store';
 import { GlobalIcon } from './statics/iconfont/iconfont';
 import { Globalstyle } from './style';
 import Header from './common/header';
-import Form from './common/form';
+import FormForSubmitter from './common/form';
 import Login from './common/login';
 import SystemAdminMainpage from './pages/systemadmin/mainpage';
 import SystemAdminUnitsBudgetsPeople from './pages/systemadmin/unitsbudgetspeople';
@@ -21,7 +21,7 @@ class App extends Component {
           <BrowserRouter>
             {/* common */}
             <Header />
-            <Route path='/submitrequests' exact component={Form}></Route>
+            <Route path='/submitrequests' exact component={FormForSubmitter}></Route>
             <Route path='/login' exact component={Login}></Route>
             {/* system administrator */}
             <Route path='/systemadministrator/mainpage' exact component={SystemAdminMainpage}></Route>
