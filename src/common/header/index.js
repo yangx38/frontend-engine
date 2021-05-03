@@ -23,13 +23,12 @@ class Header extends Component {
                         </Link>
                     </Fragment>
                 );
-            } else if (role === 'approver') {
+            } else if (role === 'fiscal staff') {
                 return (
                     <Fragment>
-                        <Link to={'/systemadministrator/unitsbudgetspeople'}>
-                            <NavItem className='left'>Approver Tickets</NavItem>
-                        </Link>
-                        
+                        {/* <Link to={'/fiscalstaff/'}>
+                            <NavItem className='left'>Approve Requests</NavItem>
+                        </Link> */}
                     </Fragment>
                 );
             }

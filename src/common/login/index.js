@@ -41,7 +41,12 @@ class Login extends Component {
             else if (role === 'system administrator') {
                 return <Redirect to='/systemadministrator/mainpage' />
             }
-            else return <Redirect to='/' />
+            else if (role === 'fiscal staff') {
+                return <Redirect to='/fiscalstaff/mainpage' />
+            }
+            else {
+                return <Redirect to='/' />
+            }
         }
     }
 }

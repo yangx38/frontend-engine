@@ -8,6 +8,7 @@ import Header from './common/header';
 import Login from './common/login';
 import SystemAdminMainpage from './pages/systemadmin/mainpage';
 import SystemAdminUnitsBudgetsPeople from './pages/systemadmin/unitsbudgetspeople';
+import FiscalStaffMainpage from './pages/fiscalstaff/mainpage';
 
 class App extends Component {
   render() {
@@ -23,6 +24,8 @@ class App extends Component {
             {/* system administrator */}
             <Route path='/systemadministrator/mainpage' exact component={SystemAdminMainpage}></Route>
             <Route path='/systemadministrator/unitsbudgetspeople' exact component={SystemAdminUnitsBudgetsPeople}></Route>
+            {/* fiscal staff */}
+            <Route path='/fiscalstaff/mainpage' exact component={FiscalStaffMainpage}></Route>
           </BrowserRouter>
         </div>
       </Provider>

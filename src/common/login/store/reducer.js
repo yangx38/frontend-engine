@@ -6,8 +6,8 @@ const defaultState = fromJS({
     profileObj: {},
     user: {
         role: '',
-        unit: '',
-        subunit: ''
+        submitter_subunits: '',
+        fiscalstaff_subunits: ''
     },
 });
 
@@ -15,6 +15,10 @@ const reducer = (state = defaultState, action) => {
     switch (action.type) {
         case constants.CHANGE_ROLE:
             return state.setIn(['user', 'role'], action.role);
+        case constants.CHANGE_SUBMITTER_SUBUNITS_OF_GIVEN_NETID:
+            return state.setIn(['user', 'submitter_subunits'], action.data);
+        case constants.CHANGE_FISCAL_STAFF_SUBUNITS_OF_GIVEN_NETID:
+            return state.setIn(['user', 'fiscalstaff_subunits'], action.data);
         case constants.CHANGE_TO_LOGIN: 
             return state.merge({
                 login: true,
@@ -26,8 +30,8 @@ const reducer = (state = defaultState, action) => {
                 profileObj: {},
                 user: {
                     role: '',
-                    unit: '',
-                    subunit: ''
+                    submitter_subunits: '',
+                    fiscalstaff_subunits: ''
                 },
             })
         default:
