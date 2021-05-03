@@ -14,243 +14,115 @@ import {
     ModalWrapper,
     AddMoalBox,
     ModalTitle,
+    ModalBody,
+    ModalFooter,
 } from './style';
 
 class SystemAdminUnitsBudgetsPeople extends Component {
     componentDidMount() {
-        const { login, getAllUnitSubunit } = this.props;
+        const { login } = this.props;
+        const { getAllUnitSubunit, getAllPeople } = this.props;
         if (login) {
             getAllUnitSubunit();
+            getAllPeople();
         }
     }
 
     getUnitSubunitTable() {
-        const { unitSubunits, showAddModal, showEditModal, changeSelectedUnitSubunit, selectedUnit } = this.props;
-        const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name' }];
-        const unitSubunitsJS = Immutable.List(unitSubunits).toJS();
+        const { ust_allunitsubunit, ust_selectedUnit } = this.props;
+        const unitSubunitsJS = Immutable.List(ust_allunitsubunit).toJS();
+        const { changeUSTSelectedUnitSubunit, showUSTEditModal } = this.props;
+        const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name', sorter: (a, b) => {
+                if (a.children !== undefined && b.children !== undefined) return a.name.localeCompare(b.name);
+                else if (a.children === undefined && b.children === undefined) return a.name.localeCompare(b.name);
+                return 0;
+            }
+        } ];
         return (
             <Fragment>
-                <Table className='treeStyleTable' columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
-                    rowSelection={{ 
-                        type: 'radio', 
-                        onChange: (selectedRowKeys, selectedRows) => { changeSelectedUnitSubunit(selectedRowKeys, selectedRows) }}} />
-                <Button type='primary' onClick={showAddModal}>Add Unit</Button> 
+                <Table className='tableCursor' columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
+                    rowSelection={{ type: 'radio',  onChange: (selectedRowKeys, selectedRows) => { changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows) }}} />
                 { 
-                    selectedUnit ? <Button type='primary' onClick={() => showEditModal()} className='unitSubunitBtn'>Edit Unit</Button> : <Button disabled className='unitSubunitBtn'> Edit Unit </Button> 
+                    ust_selectedUnit ? <Button type='primary' onClick={() => showUSTEditModal()} className='unitSubunitBtn'>Edit Unit</Button> : <Button disabled className='unitSubunitBtn'>Edit Unit</Button>
                 }
             </Fragment>
         );
     }
 
-    getAddModal() {
-        const { addModalCancel } = this.props;
-        const { TextArea } = Input;
-        const layout = { labelCol: { span: 8 }, wrapperCol: { span: 16 }, };
-        const tailLayout = { wrapperCol: { offset: 8, span: 16, },};
+    getUSTEditModal() {
+        const { ust_selectedUnit } = this.props;
+        const { backUSTEditModal } = this.props;
         return (
             <ModalWrapper>
                 <AddMoalBox>
-                    <ModalTitle>Add Unit</ModalTitle>
-                    <Form {...layout}>
-                        <Form.Item label="Unit Name" name="unitname" rules={[ {required: true, message: 'Please input unit name!',},]} >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item label="Subunit Name" name="subunitname">
-                            <TextArea rows={10} placeholder='TODO'/>
-                        </Form.Item>
-                        <Form.Item {...tailLayout}>
-                            <Button className='unitSubunitBtn' type='primary' htmlType="submit">Submit</Button>
-                            <Button onClick={addModalCancel}>Cancel</Button>
-                        </Form.Item>
-                    </Form> 
-                </AddMoalBox>
-            </ModalWrapper>
-        );
-    }
+                    <ModalTitle>Modify Unit - <span className="ust_selectedUnit">{ust_selectedUnit}</span></ModalTitle>
+                    <ModalBody>
 
-    getEditModal() {
-        const { editModalCancel, selectedUnit, modifyUnitSubunits, modifyUnitSubunit, changeModifyUnitSubunit, appendSubunit, page, totalPage, handleChangePage } = this.props;
-        const modifyUnitSubunitsJS = Immutable.List(modifyUnitSubunits).toJS();
-        const pageList = [];
-        if (modifyUnitSubunitsJS.length > 0) {
-            for (let i = (page-1)*10; i < page*10; i++) {
-                if ( modifyUnitSubunitsJS[i] !== undefined) {
-                    const subunitName = modifyUnitSubunitsJS[i].name
-                    pageList.push(<Tag className='subunitTag' key={subunitName} onClick={() => changeModifyUnitSubunit(subunitName)}> {subunitName} </Tag>);
-                }
-            }
-        }
-        return (
-            <ModalWrapper>
-                <AddMoalBox>
-                    <ModalTitle>Modify Unit - {selectedUnit}</ModalTitle>
-                    { pageList }
-                    <div>
-                        { 
-                            page === 1 && totalPage === 1 ? <Fragment> <Button disabled>Prev</Button> <Button disabled>Next</Button> </Fragment> : 
-                            page === 1 ? <Fragment> <Button disabled>Prev</Button> <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button> </Fragment> : 
-                            page === totalPage ? <Fragment> <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button> <Button disabled>Next</Button> </Fragment> : 
-                            <Fragment> <Button onClick={() => handleChangePage(page, totalPage, false)}>Prev</Button> <Button onClick={() => handleChangePage(page, totalPage, true)}>Next</Button> </Fragment>
-                        }    
-                    </div>
-                    <SemanticInput value={modifyUnitSubunit} onChange={(e, data) => changeModifyUnitSubunit(data.value)}/>
-                    <Button onClick={() => appendSubunit(modifyUnitSubunitsJS, modifyUnitSubunit, selectedUnit)}>Add</Button>
-                    <Button>Update</Button>
-                    <Button>Remove</Button>
-                    <Button onClick={() => editModalCancel()}>Cancel</Button>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button className='unitSubunitBtn' onClick={() => backUSTEditModal()}>Back</Button> 
+                    </ModalFooter>
                 </AddMoalBox>
             </ModalWrapper>
         );
     }
 
     getBudgetTable() {
-        const { changeSelectedBudget } = this.props;
-        const dataSource = [
-            {
-              key: '1',
-              budgetnumber: '62-0372',
-              budgetname: 'TSUNAMI EVACUATION S',
-              startdate: '10/15/19',
-              enddate: '6/30/20'
-            },
-            {
-              key: '2',
-              budgetnumber: '66-2729',
-              budgetname: 'MIC KCMETRO COST SHARE',
-              startdate: '2/1/20',
-              enddate: '6/30/20'
-            },
-          ];
-          
-          const columns = [
-            {
-              title: 'Budget Number',
-              dataIndex: 'budgetnumber',
-              key: 'budgetnumber',
-            },
-            {
-              title: 'Budget Name',
-              dataIndex: 'budgetname',
-              key: 'budgetname',
-            },
-            {
-              title: 'Start Date',
-              dataIndex: 'startdate',
-              key: 'startdate',
-            },
-            {
-                title: 'End Date',
-                dataIndex: 'enddate',
-                key: 'enddate',
-              },
-          ];
-        return (
-            <Table dataSource={dataSource} columns={columns} rowSelection={{ 
-                type: 'radio', 
-                onChange: (selectedRowKeys, selectedRows) => { changeSelectedBudget(selectedRowKeys, selectedRows) }}} />
-        );
-    }
-
-    getAddPeopleModal() {
-        const { addPeopleModalCancel } = this.props;
-        const layout = { labelCol: { span: 8 }, wrapperCol: { span: 16 }, };
-        const tailLayout = { wrapperCol: { offset: 8, span: 16, },};
-        const { Option } = Select;
-        return (
-            <ModalWrapper>
-                <AddMoalBox>
-                    <Form {...layout}>
-                        <Form.Item label="Name" name="name" rules={[ {required: true, message: 'Please input Name!',},]} >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item label="Type" name="type" rules={[ { required: true, }, ]} >
-                            <Select
-                                placeholder="Select Submitter / Fiscal Staff"
-                                onChange={this.onGenderChange}
-                                allowClear
-                            >
-                                <Option value="submitter">Submitter</Option>
-                                <Option value="fiscalstaff">Fiscal Staff</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item {...tailLayout}>
-                            <Button className='unitSubunitBtn' type='primary' htmlType="submit">Submit</Button>
-                        </Form.Item>
-                    </Form> 
-                    <Button onClick={() => addPeopleModalCancel()}>Cancel</Button>
-                </AddMoalBox>
-            </ModalWrapper>
-        );
+        return null;
     }
 
     getPeopleTable() {
-        const { changeSelectedPeople, showAddPeopleModal, selectedSubunit } = this.props;
-        const dataSource = [
-            {
-              key: 'NetID1',
-              subunitName: 'Subunit 1',
-              peopleName: 'People 1',
-              peopleNetID: 'NetID1',
-              peopleType: 'Submitter',
-            },
-            {
-              key: 'NetID2',
-              subunitName: 'Subunit 2',
-              peopleName: 'People 2',
-              peopleNetID: 'NetID2',
-              peopleType: 'Approver',
-            },
-          ];
-          
-          const columns = [
-            {
-                title: 'Subunit',
-                dataIndex: 'subunitName',
-                key: 'subunitName',
-            },
+        const { pt_allpeople, ust_selectedSubunit } = this.props;
+        const pt_allpeopleJS = Immutable.List(pt_allpeople).toJS();
+        const peopleTableColumns = [
             {
               title: 'Name',
-              dataIndex: 'peopleName',
-              key: 'peopleName',
+              dataIndex: 'name',
+              key: 'name',
+              sorter: (a, b) => a.name.localeCompare(b.name)
             },
             {
               title: 'NetID',
-              dataIndex: 'peopleNetID',
-              key: 'peopleNetID',
+              dataIndex: 'netId',
+              key: 'netId',
+              sorter: (a, b) => a.netId.localeCompare(b.netId)
             },
             {
               title: 'Type',
-              dataIndex: 'peopleType',
-              key: 'peopleType',
+              dataIndex: 'type',
+              key: 'type',
+              sorter: (a, b) => a.type.localeCompare(b.type)
             },
-          ];
+            {
+                title: 'Subunit',
+                dataIndex: 'subunit',
+                key: 'subunit',
+                sorter: (a, b) => a.subunit.localeCompare(b.subunit)
+            },
+        ];
         return (
             <Fragment>
-                <Table className='treeStyleTable' columns={columns} dataSource={dataSource}  
-                    rowSelection={{ 
-                    type: 'radio', 
-                    onChange: (selectedRowKeys, selectedRows) => { changeSelectedPeople(selectedRowKeys, selectedRows) }}} />
-                { selectedSubunit ? <Button type='primary' onClick={() => showAddPeopleModal()}>Add People</Button> : <Button disabled>Add People</Button>}
-                <Button disabled className='unitSubunitBtn'> Edit People </Button> 
+                <Table className='tableCursor' columns={peopleTableColumns} dataSource={pt_allpeopleJS}  />
+                    
+                { ust_selectedSubunit ? <Button type='primary' className='unitSubunitBtn'>Edit People</Button> : <Button disabled className='unitSubunitBtn'>Edit People</Button> }
             </Fragment>
         );
+        //rowSelection={{ type: 'radio', onChange: (selectedRowKeys, selectedRows) => { changeSelectedPeople(selectedRowKeys, selectedRows) }}} />
     }
 
     render() {
-        const { login, role, addMoal, editModal, addPeopleModal } = this.props;
+        const { login, role, ust_editmodal } = this.props;
         const { TabPane } = Tabs;
         if (login && role === 'system administrator') {
             return (
                 <Fragment>
-                    { addMoal ? this.getAddModal() : null }
-                    { editModal ? this.getEditModal() : null }
-                    { addPeopleModal ? this.getAddPeopleModal() : null }
+                    { ust_editmodal ? this.getUSTEditModal() : null }
                     <HomeWrapper>
                         <HomeLeft>
                             {this.getUnitSubunitTable()}
                         </HomeLeft>
                         <HomeRight>
-                            <Tabs defaultActiveKey="1">
+                            <Tabs defaultActiveKey="2">
                                 <TabPane tab="Budgets" key="1">
                                     {this.getBudgetTable()}
                                 </TabPane>
@@ -270,16 +142,11 @@ const mapStateToProps = (state) => {
     return {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
-        unitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'unitsubunit']),
-        addMoal: state.getIn(['systemadmin_unitsbudgetspeople', 'addMoal']),
-        editModal: state.getIn(['systemadmin_unitsbudgetspeople', 'editModal']),
-        selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'selectedUnit']),
-        selectedSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'selectedSubunit']),
-        modifyUnitSubunits: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunits']),
-        page: state.getIn(['systemadmin_unitsbudgetspeople', 'page']),
-        totalPage: state.getIn(['systemadmin_unitsbudgetspeople', 'totalPage']),
-        modifyUnitSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'modifyUnitSubunit']),
-        addPeopleModal: state.getIn(['systemadmin_unitsbudgetspeople', 'addPeopleModal']),
+        ust_allunitsubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_allunitsubunit']),
+        pt_allpeople: state.getIn(['systemadmin_unitsbudgetspeople', 'pt_allpeople']),
+        ust_selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_selectedUnit']),
+        ust_selectedSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_selectedSubunit']),
+        ust_editmodal: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_editmodal']),   
     }
 }
 
@@ -289,61 +156,26 @@ const mapDispatchToProps = (dispatch) => {
         getAllUnitSubunit() {
             dispatch(actionCreators.getAllUnitSubunit());
         },
-        // getAddModal()
-        addModalCancel() {
-            dispatch(actionCreators.showAddModal(false));
-        },
-        // getEditModal()
-        editModalCancel() {
-            dispatch(actionCreators.showEditModal(false));
-            dispatch(actionCreators.clearSelected(false));
+        getAllPeople() {
+            dispatch(actionCreators.getAllPeople());
         },
         // getUnitSubunitTable()
-        showAddModal() {
-            dispatch(actionCreators.showAddModal(true));
-        },
-        showEditModal() {
-            dispatch(actionCreators.showEditModal(true));
-        },
-        changeSelectedUnitSubunit(selectedRowKeys, selectedRows) {
-            if (selectedRows[0].children === undefined) {                
-                dispatch(actionCreators.changeSelectedSubunit(selectedRows[0].key));
+        changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows) {
+            if (selectedRows[0].children !== undefined) {           
+                dispatch(actionCreators.changeUSTSelectedUnit(selectedRows[0].key));
+                dispatch(actionCreators.changePTfromSelectedUnit(selectedRows[0].key));  
             } else {
-                dispatch(actionCreators.getAllSubunits(selectedRows[0].key));
-                dispatch(actionCreators.changeSelectedUnit(selectedRows[0].key));
+                dispatch(actionCreators.changeUSTSelectedSubunit(selectedRows[0].key));
             }
         },
-        appendSubunit(modifyUnitSubunitsJS, subunitname, selectedUnit) {
-            dispatch(actionCreators.appendSubunit(modifyUnitSubunitsJS, subunitname, selectedUnit));
+        showUSTEditModal() {
+            dispatch(actionCreators.showUSTEditModal(true));
         },
-        changeModifyUnitSubunit(subunitname) {
-            dispatch(actionCreators.changeModifyUnitSubunit(subunitname))
-        },
-        handleChangePage(page, totalPage, nextPage) {
-            if (nextPage) {
-                if (page < totalPage) {
-                    dispatch(actionCreators.handleChangePage(page+1))    
-                }
-            } else {
-                if (page > 1) {
-                    dispatch(actionCreators.handleChangePage(page-1))    
-                }
-            }
-        },
-        // getBudgetTable()
-        changeSelectedBudget() {
+        // getUSTEditModal() 
+        backUSTEditModal() {
+            dispatch(actionCreators.showUSTEditModal(false));
+        }
 
-        },
-        // getPeopleTable()
-        showAddPeopleModal() {
-            dispatch(actionCreators.showAddPeopleModal(true));
-        },
-        changeSelectedPeople() {
-            
-        },
-        addPeopleModalCancel() {
-            dispatch(actionCreators.showAddPeopleModal(false));
-        },
     }
 }
 

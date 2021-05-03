@@ -21,7 +21,6 @@ class Header extends Component {
                         <Link to={'/systemadministrator/unitsbudgetspeople'}>
                             <NavItem className='left'>Units/Budgets/People</NavItem>
                         </Link>
-                        <NavItem className='left'>Search Orders</NavItem>
                     </Fragment>
                 );
             } else if (role === 'approver') {

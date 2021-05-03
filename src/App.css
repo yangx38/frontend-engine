@@ -5,7 +5,7 @@ th {
     font-weight: bold;
     text-decoration: underline;
 }
-.treeStyleTable {
+.tableCursor {
     cursor: default !important;
 }
 .unitSubunitBtn {
@@ -13,4 +13,7 @@ th {
 }
 .subunitTag {
     display: block !important;
+}
+.ust_selectedUnit {
+    color: #6F42C1 !important;
 }
