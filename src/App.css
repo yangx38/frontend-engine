@@ -17,3 +17,11 @@ th {
 .ust_selectedUnit {
     color: #6F42C1 !important;
 }
+.ant-menu {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    background: #f6f5ff;
+}
+.fiscalstaffnav {
+    width: 110px !important;
+}

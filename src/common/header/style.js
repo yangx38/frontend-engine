@@ -28,8 +28,8 @@ export const Nav = styled.div`
 `
 export const NavItem = styled.div`
     line-height: 54px;
-    padding: 0 12px;
-    margin: 0 5px;
+    margin-left: 10px;
+    margin-right: 10px;
     cursor: pointer;
     font-size: 16px;
     color: #626262;
@@ -47,6 +47,6 @@ export const NavItem = styled.div`
         text-align: center !important;
     }
     &:hover {
-        background-color: #d1ccff;
+        color: #1890ff !important;
     }
 `

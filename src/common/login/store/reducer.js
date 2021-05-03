@@ -6,8 +6,8 @@ const defaultState = fromJS({
     profileObj: {},
     user: {
         role: '',
-        submitter_subunits: '',
-        fiscalstaff_subunits: ''
+        submitterSubunitsOfGivenNetId: '',
+        fiscalStaffSubunitsOfGivenNetId: ''
     },
 });
 
@@ -16,9 +16,9 @@ const reducer = (state = defaultState, action) => {
         case constants.CHANGE_ROLE:
             return state.setIn(['user', 'role'], action.role);
         case constants.CHANGE_SUBMITTER_SUBUNITS_OF_GIVEN_NETID:
-            return state.setIn(['user', 'submitter_subunits'], action.data);
+            return state.setIn(['user', 'submitterSubunitsOfGivenNetId'], action.data);
         case constants.CHANGE_FISCAL_STAFF_SUBUNITS_OF_GIVEN_NETID:
-            return state.setIn(['user', 'fiscalstaff_subunits'], action.data);
+            return state.setIn(['user', 'fiscalStaffSubunitsOfGivenNetId'], action.data);
         case constants.CHANGE_TO_LOGIN: 
             return state.merge({
                 login: true,
@@ -30,8 +30,8 @@ const reducer = (state = defaultState, action) => {
                 profileObj: {},
                 user: {
                     role: '',
-                    submitter_subunits: '',
-                    fiscalstaff_subunits: ''
+                    submitterSubunitsOfGivenNetId: '',
+                    fiscalStaffSubunitsOfGivenNetId: ''
                 },
             })
         default:
