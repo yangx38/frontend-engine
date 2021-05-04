@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Space } from 'antd';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 
@@ -39,10 +39,10 @@ class FormForSubmitter extends Component {
             })
         }
 
-        const { onFinishTravelForm } = this.props;
+        const { onFinishTravelRequestForm } = this.props;
         
         return (
-            <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishTravelForm}>
+            <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishTravelRequestForm}>
                 <Form.Item label="Legal First Name" name="legalFirstName" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} ><Input /></Form.Item>
                 <Form.Item label="Legal Last Name" name="legalLastName" rules={[ { required: true, message: 'Please input your legal last name!', }, ]} ><Input /></Form.Item>
                 <Form.Item label="Departure" name="departure" rules={[ { required: true, message: 'Please input your departure!', }, ]} ><Input placeholder="City of airport"/></Form.Item>
@@ -83,7 +83,56 @@ class FormForSubmitter extends Component {
                     )}
                 </Form.List>
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Submit</Button>
+                    <Button type="primary" htmlType="submit">Finish</Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+
+    getTravelReimbursementForm() {
+        const { reimbursedBefore, requestForSelf } = this.props;
+        const layout = { labelCol: { span: 9, }, wrapperCol: { span: 10, }, };
+        const tailLayout = { wrapperCol: { offset: 9, span: 15, }, };
+
+        const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, onFinishTravelReimbursementForm } = this.props;
+
+        return (
+            <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishTravelReimbursementForm}>
+                <Form.Item label="Have you been reimbursed before this trip?" name="reimbursedbefore" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={traRei_changeReimbursedBefore}>
+                        <Radio value={'yes'}>Yes</Radio>
+                        <Radio value={'no'}>No</Radio>
+                    </Radio.Group>
+                </Form.Item>
+                { reimbursedBefore === 'yes' ? <Form.Item label="Reference Number" name="referencenumber" ><Input placeholder="Leave Blank If Not Known"/></Form.Item> : null }
+                <Form.Item label="Requesting travel reimbursement for yourself?" name="requestforself" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={traRei_changeRequestForSelf}>
+                        <Radio value={'yes'}>Yes</Radio>
+                        <Radio value={'no'}>No</Radio>
+                    </Radio.Group>
+                </Form.Item>
+                { requestForSelf === 'yes' ? <Form.Item label="Reference Number" name="r" >
+                    <Input placeholder="Leave Blank If Not Known"/>
+                    </Form.Item> : null }
+
+
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">Finish</Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+
+    getPayAnInvoiceForm() {
+        const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
+        const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
+
+        const { onFinishPayAnInvoiceForm } = this.props;
+
+        return (
+            <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishPayAnInvoiceForm}>
+                <Form.Item {...tailLayout}>
+                    {/* <Button type="primary" htmlType="submit">Finish</Button> */}
                 </Form.Item>
             </Form>
         );
@@ -98,7 +147,7 @@ class FormForSubmitter extends Component {
                     <HomeWrapper>
                         { 
                             formType === 'Pay an Invoice' ? 
-                                <div>Pay an invoice</div> : 
+                                this.getPayAnInvoiceForm() : 
                             formType === 'Procard Receipt' ? 
                                 <div>Procard Receipt</div> : 
                             formType === 'Purchase Request' ? 
@@ -108,7 +157,7 @@ class FormForSubmitter extends Component {
                             formType === 'Travel Request' ? 
                                 this.getTravelRequestForm() : 
                             formType === 'Traval Reimbursement' ? 
-                                <div>Traval Reimbursement</div> : null
+                                this.getTravelReimbursementForm() : null
                         }
                     </HomeWrapper>
                 </Fragment>
@@ -125,6 +174,8 @@ const mapStateToProps = (state) => {
         subunit: state.getIn(['header', 'submit_form', 'subunit']),
         formType: state.getIn(['header', 'submit_form', 'formType']),
         all_budget: state.getIn(['form', 'all_budget']),
+        reimbursedBefore: state.getIn(['form', 'traRei', 'reimbursedBefore']),
+        requestForSelf: state.getIn(['form', 'traRei', 'requestForSelf']),
     }
 }
 
@@ -135,9 +186,23 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actionCreators.getAllBudgets());
         },
         // getTravelRequestForm()
-        onFinishTravelForm(values) {
+        onFinishTravelRequestForm(values) {
             console.log(values)
         },
+        // getTravelReimbursementForm()
+        traRei_changeReimbursedBefore(e) {
+            dispatch(actionCreators.traRei_changeReimbursedBefore(e.target.value));
+        },
+        traRei_changeRequestForSelf(e) {
+            dispatch(actionCreators.traRei_changeRequestForSelf(e.target.value));
+        },
+        onFinishTravelReimbursementForm(values) {
+            console.log(values)
+        },
+        // getPayAnInvoiceForm()
+        onFinishPayAnInvoiceForm(values) {
+            console.log(values)
+        }
     }
 }
 

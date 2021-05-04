@@ -6,6 +6,10 @@ import { fromJS } from 'immutable';
 export const CHANGE_TO_LOGOUT = 'common/form/CHANGE_TO_LOGOUT';
 // componentDidMount()
 export const GET_ALL_BUDGET = 'common/form/GET_ALL_BUDGET';
+// getTravelRequestForm()
+// getTravelReimbursementForm()
+export const CHANGE_REIMBURSEBEFORE = 'common/form/CHANGE_REIMBURSEBEFORE';
+export const CHANGE_REQUESTFORSELF = 'common/form/CHANGE_REQUESTFORSELF';
 
 
 // **************** Actions ****************
@@ -31,3 +35,12 @@ export const getAllBudgets = () => {
     }
 }
 // getTravelRequestForm()
+// getTravelReimbursementForm()
+export const traRei_changeReimbursedBefore = (data) => ({
+    type: CHANGE_REIMBURSEBEFORE,
+    data
+})
+export const traRei_changeRequestForSelf = (data) => ({
+    type: CHANGE_REQUESTFORSELF,
+    data
+})
