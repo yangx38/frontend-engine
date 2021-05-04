@@ -22,3 +22,19 @@ th {
     padding-bottom: 3px !important;
     background: #f6f5ff;
 }
+.budgetRow {
+    display: flex;
+    background: greenyellow;
+    width: 400px !important;
+}
+.budgetSelect {
+    background: blueviolet;
+    width: 250px !important;
+}
+.budgetAmount {
+    width: 150px !important;
+}
+.XXX {
+    background: green;
+    display: flex;
+}
