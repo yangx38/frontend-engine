@@ -82,6 +82,7 @@ class FormForSubmitter extends Component {
                         </Fragment>
                     )}
                 </Form.List>
+
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
                 </Form.Item>
@@ -90,9 +91,22 @@ class FormForSubmitter extends Component {
     }
 
     getTravelReimbursementForm() {
-        const { reimbursedBefore, requestForSelf } = this.props;
-        const layout = { labelCol: { span: 9, }, wrapperCol: { span: 10, }, };
-        const tailLayout = { wrapperCol: { offset: 9, span: 15, }, };
+        const { reimbursedBefore, requestForSelf, all_budget } = this.props;
+        const all_budgetJS = Immutable.List(all_budget).toJS();
+        var all_budgetBeautifyJS = [];
+
+        const { Option } = Select;
+        const { RangePicker } = DatePicker;
+        const { TextArea } = Input;
+        const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
+        const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
+        
+        if (all_budgetJS.length > 0) {
+            all_budgetJS.map(item => {
+                const { budgetnumber, budgetname } = item;
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+            })
+        }
 
         const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, onFinishTravelReimbursementForm } = this.props;
 
@@ -105,16 +119,53 @@ class FormForSubmitter extends Component {
                     </Radio.Group>
                 </Form.Item>
                 { reimbursedBefore === 'yes' ? <Form.Item label="Reference Number" name="referencenumber" ><Input placeholder="Leave Blank If Not Known"/></Form.Item> : null }
-                <Form.Item label="Requesting travel reimbursement for yourself?" name="requestforself" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                <Form.Item label="Requesting this reimbursement for yourself?" name="requestforself" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
                     <Radio.Group onChange={traRei_changeRequestForSelf}>
                         <Radio value={'yes'}>Yes</Radio>
                         <Radio value={'no'}>No</Radio>
                     </Radio.Group>
                 </Form.Item>
-                { requestForSelf === 'yes' ? <Form.Item label="Reference Number" name="r" >
-                    <Input placeholder="Leave Blank If Not Known"/>
-                    </Form.Item> : null }
-
+                { 
+                    requestForSelf === 'no' ? <Fragment><Form.Item label="Name" name="requestforself_name" rules={[ { required: true, message: 'Please input name!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Affliation" name="requestforself_affliation" rules={[ { required: true, message: 'Please input afflication!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Email" name="requestforself_email" rules={[ { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null 
+                }
+                <Form.Item label="Date Submitted" name="datesubmitted" rules={[ { required: true, message: 'Please input date!', }, ]} >
+                    <DatePicker />
+                </Form.Item>
+                <div className="ant-row">
+                    <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
+                    <Space className='firstBudgetRow'>
+                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss Budget' }]} >
+                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                        </Form.Item>
+                        <Form.Item name="budget_firstamount" rules={[{ required: true, message: 'Amount' }]} >
+                            <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                        </Form.Item>
+                    </Space>
+                </div>
+                <Form.List name="budget_rest">
+                    {(fields, { add, remove }) => (
+                        <Fragment>
+                            {
+                                fields.map(({ key, name, fieldKey, ...restField }) => (
+                                    <Space key={key} className='restBudgetRow' align="baseline" >
+                                        <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss Budget' }]} >
+                                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                        </Form.Item>
+                                        <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
+                                            <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                        </Form.Item>
+                                        <MinusCircleOutlined onClick={() => remove(name)} />
+                                    </Space>
+                                ))
+                            }
+                            <Form.Item className='addBudgetBtn'>
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                            </Form.Item>
+                        </Fragment>
+                    )}
+                </Form.List>
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
