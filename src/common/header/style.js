@@ -31,7 +31,7 @@ export const NavItem = styled.div`
     margin-left: 10px;
     margin-right: 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
     color: #626262;
     background: #f6f5ff;
     border-radius: 5px;

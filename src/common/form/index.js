@@ -313,6 +313,90 @@ class FormForSubmitter extends Component {
         );
     }
 
+    getProcardReceipt() {
+        const { all_budget } = this.props;
+        const all_budgetJS = Immutable.List(all_budget).toJS();
+        var all_budgetBeautifyJS = [];
+
+        const { Option } = Select;
+        const { TextArea } = Input;
+        const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
+        const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
+        
+        if (all_budgetJS.length > 0) {
+            all_budgetJS.map(item => {
+                const { budgetnumber, budgetname } = item;
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+            })
+        }
+
+        const { normFile, onFinishProcardReceiptForm } = this.props;
+
+        return (
+            <Form {...layout} name="procardreceiptform" initialValues={{ remember: true, }} onFinish={onFinishProcardReceiptForm}>
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">Finish</Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+
+    getPurchaseRequestForm() {
+        const { all_budget } = this.props;
+        const all_budgetJS = Immutable.List(all_budget).toJS();
+        var all_budgetBeautifyJS = [];
+
+        const { Option } = Select;
+        const { TextArea } = Input;
+        const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
+        const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
+        
+        if (all_budgetJS.length > 0) {
+            all_budgetJS.map(item => {
+                const { budgetnumber, budgetname } = item;
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+            })
+        }
+
+        const { normFile, onFinishPurchaseRequestForm } = this.props;
+
+        return (
+            <Form {...layout} name="purchaserequestform" initialValues={{ remember: true, }} onFinish={onFinishPurchaseRequestForm}>
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">Finish</Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+
+    getReimbursementForm() {
+        const { all_budget } = this.props;
+        const all_budgetJS = Immutable.List(all_budget).toJS();
+        var all_budgetBeautifyJS = [];
+
+        const { Option } = Select;
+        const { TextArea } = Input;
+        const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
+        const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
+        
+        if (all_budgetJS.length > 0) {
+            all_budgetJS.map(item => {
+                const { budgetnumber, budgetname } = item;
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+            })
+        }
+
+        const { normFile, onFinishReimbursementForm } = this.props;
+
+        return (
+            <Form {...layout} name="reimbursementform" initialValues={{ remember: true, }} onFinish={onFinishReimbursementForm}>
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">Finish</Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+
     render() {
         const { login, role, unit, subunit, formType } = this.props;
         if (login && role !== '') {
@@ -321,18 +405,8 @@ class FormForSubmitter extends Component {
                     { subunit !== '' && unit !== '' && formType !== '' ? <TitleWrapper>{subunit} @ {unit}, {formType}</TitleWrapper> : <TitleWrapper>Please Select Subunit & Form Type First</TitleWrapper>}
                     <HomeWrapper>
                         { 
-                            formType === 'Pay an Invoice' ? 
-                                this.getPayAnInvoiceForm() : 
-                            formType === 'Procard Receipt' ? 
-                                <div>Procard Receipt</div> : 
-                            formType === 'Purchase Request' ? 
-                                <div>Purchase Request</div> : 
-                            formType === 'Reimbursement' ? 
-                                <div>Reimbursement</div> : 
-                            formType === 'Travel Request' ? 
-                                this.getTravelRequestForm() : 
-                            formType === 'Traval Reimbursement' ? 
-                                this.getTravelReimbursementForm() : null
+                            formType === 'Pay an Invoice' ? this.getPayAnInvoiceForm() : formType === 'Procard Receipt' ? this.getProcardReceipt() : formType === 'Purchase Request' ? this.getPurchaseRequestForm() : 
+                            formType === 'Reimbursement' ? this.getReimbursementForm() : formType === 'Travel Request' ? this.getTravelRequestForm() : formType === 'Traval Reimbursement' ? this.getTravelReimbursementForm() : null
                         }
                     </HomeWrapper>
                 </Fragment>
@@ -358,6 +432,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        normFile(e) {
+            console.log('Upload event:', e);
+            if (Array.isArray(e)) return e;
+            return e && e.fileList;
+        },
         // componentDidMount()
         getAllBudgets() {
             dispatch(actionCreators.getAllBudgets());
@@ -379,20 +458,25 @@ const mapDispatchToProps = (dispatch) => {
         traRei_changeWhetherPersonalTravelInclude(e) {
             dispatch(actionCreators.traRei_changeWhetherPersonalTravelInclude(e.target.value));
         },
-
-
-        normFile(e) {
-            console.log('Upload event:', e);
-            if (Array.isArray(e)) return e;
-            return e && e.fileList;
-        },
         onFinishTravelReimbursementForm(values) {
             console.log(values)
         },
         // getPayAnInvoiceForm()
         onFinishPayAnInvoiceForm(values) {
             console.log(values)
-        }
+        },
+        // getProcardReceipt()
+        onFinishProcardReceiptForm(values) {
+            console.log(values)
+        },
+        // getPurchaseRequestForm()
+        onFinishPurchaseRequestForm(values) {
+            console.log(values)
+        },
+        // getReimbursementForm()
+        onFinishReimbursementForm(values) {
+            console.log(values)
+        },
     }
 }
 

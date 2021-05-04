@@ -57,6 +57,15 @@ class Header extends Component {
                         <Link to={'/systemadministrator/unitsbudgetspeople'}>
                             <NavItem className='left'>Units/Budgets/People</NavItem>
                         </Link>
+                        <Link to={'/submitrequests'}>
+                            <NavItem className='left'>
+                                <Menu mode="horizontal">
+                                    <SubMenu key="SubMenu" title="Submit Request">
+                                        { submitterSubunitsOfGivenNetIdList }
+                                    </SubMenu>
+                                </Menu>
+                            </NavItem>
+                        </Link>
                     </Fragment>
                 );
             } else if (role === 'fiscal staff') {
