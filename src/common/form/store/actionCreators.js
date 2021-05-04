@@ -10,6 +10,8 @@ export const GET_ALL_BUDGET = 'common/form/GET_ALL_BUDGET';
 // getTravelReimbursementForm()
 export const CHANGE_REIMBURSEBEFORE = 'common/form/CHANGE_REIMBURSEBEFORE';
 export const CHANGE_REQUESTFORSELF = 'common/form/CHANGE_REQUESTFORSELF';
+export const CHANGE_WHTHERCITIZEN = 'common/form/CHANGE_WHTHERCITIZEN';
+export const CHANGE_WHETHERPERSONALTRAVELINCLUDE = 'common/form/CHANGE_WHETHERPERSONALTRAVELINCLUDE';
 
 
 // **************** Actions ****************
@@ -42,5 +44,13 @@ export const traRei_changeReimbursedBefore = (data) => ({
 })
 export const traRei_changeRequestForSelf = (data) => ({
     type: CHANGE_REQUESTFORSELF,
+    data
+})
+export const traRei_changeWhetherCitizen = (data) => ({
+    type: CHANGE_WHTHERCITIZEN,
+    data
+})
+export const traRei_changeWhetherPersonalTravelInclude = (data) => ({
+    type: CHANGE_WHETHERPERSONALTRAVELINCLUDE,
     data
 })

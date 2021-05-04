@@ -6,6 +6,8 @@ const defaultState = fromJS({
     traRei: {
         reimbursedBefore: '',
         requestForSelf: '',
+        whetherCitizen: '',
+        whetherPersonalTravelInclude: '',
     },
 });
 
@@ -18,6 +20,8 @@ const reducer = (state = defaultState, action) => {
                 traRei: {
                     reimbursedBefore: '',
                     requestForSelf: '',
+                    whetherCitizen: '',
+                    whetherPersonalTravelInclude: '',
                 },
             }))
         // componentDidMount()
@@ -29,6 +33,10 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['traRei', 'reimbursedBefore'], action.data);
         case constants.CHANGE_REQUESTFORSELF:
             return state.setIn(['traRei', 'requestForSelf'], action.data);
+        case constants.CHANGE_WHTHERCITIZEN:
+            return state.setIn(['traRei', 'whetherCitizen'], action.data);
+        case constants.CHANGE_WHETHERPERSONALTRAVELINCLUDE:
+            return state.setIn(['traRei', 'whetherPersonalTravelInclude'], action.data);
         default:
             return state;
     }

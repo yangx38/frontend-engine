@@ -3,8 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, Typography } from 'antd';
+import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
 
 import {
@@ -91,7 +91,7 @@ class FormForSubmitter extends Component {
     }
 
     getTravelReimbursementForm() {
-        const { reimbursedBefore, requestForSelf, all_budget } = this.props;
+        const { reimbursedBefore, requestForSelf, all_budget, whetherCitizen, whetherPersonalTravelInclude } = this.props;
         const all_budgetJS = Immutable.List(all_budget).toJS();
         var all_budgetBeautifyJS = [];
 
@@ -108,7 +108,7 @@ class FormForSubmitter extends Component {
             })
         }
 
-        const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, onFinishTravelReimbursementForm } = this.props;
+        const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, traRei_changeWhetherCitizen, traRei_changeWhetherPersonalTravelInclude, normFile, onFinishTravelReimbursementForm } = this.props;
 
         return (
             <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishTravelReimbursementForm}>
@@ -166,6 +166,44 @@ class FormForSubmitter extends Component {
                         </Fragment>
                     )}
                 </Form.List>
+                <div className="ant-row">
+                    <span className='budgetLabel'><span className='redMark'>*</span> US Citizen or Permanent Resident? :
+                    <div className='uwPolicy'><Typography.Link href="https://finance.uw.edu/travel/foreigntravel">UW Policy</Typography.Link></div></span>
+                    <Space className='firstBudgetRow'>
+                        <Form.Item name="whethercitizen" rules={[ { required: true, message: 'Select!', }, ]} >
+                            <Radio.Group onChange={traRei_changeWhetherCitizen}><Space direction="vertical"><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Space></Radio.Group>
+                        </Form.Item>
+                    </Space>
+                </div>
+                { 
+                    whetherCitizen === 'no' ? <Fragment>
+                        <Form.Item label="Passport Identity Page Copy" name="whethercitizen_passportidentitypagecopy" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Miss Passport Copy' }]} >
+                            <Upload name="file" action="http://localhost:8080/upload" listType="picture"><Button icon={<UploadOutlined />}>Click to upload</Button></Upload></Form.Item>
+                        <Form.Item label="I-94 or US port entry stamp (visa)" name="whethercitizen_i94" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Miss File' }]} >
+                            <Upload name="file" action="http://localhost:8080/upload" listType="picture"><Button icon={<UploadOutlined />}>Click to upload</Button></Upload></Form.Item></Fragment> : null 
+                }
+                <Form.Item label="Purpose of Travel" name="purposeoftravel" rules={[ { required: true, message: 'Please input your purpose!', }, ]} ><TextArea rows={2} /></Form.Item>
+                <div className="ant-row">
+                    <span className='budgetLabel'><span className='redMark'>*</span> Was personal travel included? :
+                    <div className='uwPolicy'><Typography.Link href="https://finance.uw.edu/travel/responsibility#personal">UW Policy</Typography.Link></div></span>
+                    <Space className='firstBudgetRow'>
+                        <Form.Item name="whetherpersontravelinclude" rules={[ { required: true, message: 'Select!', }, ]} >
+                        
+                        <Radio.Group onChange={traRei_changeWhetherPersonalTravelInclude}><Space direction="vertical"><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Space></Radio.Group>
+                        </Form.Item>
+                    </Space>
+                </div>
+                { whetherPersonalTravelInclude === 'yes' ? <Form.Item label="Departing & Returning Time" name="departingreturningtime"><RangePicker showTime format="YYYY-MM-DD HH:mm" /></Form.Item>: null }
+
+
+
+
+
+                {/* <Form.Item label="Registration Receipt" name="registrationreceipt" valuePropName="fileList" getValueFromEvent={normFile}>
+                    <Upload name="file" action="http://localhost:8080/upload" listType="picture">
+                        <Button icon={<UploadOutlined />}>Click to upload</Button>
+                    </Upload>
+                </Form.Item> */}
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
@@ -227,6 +265,8 @@ const mapStateToProps = (state) => {
         all_budget: state.getIn(['form', 'all_budget']),
         reimbursedBefore: state.getIn(['form', 'traRei', 'reimbursedBefore']),
         requestForSelf: state.getIn(['form', 'traRei', 'requestForSelf']),
+        whetherCitizen: state.getIn(['form', 'traRei', 'whetherCitizen']),
+        whetherPersonalTravelInclude: state.getIn(['form', 'traRei', 'whetherPersonalTravelInclude']),
     }
 }
 
@@ -246,6 +286,19 @@ const mapDispatchToProps = (dispatch) => {
         },
         traRei_changeRequestForSelf(e) {
             dispatch(actionCreators.traRei_changeRequestForSelf(e.target.value));
+        },
+        traRei_changeWhetherCitizen(e) {
+            dispatch(actionCreators.traRei_changeWhetherCitizen(e.target.value));
+        },
+        traRei_changeWhetherPersonalTravelInclude(e) {
+            dispatch(actionCreators.traRei_changeWhetherPersonalTravelInclude(e.target.value));
+        },
+
+
+        normFile(e) {
+            console.log('Upload event:', e);
+            if (Array.isArray(e)) return e;
+            return e && e.fileList;
         },
         onFinishTravelReimbursementForm(values) {
             console.log(values)
