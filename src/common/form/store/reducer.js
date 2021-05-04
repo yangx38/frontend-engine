@@ -3,6 +3,10 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
     all_budget: [],
+    tra: {
+        whetherUnitPayFlight: '',
+        whetherUnitPayHotel: '',
+    },
     traRei: {
         reimbursedBefore: '',
         requestForSelf: '',
@@ -21,6 +25,10 @@ const reducer = (state = defaultState, action) => {
         case constants.CHANGE_TO_LOGOUT: 
             return state.merge(fromJS({
                 all_budget: [],
+                tra: {
+                    whetherUnitPayFlight: '',
+                    whetherUnitPayHotel: '',
+                },
                 traRei: {
                     reimbursedBefore: '',
                     requestForSelf: '',
@@ -29,12 +37,17 @@ const reducer = (state = defaultState, action) => {
                 },
                 rei: {
                     whetherReimbursementFor: '',
+                    preferredPaymentMethod: '',
                 },
             }))
         // componentDidMount()
         case constants.GET_ALL_BUDGET:
             return state.set('all_budget', action.data);
         // getTravelRequestForm()
+        case constants.CHANGE_WHETHERUNITPAYFLIGHT:
+            return state.setIn(['tra', 'whetherUnitPayFlight'], action.data);
+        case constants.CHANGE_WHETHERUNITPAYHOTEL:
+            return state.setIn(['tra', 'whetherUnitPayHotel'], action.data);
         // getTravelReimbursementForm()
         case constants.CHANGE_REIMBURSEBEFORE:
             return state.setIn(['traRei', 'reimbursedBefore'], action.data);

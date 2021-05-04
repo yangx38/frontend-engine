@@ -22,7 +22,7 @@ class FormForSubmitter extends Component {
     }
 
     getTravelRequestForm() {
-        const { all_budget } = this.props;
+        const { whetherUnitPayFlight, whetherUnitPayHotel, all_budget } = this.props;
         const all_budgetJS = Immutable.List(all_budget).toJS();
         var all_budgetBeautifyJS = [];
 
@@ -39,10 +39,11 @@ class FormForSubmitter extends Component {
             })
         }
 
-        const { onFinishTravelRequestForm } = this.props;
+        const { tra_changeWhetherUnitPayFlight, tra_changeWhetherUnitPayHotel, onFinishTravelRequestForm } = this.props;
         
         return (
             <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishTravelRequestForm}>
+                <Divider className='divider'>Travel Request · Travel Information</Divider>
                 <Form.Item label="Legal First Name" name="legalfirstname" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} ><Input /></Form.Item>
                 <Form.Item label="Legal Last Name" name="legallastname" rules={[ { required: true, message: 'Please input your legal last name!', }, ]} ><Input /></Form.Item>
                 <Form.Item label="Departure" name="departure" rules={[ { required: true, message: 'Please input your departure!', }, ]} ><Input placeholder="City of airport"/></Form.Item>
@@ -82,6 +83,32 @@ class FormForSubmitter extends Component {
                         </Fragment>
                     )}
                 </Form.List>
+                <Form.Item label="Would you like unit to pay the flight?" name="whetherunitpayflight" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={tra_changeWhetherUnitPayFlight}><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Radio.Group>
+                </Form.Item>
+                { 
+                    whetherUnitPayFlight === 'yes' ? <Fragment>
+                        <Form.Item label="Birthday" name="birthday" rules={[ { required: true, message: 'Please input birthday!', }, ]} ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
+                        <Form.Item label="Airline" name="airline" ><Input /></Form.Item>
+                        <Form.Item label="Flight Number" name="flightnumber" ><Input /></Form.Item>
+                        <Form.Item label="Flight From" name="flightfrom" ><Input /></Form.Item>
+                        <Form.Item label="Flight To" name="flightto" ><Input /></Form.Item>
+                        <Form.Item label="Departing & Returning Date" name="unitpayflight_departingreturningdate"><RangePicker format="YYYY-MM-DD"/></Form.Item>
+                        <Form.Item label="Amount" name="unitpayflight_amount"><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item label="Flight Reference" name="flightreference" ><TextArea rows={2} placeholder='Window seat, flight in the morning...'/></Form.Item></Fragment> : null }
+                <Form.Item label="Would you like unit to pay the hotel?" name="whetherunitpayhotel" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={tra_changeWhetherUnitPayHotel}><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Radio.Group>
+                </Form.Item>
+                { 
+                    whetherUnitPayHotel === 'yes' ? <Fragment>
+                        <Form.Item label="Hotel Name" name="hotelname" ><Input /></Form.Item>
+                        <Form.Item label="Address" name="unitpayhotel_address" ><Input /></Form.Item>
+                        <Form.Item label="Number of People" name="unitpayhotel_numberofpeople"><InputNumber className='budgetAmount' formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item label="Zip" name="unitpayhotel_zip" ><Input /></Form.Item>
+                        <Form.Item label="Check In & Check Out Date" name="unitpayhotel_checkincheckoutdate"><RangePicker format="YYYY-MM-DD"/></Form.Item>
+                        <Form.Item label="Amount" name="unitpayhotel_amount"><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item label="Link" name="unitpayhotel_link" ><Input /></Form.Item>
+                        <Form.Item label="Hotel Note" name="unitpayhotel_hotelnote" ><TextArea rows={2} /></Form.Item></Fragment> : null }
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
@@ -112,7 +139,7 @@ class FormForSubmitter extends Component {
 
         return (
             <Form {...layout} name="travelreimbursementform" initialValues={{ remember: true, }} onFinish={onFinishTravelReimbursementForm}>
-                <Divider className='divider'>Travel Reimbursement</Divider>
+                <Divider className='divider'>Travel Reimbursement · Travel Reimbursement</Divider>
                 <Form.Item label="Have you been reimbursed before this trip?" name="reimbursedbefore" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
                     <Radio.Group onChange={traRei_changeReimbursedBefore}><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Radio.Group>
                 </Form.Item>
@@ -126,7 +153,7 @@ class FormForSubmitter extends Component {
                         <Form.Item label="Email" name="requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null 
                 }
                 <Form.Item label="Date Submitted" name="datesubmitted" rules={[ { required: true, message: 'Please input date!', }, ]} >
-                    <DatePicker />
+                    <DatePicker placeholder='YYYY-MM-DD'/>
                 </Form.Item>
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
@@ -189,7 +216,7 @@ class FormForSubmitter extends Component {
                 </div>
                 { whetherPersonalTravelInclude === 'yes' ? <Form.Item label="Departing & Returning Time" name="departingreturningtime"><RangePicker showTime format="YYYY-MM-DD HH:mm" /></Form.Item>: null }
 
-                <Divider className='divider'>Travel Costs</Divider>
+                <Divider className='divider'>Travel Reimbursement · Travel Costs</Divider>
 
 
                 <Form.Item {...tailLayout}>
@@ -691,6 +718,8 @@ const mapStateToProps = (state) => {
         subunit: state.getIn(['header', 'submit_form', 'subunit']),
         formType: state.getIn(['header', 'submit_form', 'formType']),
         all_budget: state.getIn(['form', 'all_budget']),
+        whetherUnitPayFlight: state.getIn(['form', 'tra', 'whetherUnitPayFlight']),
+        whetherUnitPayHotel: state.getIn(['form', 'tra', 'whetherUnitPayHotel']),
         reimbursedBefore: state.getIn(['form', 'traRei', 'reimbursedBefore']),
         requestForSelf: state.getIn(['form', 'traRei', 'requestForSelf']),
         whetherCitizen: state.getIn(['form', 'traRei', 'whetherCitizen']),
@@ -712,6 +741,12 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actionCreators.getAllBudgets());
         },
         // getTravelRequestForm()
+        tra_changeWhetherUnitPayFlight(e) {
+            dispatch(actionCreators.tra_changeWhetherUnitPayFlight(e.target.value));
+        },
+        tra_changeWhetherUnitPayHotel(e) {
+            dispatch(actionCreators.tra_changeWhetherUnitPayHotel(e.target.value));
+        },
         onFinishTravelRequestForm(values) {
             console.log(values)
         },

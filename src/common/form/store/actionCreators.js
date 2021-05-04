@@ -7,6 +7,8 @@ export const CHANGE_TO_LOGOUT = 'common/form/CHANGE_TO_LOGOUT';
 // componentDidMount()
 export const GET_ALL_BUDGET = 'common/form/GET_ALL_BUDGET';
 // getTravelRequestForm()
+export const CHANGE_WHETHERUNITPAYFLIGHT = 'common/form/CHANGE_WHETHERUNITPAYFLIGHT';
+export const CHANGE_WHETHERUNITPAYHOTEL = 'common/form/CHANGE_WHETHERUNITPAYHOTEL';
 // getTravelReimbursementForm()
 export const CHANGE_REIMBURSEBEFORE = 'common/form/CHANGE_REIMBURSEBEFORE';
 export const CHANGE_REQUESTFORSELF = 'common/form/CHANGE_REQUESTFORSELF';
@@ -42,6 +44,14 @@ export const getAllBudgets = () => {
     }
 }
 // getTravelRequestForm()
+export const tra_changeWhetherUnitPayFlight = (data) => ({
+    type: CHANGE_WHETHERUNITPAYFLIGHT,
+    data
+})
+export const tra_changeWhetherUnitPayHotel = (data) => ({
+    type: CHANGE_WHETHERUNITPAYHOTEL,
+    data
+})
 // getTravelReimbursementForm()
 export const traRei_changeReimbursedBefore = (data) => ({
     type: CHANGE_REIMBURSEBEFORE,
