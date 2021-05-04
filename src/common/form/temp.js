@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Space } from 'antd';
+import { Form, Input, Button, DatePicker, Select, InputNumber } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 
@@ -53,7 +53,7 @@ class FormForSubmitter extends Component {
         const { updateFirstName, updateLastName, updateDeparture, updateDestination, updateDepartingAndReturningTime, updateReason } = this.props;
         return (
             <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinish}>
-                {/* <Form.Item label="Legal First Name" name="legalFirstName" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} >
+                <Form.Item label="Legal First Name" name="legalFirstName" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} >
                     <Input onChange={updateFirstName} />
                 </Form.Item>
                 <Form.Item label="Legal Last Name" name="legalLastName" rules={[ { required: true, message: 'Please input your legal last name!', }, ]} >
@@ -70,7 +70,7 @@ class FormForSubmitter extends Component {
                 </Form.Item>
                 <Form.Item label="Reason" name="reason" rules={[ { required: true, message: 'Please input your reason!', }, ]} >
                     <TextArea rows={4} onChange={updateReason} />
-                </Form.Item> */}
+                </Form.Item>
                  {/* <Form.Item label="Budget Number">
                    <Input.Group compact>
                         <Form.Item name={['budget', 'budgetnumber']} noStyle rules={[{ required: true, message: 'Budget is required' }]} >
@@ -86,27 +86,22 @@ class FormForSubmitter extends Component {
                         </Form.Item> 
                     </Input.Group> 
                 </Form.Item>*/}
-                <Form.List name="users">
-                    {(fields, { add, remove }) => (
-                        <>
-                            {
-                                fields.map(({ key, name, fieldKey, ...restField }) => (
-                                    <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                        <Form.Item {...restField} name={[name, 'first']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Missing first name' }]} >
-                                            <Input placeholder="First Name" />
-                                        </Form.Item>
-                                        <Form.Item {...restField} name={[name, 'last']} fieldKey={[fieldKey, 'last']} rules={[{ required: true, message: 'Missing last name' }]} >
-                                            <Input placeholder="Last Name" />
-                                        </Form.Item>
-                                        <MinusCircleOutlined onClick={() => remove(name)} />
-                                    </Space>
-                                ))
-                            }
-                            <Form.Item>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add field</Button>
-                            </Form.Item>
-                        </>
-                    )}
+                <Form.List name="budgets">
+                    {
+                        (fields, { add, remove }) => (
+                            <Fragment>
+                                {
+                                    fields.map(({ key, name, fieldKey, ...restField }) => (
+                                        <div key={key}>
+                                            <Form.Item name={name} fieldKey={fieldKey} {...restField} > <Input /> </Form.Item>
+                                            <MinusCircleOutlined onClick={() => remove(name)} />
+                                        </div>
+                                    ))
+                                }
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add</Button>
+                            </Fragment>
+                        )
+                    }
                 </Form.List>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Submit</Button>

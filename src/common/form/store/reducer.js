@@ -10,6 +10,9 @@ const defaultState = fromJS({
         departing_date: '',
         returning_date: '',
         reason: '',
+        budget_list: [ 
+            { budget_number: '', amount: '' },
+        ],
     }
 });
 
