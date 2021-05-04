@@ -122,7 +122,7 @@ class FormForSubmitter extends Component {
                 </Form.Item>
                 { 
                     requestForSelf === 'no' ? <Fragment><Form.Item label="Name" name="requestforself_name" rules={[ { required: true, message: 'Please input name!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Affliation" name="requestforself_affliation" rules={[ { required: true, message: 'Please input afflication!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Affiliation" name="requestforself_affiliation" rules={[ { required: true, message: 'Please input affilication!', }, ]} ><Input /></Form.Item>
                         <Form.Item label="Email" name="requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null 
                 }
                 <Form.Item label="Date Submitted" name="datesubmitted" rules={[ { required: true, message: 'Please input date!', }, ]} >
@@ -542,7 +542,7 @@ class FormForSubmitter extends Component {
     }
 
     getReimbursementForm() {
-        const { all_budget } = this.props;
+        const { whetherReimbursementFor, preferredPaymentMethod, all_budget } = this.props;
         const all_budgetJS = Immutable.List(all_budget).toJS();
         var all_budgetBeautifyJS = [];
 
@@ -558,10 +558,106 @@ class FormForSubmitter extends Component {
             })
         }
 
-        const { normFile, onFinishReimbursementForm } = this.props;
+        const { rei_changeReimbursedFor, rei_changePreferredPaymentMethod, normFile, onFinishReimbursementForm } = this.props;
 
         return (
             <Form {...layout} name="reimbursementform" initialValues={{ remember: true, }} onFinish={onFinishReimbursementForm}>
+                <Divider className='divider'>Reimbursement · Requester Information</Divider>
+                <Form.Item label="Reimbursement for" name="reimbursementfor" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={rei_changeReimbursedFor}><Radio value={'myself'}>Myself</Radio><Radio value={'onbehalfofsomeone'}>On behalf of someone</Radio></Radio.Group>
+                </Form.Item>
+                { whetherReimbursementFor === 'onbehalfofsomeone' ? <Fragment><Form.Item label="Name" name="requestforself_name" rules={[ { required: true, message: 'Please input name!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Affiliation" name="requestforself_affiliation" rules={[ { required: true, message: 'Please input affilication!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Email" name="requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null }
+                <Form.Item label="Individual to be reimbursed?" name={'individualtobereimbursed'} rules={[ { required: true, message: 'Please input your choice!', }, ]} ><Radio.Group><Radio value={'employee'}>Employee</Radio><Radio value={'student'}>Student</Radio><Radio value={'nonuw'}>Non-UW</Radio></Radio.Group></Form.Item>
+
+                <Divider className='divider'>Reimbursement · Delivery Method</Divider>
+                <Form.Item label="Preferred Payment Method:" name="preferredpaymentmethod" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={rei_changePreferredPaymentMethod}><Radio value={'mailthecheck'}>Mail the check</Radio><Radio value={'pickupindepartment'}>Pick up in department</Radio></Radio.Group>
+                </Form.Item>
+                { preferredPaymentMethod === 'mailthecheck' ? <Fragment>
+                        <Divider className='billingDivider'>Billing Information</Divider>
+                        <Form.Item label="Full Name" name="fullname" rules={[ { required: true, message: 'Please input your name!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Address Line 1" name="addressline1" rules={[ { required: true, message: 'Please input your address!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Address Line 2" name="addressline2" ><Input /></Form.Item>
+                        <Form.Item label="City" name="city" rules={[ { required: true, message: 'Please input city!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="State" name="state" rules={[ { required: true, message: 'Please input state!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Zip Code" name="zipcode" rules={[ { required: true, message: 'Please input zip code!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Country" name="country" rules={[ { required: true, message: 'Please input country!', }, ]} ><Input /></Form.Item></Fragment> : null }
+                
+                <Divider className='divider'>Reimbursement · Items</Divider>
+                <Form.List name="items">
+                    {(fields, { add, remove }) => (
+                        <Fragment>
+                            {
+                                fields.map(({ key, name, fieldKey, ...restField }) => (
+                                    <Fragment>
+                                        <Divider />
+                                        <div key={key} className='itemBlock' >
+                                            <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
+                                            <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
+                                            <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
+                                            <div className="ant-row">
+                                                <span className='budgetLabel'><span className='redMark'>*</span> Category & Amount: </span>
+                                                <Space className='firstBudgetRow'>
+                                                    <Form.Item name={[name, 'category']} rules={[{ required: true, message: 'Miss catogory' }]} >
+                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select>
+                                                    </Form.Item>
+                                                    <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
+                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                    </Form.Item>
+                                                </Space>
+                                            </div>
+                                            {/* Was Sales Tax Paid? */}
+                                            <Form.Item label="Was Sales Tax Paid?" name={[name, 'wassalestaxpaid']} ><Radio.Group><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio><Radio value={'itemnottaxable'}>Item Not Taxable</Radio></Radio.Group></Form.Item>
+                                            {/* Budget: */}
+                                            <div className="ant-row">
+                                                <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
+                                                <Space className='firstBudgetRow'>
+                                                    <Form.Item name={[name, 'budget_firstnumber']} rules={[{ required: true, message: 'Miss budget' }]} >
+                                                        <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                    </Form.Item>
+                                                    <Form.Item name={[name, 'budget_firstamount']} rules={[{ required: true, message: 'Amount' }]} >
+                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                    </Form.Item>
+                                                </Space>
+                                            </div>
+                                            <Form.List name={[name, 'budget_rest']} >
+                                                {(fields, { add, remove }) => (
+                                                    <Fragment>
+                                                        {
+                                                            fields.map(({ key, name, fieldKey, ...restField }) => (
+                                                                <Space key={key} className='restBudgetRow' align="baseline" >
+                                                                    <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
+                                                                        <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                                    </Form.Item>
+                                                                    <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} >
+                                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                                    </Form.Item>
+                                                                    <MinusCircleOutlined onClick={() => remove(name)} />
+                                                                </Space>
+                                                            ))
+                                                        }
+                                                        <Form.Item className='addBudgetBtn'>
+                                                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                                                        </Form.Item>
+                                                    </Fragment>
+                                                )}
+                                            </Form.List>
+                                            <Form.Item label="Attachment" name={[name, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile}>
+                                                <Upload name="file" action="http://localhost:8080/upload" listType="picture"><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                                            </Form.Item>
+                                        </div>
+                                    </Fragment>
+                                ))
+                            }
+                            <Form.Item className='addBudgetBtn'>
+                                <Button className='addCatBtn' type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Item</Button>
+                            </Form.Item>
+                        </Fragment>
+                    )}
+                </Form.List>
+                
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
                 </Form.Item>
@@ -599,6 +695,8 @@ const mapStateToProps = (state) => {
         requestForSelf: state.getIn(['form', 'traRei', 'requestForSelf']),
         whetherCitizen: state.getIn(['form', 'traRei', 'whetherCitizen']),
         whetherPersonalTravelInclude: state.getIn(['form', 'traRei', 'whetherPersonalTravelInclude']),
+        whetherReimbursementFor: state.getIn(['form', 'rei', 'whetherReimbursementFor']),
+        preferredPaymentMethod: state.getIn(['form', 'rei', 'preferredPaymentMethod']),
     }
 }
 
@@ -646,6 +744,12 @@ const mapDispatchToProps = (dispatch) => {
             console.log(values)
         },
         // getReimbursementForm()
+        rei_changeReimbursedFor(e) {
+            dispatch(actionCreators.rei_changeReimbursedFor(e.target.value));
+        },
+        rei_changePreferredPaymentMethod(e) {
+            dispatch(actionCreators.rei_changePreferredPaymentMethod(e.target.value));
+        },
         onFinishReimbursementForm(values) {
             console.log(values)
         },

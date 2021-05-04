@@ -12,7 +12,12 @@ export const CHANGE_REIMBURSEBEFORE = 'common/form/CHANGE_REIMBURSEBEFORE';
 export const CHANGE_REQUESTFORSELF = 'common/form/CHANGE_REQUESTFORSELF';
 export const CHANGE_WHTHERCITIZEN = 'common/form/CHANGE_WHTHERCITIZEN';
 export const CHANGE_WHETHERPERSONALTRAVELINCLUDE = 'common/form/CHANGE_WHETHERPERSONALTRAVELINCLUDE';
-
+// getPayAnInvoiceForm()
+// getProcardReceipt()
+// getPurchaseRequestForm()
+// getReimbursementForm()
+export const CHANGE_REIMBURSEMENTFOR = 'common/form/CHANGE_REIMBURSEMENTFOR';
+export const CHANGE_PREFERREDPAYMENTMETHOD = 'common/form/CHANGE_PREFERREDPAYMENTMETHOD';
 
 // **************** Actions ****************
 // logout()
@@ -52,5 +57,17 @@ export const traRei_changeWhetherCitizen = (data) => ({
 })
 export const traRei_changeWhetherPersonalTravelInclude = (data) => ({
     type: CHANGE_WHETHERPERSONALTRAVELINCLUDE,
+    data
+})
+// getPayAnInvoiceForm()
+// getProcardReceipt()
+// getPurchaseRequestForm()
+// getReimbursementForm()
+export const rei_changeReimbursedFor = (data) => ({
+    type: CHANGE_REIMBURSEMENTFOR,
+    data
+})
+export const rei_changePreferredPaymentMethod = (data) => ({
+    type: CHANGE_PREFERREDPAYMENTMETHOD,
     data
 })

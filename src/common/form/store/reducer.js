@@ -9,6 +9,10 @@ const defaultState = fromJS({
         whetherCitizen: '',
         whetherPersonalTravelInclude: '',
     },
+    rei: {
+        whetherReimbursementFor: '',
+        preferredPaymentMethod: '',
+    },
 });
 
 const reducer = (state = defaultState, action) => {
@@ -22,6 +26,9 @@ const reducer = (state = defaultState, action) => {
                     requestForSelf: '',
                     whetherCitizen: '',
                     whetherPersonalTravelInclude: '',
+                },
+                rei: {
+                    whetherReimbursementFor: '',
                 },
             }))
         // componentDidMount()
@@ -37,6 +44,14 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['traRei', 'whetherCitizen'], action.data);
         case constants.CHANGE_WHETHERPERSONALTRAVELINCLUDE:
             return state.setIn(['traRei', 'whetherPersonalTravelInclude'], action.data);
+        // getPayAnInvoiceForm()
+        // getProcardReceipt()
+        // getPurchaseRequestForm()
+        // getReimbursementForm()
+        case constants.CHANGE_REIMBURSEMENTFOR:
+            return state.setIn(['rei', 'whetherReimbursementFor'], action.data);
+        case constants.CHANGE_PREFERREDPAYMENTMETHOD:
+            return state.setIn(['rei', 'preferredPaymentMethod'], action.data);
         default:
             return state;
     }
