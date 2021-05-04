@@ -231,7 +231,7 @@ class FormForSubmitter extends Component {
 
                 <Divider className='divider'>Vendor Information</Divider>
                 <Form.Item label="Vendor Name" name="vendorname" rules={[ { required: true, message: 'Please input vendor name!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Vendor Email" name="vendoremail" ><Input /></Form.Item>
+                <Form.Item label="Vendor Email" name="vendoremail"  rules={[ { type: 'email', message: 'Not valid email!', }, ]} ><Input /></Form.Item>
                 <Form.Item label="Vendor Phone" name="vendorphone"><Input /></Form.Item>
                 <Form.Item label="Vendor Website" name="vendorwebsite" ><Input /></Form.Item>
 
@@ -334,6 +334,88 @@ class FormForSubmitter extends Component {
 
         return (
             <Form {...layout} name="procardreceiptform" initialValues={{ remember: true, }} onFinish={onFinishProcardReceiptForm}>
+                <Divider className='divider'>Procard Receipt · Card Information</Divider>
+                <Form.Item label="Cardholder" name="cardholder" rules={[ { required: true, message: 'Please input cardholder!', }, ]} ><Input /></Form.Item>
+
+                <Divider className='divider'>Procard Receipt · Vendor Information</Divider>
+                <Form.Item label="Vendor Name" name="vendorname" rules={[ { required: true, message: 'Please input vendor name!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Vendor Email" name="vendoremail"  rules={[ { type: 'email', message: 'Not valid email!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Vendor Phone" name="vendorphone"><Input /></Form.Item>
+                <Form.Item label="Vendor Website" name="vendorwebsite" ><Input /></Form.Item>
+
+                <Divider className='divider'>Procard Receipt · Items</Divider>
+                <Form.List name="items">
+                    {(fields, { add, remove }) => (
+                        <Fragment>
+                            {
+                                fields.map(({ key, name, fieldKey, ...restField }) => (
+                                    <Fragment>
+                                        <Divider />
+                                        <div key={key} className='itemBlock' >
+                                            <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
+                                            <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
+                                            <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
+                                            <div className="ant-row">
+                                                <span className='budgetLabel'><span className='redMark'>*</span> Category & Amount: </span>
+                                                <Space className='firstBudgetRow'>
+                                                    <Form.Item name={[name, 'category']} rules={[{ required: true, message: 'Miss catogory' }]} >
+                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select>
+                                                    </Form.Item>
+                                                    <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
+                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                    </Form.Item>
+                                                </Space>
+                                            </div>
+                                            {/* Was Sales Tax Paid? */}
+                                            <Form.Item label="Was Sales Tax Paid?" name={[name, 'wassalestaxpaid']} ><Radio.Group><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio><Radio value={'itemnottaxable'}>Item Not Taxable</Radio></Radio.Group></Form.Item>
+                                            {/* Budget: */}
+                                            <div className="ant-row">
+                                                <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
+                                                <Space className='firstBudgetRow'>
+                                                    <Form.Item name={[name, 'budget_firstnumber']} rules={[{ required: true, message: 'Miss budget' }]} >
+                                                        <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                    </Form.Item>
+                                                    <Form.Item name={[name, 'budget_firstamount']} rules={[{ required: true, message: 'Amount' }]} >
+                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                    </Form.Item>
+                                                </Space>
+                                            </div>
+                                            <Form.List name={[name, 'budget_rest']} >
+                                                {(fields, { add, remove }) => (
+                                                    <Fragment>
+                                                        {
+                                                            fields.map(({ key, name, fieldKey, ...restField }) => (
+                                                                <Space key={key} className='restBudgetRow' align="baseline" >
+                                                                    <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
+                                                                        <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                                    </Form.Item>
+                                                                    <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} >
+                                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                                    </Form.Item>
+                                                                    <MinusCircleOutlined onClick={() => remove(name)} />
+                                                                </Space>
+                                                            ))
+                                                        }
+                                                        <Form.Item className='addBudgetBtn'>
+                                                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                                                        </Form.Item>
+                                                    </Fragment>
+                                                )}
+                                            </Form.List>
+                                            <Form.Item label="Attachment" name={[name, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile}>
+                                                <Upload name="file" action="http://localhost:8080/upload" listType="picture"><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                                            </Form.Item>
+                                        </div>
+                                    </Fragment>
+                                ))
+                            }
+                            <Form.Item className='addBudgetBtn'>
+                                <Button className='addCatBtn' type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Item</Button>
+                            </Form.Item>
+                        </Fragment>
+                    )}
+                </Form.List>
+                
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
                 </Form.Item>
