@@ -1,37 +1,33 @@
-export const CHANGE_TO_LOGOUT = 'common/form/CHANGE_TO_LOGOUT';
-// getTravelRequestForm()
-export const UPDATE_FIRSTNAME = 'common/form/UPDATE_FIRSTNAME';
-export const UPDATE_LASTNAME = 'common/form/UPDATE_LASTNAME';
-export const UPDATE_DEPARTURE = 'common/form/UPDATE_DEPARTURE';
-export const UPDATE_DESTINATION = 'common/form/UPDATE_DESTINATION';
-export const UPDATE_DEPARTING_AND_RETURNING_TIME = 'common/form/UPDATE_DEPARTING_AND_RETURNING_TIME';
-export const UPDATE_REASON = 'common/form/UPDATE_REASON';
+import axios from 'axios';
+import { fromJS } from 'immutable';
 
+// ****************  Types  ****************
+// logout()
+export const CHANGE_TO_LOGOUT = 'common/form/CHANGE_TO_LOGOUT';
+// componentDidMount()
+export const GET_ALL_BUDGET = 'common/form/GET_ALL_BUDGET';
+
+
+// **************** Actions ****************
+// logout()
 export const logout = () => ({
     type: CHANGE_TO_LOGOUT
 })
+// componentDidMount()
+const getAllBudgetsAction = (data) => ({
+    type: GET_ALL_BUDGET,
+    data: fromJS(data)
+})
+export const getAllBudgets = () => {
+    return (dispatch) => {
+        axios.get(`http://localhost:8080/api/systemadmin/getAllBudgets`)
+            .then(res => {
+                console.log('Pages, unitsbudgetspeople, getAllBudgets, res.data', res.data);
+                dispatch(getAllBudgetsAction(res.data))
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+}
 // getTravelRequestForm()
-export const updateFirstName = (value) => ({
-    type: UPDATE_FIRSTNAME,
-    value
-})
-export const updateLastName = (value) => ({
-    type: UPDATE_LASTNAME,
-    value
-})
-export const updateDeparture = (value) => ({
-    type: UPDATE_DEPARTURE,
-    value
-})
-export const updateDestination = (value) => ({
-    type: UPDATE_DESTINATION,
-    value
-})
-export const updateDepartingAndReturningTime = (value) => ({
-    type: UPDATE_DEPARTING_AND_RETURNING_TIME,
-    value
-})
-export const updateReason = (value) => ({
-    type: UPDATE_REASON,
-    value
-})

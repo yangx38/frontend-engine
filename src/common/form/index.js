@@ -10,72 +10,50 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
     TitleWrapper,
     HomeWrapper,
-    // TableWrapper,
-    // DirectText,
-    // Nav,
-    // GroupHeader,
 } from './style';
 
 class FormForSubmitter extends Component {
-    getTravelRequestForm() {
-        const { Option } = Select;
-        const tempData = [
-            {
-                "budgetnumber": "62-0372",
-                "budgetname": "TSUNAMI EVACUATION S"
-            },
-            {
-                "budgetnumber": "66-2729",
-                "budgetname": "MIC KCMETRO COST SHARE"
-            },
-            {
-                "budgetnumber": "63-8050",
-                "budgetname": "PSRC CASESTDY4SUB CHEN"
-            }
-        ]
-        var tempDataJS = [];
-        tempData.map(item => {
-            const { budgetnumber, budgetname } = item;
-            tempDataJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
-        })
-        console.log(tempDataJS)
-        // const templayout = { labelCol: { span: 8, }, wrapperCol: { span: 10, span: 8 }, };
-        const onFinish = values => {
-            console.log('Received values of form:', values);
-          };
-        
+    componentDidMount() {
+        const { login } = this.props;
+        const { getAllBudgets } = this.props;
+        if (login) {
+            getAllBudgets();
+        }
+    }
 
-        const { budget_list } = this.props;
+    getTravelRequestForm() {
+        const { all_budget } = this.props;
+        const all_budgetJS = Immutable.List(all_budget).toJS();
+        var all_budgetBeautifyJS = [];
+
+        const { Option } = Select;
         const { RangePicker } = DatePicker;
         const { TextArea } = Input;
         const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
         const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
-        const { updateFirstName, updateLastName, updateDeparture, updateDestination, updateDepartingAndReturningTime, updateReason } = this.props;
+        
+        if (all_budgetJS.length > 0) {
+            all_budgetJS.map(item => {
+                const { budgetnumber, budgetname } = item;
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+            })
+        }
+
+        const { onFinishTravelForm } = this.props;
+        
         return (
-            <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinish}>
-                <Form.Item label="Legal First Name" name="legalFirstName" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} >
-                    <Input onChange={updateFirstName} />
-                </Form.Item>
-                <Form.Item label="Legal Last Name" name="legalLastName" rules={[ { required: true, message: 'Please input your legal last name!', }, ]} >
-                    <Input onChange={updateLastName} />
-                </Form.Item>
-                <Form.Item label="Departure" name="departure" rules={[ { required: true, message: 'Please input your departure!', }, ]} >
-                    <Input onChange={updateDeparture} placeholder="City of airport"/>
-                </Form.Item>
-                <Form.Item label="Destination" name="destination" rules={[ { required: true, message: 'Please input your destination!', }, ]} >
-                    <Input onChange={updateDestination} />
-                </Form.Item>
-                <Form.Item label="Departing & Returning Date" name="departingreturningdate" rules={[ { type: 'array', required: true, message: 'Please select time!', }, ]}>
-                    <RangePicker format="YYYY-MM-DD" onChange={updateDepartingAndReturningTime}/>
-                </Form.Item>
-                <Form.Item label="Reason" name="reason" rules={[ { required: true, message: 'Please input your reason!', }, ]} >
-                    <TextArea rows={4} onChange={updateReason} />
-                </Form.Item>
+            <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishTravelForm}>
+                <Form.Item label="Legal First Name" name="legalFirstName" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Legal Last Name" name="legalLastName" rules={[ { required: true, message: 'Please input your legal last name!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Departure" name="departure" rules={[ { required: true, message: 'Please input your departure!', }, ]} ><Input placeholder="City of airport"/></Form.Item>
+                <Form.Item label="Destination" name="destination" rules={[ { required: true, message: 'Please input your destination!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Departing & Returning Date" name="departingreturningdate" rules={[ { type: 'array', required: true, message: 'Please select time!', }, ]}><RangePicker format="YYYY-MM-DD"/></Form.Item>
+                <Form.Item label="Reason" name="reason" rules={[ { required: true, message: 'Please input your reason!', }, ]} ><TextArea rows={4} /></Form.Item>
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
                     <Space className='firstBudgetRow'>
                         <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss Budget' }]} >
-                            <Select className='budgetSelect' placeholder="Select Budget">{tempDataJS}</Select>
+                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                         </Form.Item>
                         <Form.Item name="budget_firstamount" rules={[{ required: true, message: 'Amount' }]} >
                             <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
@@ -89,7 +67,7 @@ class FormForSubmitter extends Component {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
                                     <Space key={key} className='restBudgetRow' align="baseline" >
                                         <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss Budget' }]} >
-                                            <Select className='budgetSelect' placeholder="Select Budget">{tempDataJS}</Select>
+                                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                         </Form.Item>
                                         <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                             <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
@@ -146,34 +124,20 @@ const mapStateToProps = (state) => {
         unit: state.getIn(['header', 'submit_form', 'unit']),
         subunit: state.getIn(['header', 'submit_form', 'subunit']),
         formType: state.getIn(['header', 'submit_form', 'formType']),
-        budget_list: state.getIn(['form', 'tra', 'budget_list']),
+        all_budget: state.getIn(['form', 'all_budget']),
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        // componentDidMount()
+        getAllBudgets() {
+            dispatch(actionCreators.getAllBudgets());
+        },
         // getTravelRequestForm()
-        updateFirstName(e) {
-            dispatch(actionCreators.updateFirstName(e.target.value));
+        onFinishTravelForm(values) {
+            console.log(values)
         },
-        updateLastName(e) {
-            dispatch(actionCreators.updateLastName(e.target.value));
-        },
-        updateDeparture(e) {
-            dispatch(actionCreators.updateDeparture(e.target.value));
-        },
-        updateDestination(e) {
-            dispatch(actionCreators.updateDestination(e.target.value));
-        },
-        updateDepartingAndReturningTime(date, dateString) {
-            dispatch(actionCreators.updateDepartingAndReturningTime(dateString));
-        },
-        updateReason(e) {
-            dispatch(actionCreators.updateReason(e.target.value));
-        },
-        // onFinish(value) {
-        //     console.log(value)
-        // },
     }
 }
 
