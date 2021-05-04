@@ -22,19 +22,30 @@ th {
     padding-bottom: 3px !important;
     background: #f6f5ff;
 }
-.budgetRow {
+.budgetLabel {
+    width: 33.3% !important;
+    text-align: right !important;
+    padding-right: 8px !important;
+}
+.firstBudgetRow {
+    width: 33.3% !important;
+    margin-bottom: 0 !important;
+}
+.redMark {
+    color: red;
+    font-size: 70%;
+}
+.restBudgetRow {
     display: flex;
-    background: greenyellow;
-    width: 400px !important;
+    width: 33.3% !important;
+    margin: 0 auto;
 }
 .budgetSelect {
-    background: blueviolet;
     width: 250px !important;
 }
 .budgetAmount {
-    width: 150px !important;
+   width: 150px !important;
 }
-.XXX {
-    background: green;
-    display: flex;
+.addBudgetBtn {
+    margin-left: 33.3% !important;
 }

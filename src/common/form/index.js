@@ -71,39 +71,35 @@ class FormForSubmitter extends Component {
                 <Form.Item label="Reason" name="reason" rules={[ { required: true, message: 'Please input your reason!', }, ]} >
                     <TextArea rows={4} onChange={updateReason} />
                 </Form.Item>
-                 {/* <Form.Item label="Budget Number">
-                   <Input.Group compact>
-                        <Form.Item name={['budget', 'budgetnumber']} noStyle rules={[{ required: true, message: 'Budget is required' }]} >
-                            <Select style={{ width: '55%' }} placeholder="Select Budget">
-                                {tempDataJS}
-                            </Select>
+                <div className="ant-row">
+                    <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
+                    <Space className='firstBudgetRow'>
+                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss Budget' }]} >
+                            <Select className='budgetSelect' placeholder="Select Budget">{tempDataJS}</Select>
                         </Form.Item>
-                        <Form.Item name={['budget', 'budgetamount']} noStyle rules={[{ required: true, message: 'Amount is required' }]} >
-                            
+                        <Form.Item name="budget_firstamount" rules={[{ required: true, message: 'Amount' }]} >
+                            <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
                         </Form.Item>
-                        <Form.Item style={{ width: '10%', paddingLeft: '3%' }}>
-                        
-                        </Form.Item> 
-                    </Input.Group> 
-                </Form.Item>*/}
-                <Form.List name="users">
+                    </Space>
+                </div>
+                <Form.List name="budget_rest">
                     {(fields, { add, remove }) => (
                         <Fragment>
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
-                                    <Space key={key} align="baseline" >
-                                        <Form.Item className='budgetRow' label="Budget Number" {...restField} name={[name, 'first']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Missing first name' }]} >
+                                    <Space key={key} className='restBudgetRow' align="baseline" >
+                                        <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss Budget' }]} >
                                             <Select className='budgetSelect' placeholder="Select Budget">{tempDataJS}</Select>
                                         </Form.Item>
-                                        <Form.Item {...restField} name={[name, 'amount']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Missing Amount' }]} >
+                                        <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                             <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
                                         </Form.Item>
                                         <MinusCircleOutlined onClick={() => remove(name)} />
                                     </Space>
                                 ))
                             }
-                            <Form.Item>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add field</Button>
+                            <Form.Item className='addBudgetBtn'>
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
                             </Form.Item>
                         </Fragment>
                     )}
