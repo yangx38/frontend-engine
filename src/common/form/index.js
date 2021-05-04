@@ -205,7 +205,6 @@ class FormForSubmitter extends Component {
         var all_budgetBeautifyJS = [];
 
         const { Option } = Select;
-        const { RangePicker } = DatePicker;
         const { TextArea } = Input;
         const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
         const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
@@ -217,7 +216,7 @@ class FormForSubmitter extends Component {
             })
         }
 
-        const { onFinishPayAnInvoiceForm } = this.props;
+        const { normFile, onFinishPayAnInvoiceForm } = this.props;
 
         return (
             <Form {...layout} name="payaninvoiceform" initialValues={{ remember: true, }} onFinish={onFinishPayAnInvoiceForm}>
@@ -259,6 +258,7 @@ class FormForSubmitter extends Component {
                                                     </Form.Item>
                                                 </Space>
                                             </div>
+                                            {/* Budget: */}
                                             <div className="ant-row">
                                                 <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
                                                 <Space className='firstBudgetRow'>
@@ -270,12 +270,37 @@ class FormForSubmitter extends Component {
                                                     </Form.Item>
                                                 </Space>
                                             </div>
+                                            <Form.List name={[name, 'budget_rest']} >
+                                                {(fields, { add, remove }) => (
+                                                    <Fragment>
+                                                        {
+                                                            fields.map(({ key, name, fieldKey, ...restField }) => (
+                                                                <Space key={key} className='restBudgetRow' align="baseline" >
+                                                                    <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
+                                                                        <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                                    </Form.Item>
+                                                                    <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} >
+                                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                                    </Form.Item>
+                                                                    <MinusCircleOutlined onClick={() => remove(name)} />
+                                                                </Space>
+                                                            ))
+                                                        }
+                                                        <Form.Item className='addBudgetBtn'>
+                                                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                                                        </Form.Item>
+                                                    </Fragment>
+                                                )}
+                                            </Form.List>
+                                            <Form.Item label="Attachment" name={[name, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile}>
+                                                <Upload name="file" action="http://localhost:8080/upload" listType="picture"><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                                            </Form.Item>
                                         </div>
                                     </Fragment>
                                 ))
                             }
                             <Form.Item className='addBudgetBtn'>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Item</Button>
+                                <Button className='addCatBtn' type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Item</Button>
                             </Form.Item>
                         </Fragment>
                     )}
@@ -293,7 +318,7 @@ class FormForSubmitter extends Component {
         if (login && role !== '') {
             return (
                 <Fragment>
-                    { subunit !== '' && unit !== '' && formType !== '' ? <TitleWrapper>{subunit} @ {unit}, {formType}</TitleWrapper> : null}
+                    { subunit !== '' && unit !== '' && formType !== '' ? <TitleWrapper>{subunit} @ {unit}, {formType}</TitleWrapper> : <TitleWrapper>Please Select Subunit & Form Type First</TitleWrapper>}
                     <HomeWrapper>
                         { 
                             formType === 'Pay an Invoice' ? 

@@ -70,3 +70,6 @@ th {
 .firstLineItem {
     margin-left: 7px !important;
 }
+.addCatBtn {
+    width: 350px !important;
+}
