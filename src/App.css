@@ -53,3 +53,9 @@ th {
     padding-right: 15px !important;
     margin-top: 7px !important;
 }
+.divider {
+    margin-top: 3px !important;
+    margin-bottom: 10px !important;
+    color: #6F42C1 !important;
+    border-color: #6F42C1 !important;
+}
