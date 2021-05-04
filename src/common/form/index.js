@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
 import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, Typography, Divider } from 'antd';
-import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 
 import {
@@ -52,7 +52,7 @@ class FormForSubmitter extends Component {
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss Budget' }]} >
+                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss budget' }]} >
                             <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                         </Form.Item>
                         <Form.Item name="budget_firstamount" rules={[{ required: true, message: 'Amount' }]} >
@@ -66,7 +66,7 @@ class FormForSubmitter extends Component {
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
                                     <Space key={key} className='restBudgetRow' align="baseline" >
-                                        <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss Budget' }]} >
+                                        <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
                                             <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                         </Form.Item>
                                         <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
@@ -131,7 +131,7 @@ class FormForSubmitter extends Component {
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss Budget' }]} >
+                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss budget' }]} >
                             <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                         </Form.Item>
                         <Form.Item name="budget_firstamount" rules={[{ required: true, message: 'Amount' }]} >
@@ -145,7 +145,7 @@ class FormForSubmitter extends Component {
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
                                     <Space key={key} className='restBudgetRow' align="baseline" >
-                                        <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss Budget' }]} >
+                                        <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
                                             <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                         </Form.Item>
                                         <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
@@ -200,8 +200,22 @@ class FormForSubmitter extends Component {
     }
 
     getPayAnInvoiceForm() {
+        const { all_budget } = this.props;
+        const all_budgetJS = Immutable.List(all_budget).toJS();
+        var all_budgetBeautifyJS = [];
+
+        const { Option } = Select;
+        const { RangePicker } = DatePicker;
+        const { TextArea } = Input;
         const layout = { labelCol: { span: 8, }, wrapperCol: { span: 10, }, };
         const tailLayout = { wrapperCol: { offset: 8, span: 16, }, };
+        
+        if (all_budgetJS.length > 0) {
+            all_budgetJS.map(item => {
+                const { budgetnumber, budgetname } = item;
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+            })
+        }
 
         const { onFinishPayAnInvoiceForm } = this.props;
 
@@ -223,7 +237,49 @@ class FormForSubmitter extends Component {
                 <Form.Item label="Vendor Website" name="vendorwebsite" ><Input /></Form.Item>
 
                 <Divider className='divider'>Items</Divider>
-                
+                <Form.List name="items">
+                    {(fields, { add, remove }) => (
+                        <Fragment>
+                            {
+                                fields.map(({ key, name, fieldKey, ...restField }) => (
+                                    <Fragment>
+                                        <Divider />
+                                        <div key={key} className='itemBlock' >
+                                            <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
+                                            <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
+                                            <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
+                                            <div className="ant-row">
+                                                <span className='budgetLabel'><span className='redMark'>*</span> Category & Amount: </span>
+                                                <Space className='firstBudgetRow'>
+                                                    <Form.Item name={[name, 'category']} rules={[{ required: true, message: 'Miss catogory' }]} >
+                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select>
+                                                    </Form.Item>
+                                                    <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
+                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                    </Form.Item>
+                                                </Space>
+                                            </div>
+                                            <div className="ant-row">
+                                                <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
+                                                <Space className='firstBudgetRow'>
+                                                    <Form.Item name={[name, 'budget_firstnumber']} rules={[{ required: true, message: 'Miss budget' }]} >
+                                                        <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                    </Form.Item>
+                                                    <Form.Item name={[name, 'budget_firstamount']} rules={[{ required: true, message: 'Amount' }]} >
+                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                                    </Form.Item>
+                                                </Space>
+                                            </div>
+                                        </div>
+                                    </Fragment>
+                                ))
+                            }
+                            <Form.Item className='addBudgetBtn'>
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Item</Button>
+                            </Form.Item>
+                        </Fragment>
+                    )}
+                </Form.List>
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>

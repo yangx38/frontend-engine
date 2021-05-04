@@ -59,3 +59,14 @@ th {
     color: #6F42C1 !important;
     border-color: #6F42C1 !important;
 }
+.crossSign {
+    float: right !important;
+    font-size: 20px !important;
+    color: #fa6986 !important;
+}
+.itemBlock {
+    display: block;
+}
+.firstLineItem {
+    margin-left: 7px !important;
+}
