@@ -84,3 +84,15 @@ th {
     color: #a3a3a3 !important;
     margin-top: -16px !important;
 }
+.topRow {
+    margin-left: 33.3% !important;
+    margin-bottom: 0 !important;
+}
+.budgetTop {
+    width: 131px !important;
+}
+.minusSign {
+    color: #fa6986 !important;
+    font-size: 20px !important;
+    margin-left: 10px !important;
+}
