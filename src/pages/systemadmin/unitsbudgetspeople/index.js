@@ -38,6 +38,7 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                 return 0;
             }
         } ];
+        console.log(unitSubunitsJS)
         return (
             <Fragment>
                 <Table className='tableCursor' columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
@@ -74,6 +75,7 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     getPeopleTable() {
         const { pt_allpeople, ust_selectedSubunit } = this.props;
         const pt_allpeopleJS = Immutable.List(pt_allpeople).toJS();
+        console.log(pt_allpeopleJS)
         const peopleTableColumns = [
             {
               title: 'Name',
