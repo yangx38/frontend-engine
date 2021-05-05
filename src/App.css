@@ -72,6 +72,12 @@ th {
 }
 .addCatBtn {
     width: 350px !important;
+    color: #6F42C1 !important;
+    border-color: #6F42C1 !important;
+}
+.addBudgetStyle {
+    color: #6F42C1 !important;
+    border-color: #6F42C1 !important;
 }
 .billingDivider {
     font-size: 14px !important;

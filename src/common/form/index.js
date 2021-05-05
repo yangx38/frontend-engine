@@ -152,9 +152,6 @@ class FormForSubmitter extends Component {
                         <Form.Item label="Affiliation" name="requestforself_affiliation" rules={[ { required: true, message: 'Please input affilication!', }, ]} ><Input /></Form.Item>
                         <Form.Item label="Email" name="requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null 
                 }
-                <Form.Item label="Date Submitted" name="datesubmitted" rules={[ { required: true, message: 'Please input date!', }, ]} >
-                    <DatePicker placeholder='YYYY-MM-DD'/>
-                </Form.Item>
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
                     <Space className='firstBudgetRow'>
@@ -274,17 +271,8 @@ class FormForSubmitter extends Component {
                                             <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
                                             <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
                                             <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
-                                            <div className="ant-row">
-                                                <span className='budgetLabel'><span className='redMark'>*</span> Category & Amount: </span>
-                                                <Space className='firstBudgetRow'>
-                                                    <Form.Item name={[name, 'category']} rules={[{ required: true, message: 'Miss catogory' }]} >
-                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select>
-                                                    </Form.Item>
-                                                    <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
-                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
-                                                    </Form.Item>
-                                                </Space>
-                                            </div>
+                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} ><Select className='budgetSelect' placeholder="Select Category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select></Form.Item>
+                                            <Form.Item  {...restField} label="Full Amount" name={[name, 'fullamount']} fieldKey={[fieldKey, 'fullamount']} rules={[ { required: true, message: 'Please input full amount!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                                             {/* Budget: */}
                                             <div className="ant-row">
                                                 <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
@@ -314,7 +302,7 @@ class FormForSubmitter extends Component {
                                                             ))
                                                         }
                                                         <Form.Item className='addBudgetBtn'>
-                                                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                                                            <Button className='addBudgetStyle' type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
                                                         </Form.Item>
                                                     </Fragment>
                                                 )}
