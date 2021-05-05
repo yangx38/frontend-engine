@@ -97,7 +97,7 @@ class FormForSubmitter extends Component {
                                                                 <div key={key}>
                                                                     <Space className='restBudgetRow' align="baseline" >
                                                                         <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
-                                                                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                                            <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                                                         </Form.Item>
                                                                         <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                                                             <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
@@ -221,7 +221,7 @@ class FormForSubmitter extends Component {
                                                                 <div key={key}>
                                                                     <Space className='restBudgetRow' align="baseline" >
                                                                         <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
-                                                                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                                            <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                                                         </Form.Item>
                                                                         <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                                                             <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
@@ -351,7 +351,7 @@ class FormForSubmitter extends Component {
                                                                 <div key={key}>
                                                                     <Space className='restBudgetRow' align="baseline" >
                                                                         <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
-                                                                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                                            <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                                                         </Form.Item>
                                                                         <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                                                             <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
@@ -489,7 +489,7 @@ class FormForSubmitter extends Component {
                                                                 <div key={key}>
                                                                     <Space className='restBudgetRow' align="baseline" >
                                                                         <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
-                                                                            <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                                            <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                                                         </Form.Item>
                                                                         <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                                                             <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
@@ -581,12 +581,12 @@ class FormForSubmitter extends Component {
                                     <Fragment>
                                         <Space key={key} className='restBudgetRow' align="baseline" >
                                             <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
-                                                <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                             </Form.Item>
                                             <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                                 <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
                                             </Form.Item>
-                                            <MinusCircleOutlined onClick={() => remove(name)} />
+                                            <MinusCircleOutlined className='minusSign' onClick={() => remove(name)} />
                                         </Space>
                                         <Space className='topRow'>
                                             <Form.Item name={'budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
@@ -597,7 +597,7 @@ class FormForSubmitter extends Component {
                                 ))
                             }
                             <Form.Item className='addBudgetBtn'>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                                <Button type="dashed" className='addBudgetStyle' onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
                             </Form.Item>
                         </Fragment>
                     )}
@@ -694,12 +694,12 @@ class FormForSubmitter extends Component {
                                     <Fragment>
                                         <Space key={key} className='restBudgetRow' align="baseline" >
                                             <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
-                                                <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                                <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                             </Form.Item>
                                             <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                                 <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
                                             </Form.Item>
-                                            <MinusCircleOutlined onClick={() => remove(name)} />
+                                            <MinusCircleOutlined className='minusSign' onClick={() => remove(name)} />
                                         </Space>
                                         <Space className='topRow'>
                                             <Form.Item name={'budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
@@ -710,7 +710,7 @@ class FormForSubmitter extends Component {
                                 ))
                             }
                             <Form.Item className='addBudgetBtn'>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                                <Button type="dashed" className='addBudgetStyle' onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
                             </Form.Item>
                         </Fragment>
                     )}
@@ -744,45 +744,45 @@ class FormForSubmitter extends Component {
                 { whetherPersonalTravelInclude === 'yes' ? <Form.Item label="Departing & Returning Time" name="departingreturningtime"><RangePicker showTime format="YYYY-MM-DD HH:mm" /></Form.Item>: null }
 
                 <Divider className='divider'>Travel Reimbursement · Travel Costs</Divider>
+                <Divider className='serviceDivider'>Service</Divider>
+                <div className='categoryHeader firstLine'>For Registration, Airfare, Car Service, Hotel, attach "receipts"</div>
+                <div className='categoryHeader'> For Trail/Rain, attach "itinerary and receipt of payment"</div>
+                <div className='categoryHeader lastLine'>For Car Rental, attach "final car rental agreement"</div>
                 {/* Category */}
-                <Form.Item label="Category" name={'category'} ><Select className='budgetSelect' placeholder="Select Category">
-                    <Option key='registration' value='registration'>Registration</Option>
-                    <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require additional decumentation and prior approval)</Option>
-                    <Option key='other' value='other'>Other</Option>
-                    </Select></Form.Item>
-                <Form.Item label="Attachment" name={'attachment'} valuePropName="fileList" getValueFromEvent={normFile} extra="longgggggggggggggggggggggggggggggggggg">
+                <Form.Item label="Category" name={'category'} >
+                    <Select className='categorySelect' placeholder="Select Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
+                </Form.Item>
+                <Form.Item label="Attachment" name={'attachment'} valuePropName="fileList" getValueFromEvent={normFile} >
                     <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                 </Form.Item>
-                <Form.List name="budget_rest">
+                <Form.List name="category_rest">
                     {(fields, { add, remove }) => (
                         <Fragment>
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
                                     <Fragment>
                                         <Space key={key} className='restBudgetRow' align="baseline" >
-                                            <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
-                                                <Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
+                                            <Form.Item {...restField} name={[name, 'category']} fieldKey={[fieldKey, 'category']} >
+                                                <Select className='categorySelect' placeholder="Select Another Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
                                             </Form.Item>
-                                            <Form.Item {...restField} name={[name, 'budget_restamounts']} fieldKey={[fieldKey, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
-                                                <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+                                            <MinusCircleOutlined className='minusSign' onClick={() => remove(name)} />
+                                        </Space>
+                                        <div className='addBudgetBtn'>
+                                            <Form.Item {...restField} name={[name, 'attachment']} fieldKey={[fieldKey, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile} >
+                                                <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                                             </Form.Item>
-                                            <MinusCircleOutlined onClick={() => remove(name)} />
-                                        </Space>
-                                        <Space className='topRow'>
-                                            <Form.Item name={'budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
-                                            <Form.Item name={'budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
-                                            <Form.Item  name={'budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
-                                        </Space>
+                                        </div>
                                     </Fragment>
                                 ))
                             }
                             <Form.Item className='addBudgetBtn'>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}> Add Budget</Button>
+                                <Button type="dashed" className='addBudgetStyle' onClick={() => add()} block icon={<PlusOutlined />}> Add Item</Button>
                             </Form.Item>
                         </Fragment>
                     )}
                 </Form.List>
 
+                <Divider className='serviceDivider'>Meal</Divider>
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>

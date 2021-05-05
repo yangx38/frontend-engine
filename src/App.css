@@ -84,6 +84,11 @@ th {
     color: #a3a3a3 !important;
     margin-top: -16px !important;
 }
+.serviceDivider {
+    font-size: 14px !important;
+    color: #a3a3a3 !important;
+    margin-top: -5px !important;
+}
 .topRow {
     margin-left: 33.3% !important;
     margin-bottom: 0 !important;
@@ -95,4 +100,18 @@ th {
     color: #fa6986 !important;
     font-size: 20px !important;
     margin-left: 10px !important;
+}
+.categorySelect {
+    width: 420px !important;
+}
+.categoryHeader {
+    text-align: center !important;
+    font-size: 88% !important;
+    color: #a3a3a3 !important;
+}
+.firstLine {
+    margin-top: -12px !important;
+}
+.lastLine {
+    margin-bottom: 12px !important;
 }
