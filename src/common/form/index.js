@@ -639,7 +639,7 @@ class FormForSubmitter extends Component {
     }
 
     getTravelReimbursementForm() {
-        const { reimbursedBefore, requestForSelf, all_budget, whetherCitizen, whetherPersonalTravelInclude } = this.props;
+        const { reimbursedBefore, requestForSelf, all_budget, whetherCitizen, whetherPersonalTravelInclude, claimMealPerDiem } = this.props;
         const all_budgetJS = Immutable.List(all_budget).toJS();
         var all_budgetBeautifyJS = [];
 
@@ -656,7 +656,7 @@ class FormForSubmitter extends Component {
             })
         }
 
-        const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, traRei_changeWhetherCitizen, traRei_changeWhetherPersonalTravelInclude, beforeUpload, normFile, onFinishTravelReimbursementForm } = this.props;
+        const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, traRei_changeWhetherCitizen, traRei_changeWhetherPersonalTravelInclude, traRei_changeClaimMealPerDiem, beforeUpload, normFile, onFinishTravelReimbursementForm } = this.props;
 
         return (
             <Form {...layout} name="travelreimbursementform" initialValues={{ remember: true, }} onFinish={onFinishTravelReimbursementForm}>
@@ -745,9 +745,11 @@ class FormForSubmitter extends Component {
 
                 <Divider className='divider'>Travel Reimbursement · Travel Costs</Divider>
                 <Divider className='serviceDivider'>Service</Divider>
+                <div className='categoryNote'>
                 <div className='categoryHeader firstLine'>For Registration, Airfare, Car Service, Hotel, attach "receipts"</div>
                 <div className='categoryHeader'> For Trail/Rain, attach "itinerary and receipt of payment"</div>
                 <div className='categoryHeader lastLine'>For Car Rental, attach "final car rental agreement"</div>
+                </div>
                 {/* Category */}
                 <Form.Item label="Category" name={'category'} >
                     <Select className='categorySelect' placeholder="Select Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
@@ -782,8 +784,28 @@ class FormForSubmitter extends Component {
                     )}
                 </Form.List>
 
-                <Divider className='serviceDivider'>Meal</Divider>
-
+                <Divider className='serviceDivider'>Meal Per Diem</Divider>
+                <div className="ant-row">
+                    <span className='budgetLabel'><span className='redMark'>*</span> Are you claiming meal per diem? :
+                    <div className='uwPolicy'><Typography.Link href="https://finance.uw.edu/travel/meals">UW Policy</Typography.Link></div></span>
+                    <Space className='firstBudgetRow'>
+                        <Form.Item name="whetherclaimmealperdiem" >
+                            <Radio.Group className='claimMealRadio' onChange={traRei_changeClaimMealPerDiem}><Space direction="vertical">
+                                <Radio value={'yesmaxallowableperdiem'}>Yes, maximum allowable perdiem</Radio>
+                                <Radio value={'yesspecificdaysandmeals'}>Yes, specifc days and meals</Radio>
+                                <Radio value={'yesspecificamount'}>Yes, specific amount</Radio>
+                                <Radio value={'no'}>No</Radio>
+                                </Space></Radio.Group>
+                        </Form.Item>
+                    </Space>
+                </div>
+                { 
+                    claimMealPerDiem === 'yesspecificdaysandmeals' ? 
+                        <Form.Item label="Reference Number" name="referencenumber" ><Input placeholder="Leave Blank If Not Known"/></Form.Item> 
+                    
+                    
+                    : claimMealPerDiem === 'yesspecificamount' ? <Form.Item label="Reference Number" name="referencenumber" ><Input placeholder="LONOIJown"/></Form.Item> : null }
+                
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
                 </Form.Item>
@@ -823,6 +845,7 @@ const mapStateToProps = (state) => {
         requestForSelf: state.getIn(['form', 'traRei', 'requestForSelf']),
         whetherCitizen: state.getIn(['form', 'traRei', 'whetherCitizen']),
         whetherPersonalTravelInclude: state.getIn(['form', 'traRei', 'whetherPersonalTravelInclude']),
+        claimMealPerDiem: state.getIn(['form', 'traRei', 'claimMealPerDiem']),
         whetherReimbursementFor: state.getIn(['form', 'rei', 'whetherReimbursementFor']),
         preferredPaymentMethod: state.getIn(['form', 'rei', 'preferredPaymentMethod']),
     }
@@ -872,6 +895,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         traRei_changeWhetherPersonalTravelInclude(e) {
             dispatch(actionCreators.traRei_changeWhetherPersonalTravelInclude(e.target.value));
+        },
+        traRei_changeClaimMealPerDiem(e) {
+            dispatch(actionCreators.traRei_changeClaimMealPerDiem(e.target.value));
         },
         onFinishTravelReimbursementForm(values) {
             console.log(values)

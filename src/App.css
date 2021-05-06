@@ -101,11 +101,13 @@ th {
     font-size: 20px !important;
     margin-left: 10px !important;
 }
+.categoryNote {
+    margin-left: 33.3% !important;
+}
 .categorySelect {
     width: 420px !important;
 }
 .categoryHeader {
-    text-align: center !important;
     font-size: 88% !important;
     color: #a3a3a3 !important;
 }
@@ -114,4 +116,7 @@ th {
 }
 .lastLine {
     margin-bottom: 12px !important;
+}
+.claimMealRadio {
+    width: 300px !important;
 }
