@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider, Checkbox } from 'antd';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider, Checkbox, Tag } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 
@@ -34,31 +34,31 @@ class FormForSubmitter extends Component {
         if (all_budgetJS.length > 0) {
             all_budgetJS.map(item => {
                 const { budgetnumber, budgetname } = item;
-                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber.concat(' - ').concat(budgetname)}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
             })
         }
 
         const { beforeUpload, normFile, onFinishPayAnInvoiceForm } = this.props;
 
         return (
-            <Form {...layout} name="payaninvoiceform" initialValues={{ remember: true, }} onFinish={onFinishPayAnInvoiceForm}>
+            <Form {...layout} name="pay_form" initialValues={{ remember: true, }} onFinish={onFinishPayAnInvoiceForm}>
                 <Divider className='divider'>Pay an Invoice · Shipping Address</Divider>
-                <Form.Item label="Full Name" name="fullname" rules={[ { required: true, message: 'Please input your name!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Address Line 1" name="addressline1" rules={[ { required: true, message: 'Please input your address!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Address Line 2" name="addressline2" ><Input /></Form.Item>
-                <Form.Item label="City" name="city" rules={[ { required: true, message: 'Please input city!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="State" name="state" rules={[ { required: true, message: 'Please input state!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Zip Code" name="zipcode" rules={[ { required: true, message: 'Please input zip code!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Country" name="country" rules={[ { required: true, message: 'Please input country!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Full Name" name="pay_fullname" rules={[ { required: true, message: 'Please input your name!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Address Line 1" name="pay_addressline1" rules={[ { required: true, message: 'Please input your address!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Address Line 2" name="pay_addressline2" ><Input /></Form.Item>
+                <Form.Item label="City" name="pay_city" rules={[ { required: true, message: 'Please input city!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="State" name="pay_state" rules={[ { required: true, message: 'Please input state!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Zip Code" name="pay_zipcode" rules={[ { required: true, message: 'Please input zip code!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Country" name="pay_country" rules={[ { required: true, message: 'Please input country!', }, ]} ><Input /></Form.Item>
 
                 <Divider className='divider'>Pay an Invoice · Vendor Information</Divider>
-                <Form.Item label="Vendor Name" name="vendorname" rules={[ { required: true, message: 'Please input vendor name!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Vendor Email" name="vendoremail"  rules={[ { type: 'email', message: 'Not valid email!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Vendor Phone" name="vendorphone"><Input /></Form.Item>
-                <Form.Item label="Vendor Website" name="vendorwebsite" ><Input /></Form.Item>
+                <Form.Item label="Vendor Name" name="pay_vendorname" rules={[ { required: true, message: 'Please input vendor name!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Vendor Email" name="pay_vendoremail"  rules={[ { type: 'email', message: 'Not valid email!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Vendor Phone" name="pay_vendorphone"><Input /></Form.Item>
+                <Form.Item label="Vendor Website" name="pay_vendorwebsite" ><Input /></Form.Item>
 
                 <Divider className='divider'>Pay an Invoice · Items</Divider>
-                <Form.List name="items">
+                <Form.List name="pay_items">
                     {(fields, { add, remove }) => (
                         <Fragment>
                             {
@@ -69,7 +69,7 @@ class FormForSubmitter extends Component {
                                             <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
                                             <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
                                             <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
-                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} ><Select className='budgetSelect' placeholder="Select Category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select></Form.Item>
+                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} ><Select className='budgetSelect' placeholder="Select Category"><Option key='foodandbeverage' value='Food and Beverage'>Food and Beverage</Option><Option key='other' value='Other'>Other</Option></Select></Form.Item>
                                             <Form.Item  {...restField} label="Full Amount" name={[name, 'fullamount']} fieldKey={[fieldKey, 'fullamount']} rules={[ { required: true, message: 'Please input full amount!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                                             {/* Budget: */}
                                             <div className="ant-row">
@@ -120,7 +120,7 @@ class FormForSubmitter extends Component {
                                             </Form.List>
                                             {/* Attachment: */}
                                             <Form.Item label="Attachment" name={[name, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile}>
-                                                <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                                                <Upload name="file" accept={"image/png, image/jpeg, application/pdf"} action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                                             </Form.Item>
                                         </div>
                                     </div>
@@ -135,6 +135,7 @@ class FormForSubmitter extends Component {
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
                 </Form.Item>
             </Form>
         );
@@ -186,7 +187,7 @@ class FormForSubmitter extends Component {
                                                 <span className='budgetLabel'><span className='redMark'>*</span> Category & Amount: </span>
                                                 <Space className='firstBudgetRow'>
                                                     <Form.Item name={[name, 'category']} rules={[{ required: true, message: 'Miss catogory' }]} >
-                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select>
+                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='Food and Beverage'>Food and Beverage</Option><Option key='other' value='Other'>Other</Option></Select>
                                                     </Form.Item>
                                                     <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
                                                         <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
@@ -258,6 +259,7 @@ class FormForSubmitter extends Component {
                 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
+                    <Tag></Tag>
                 </Form.Item>
             </Form>
         );
@@ -922,13 +924,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         beforeUpload(file) {
             const isPdfOrJpgOrPng = file.type === 'application/pdf' || file.type === 'image/jpeg' || file.type === 'image/png';
-            if (!isPdfOrJpgOrPng) {
-                message.error('You can only upload PDF, JPG, PNG!');
-            }
+            if (!isPdfOrJpgOrPng) { message.error('You can only upload PDF, JPG, PNG!', 5); }
             const isLt2M = file.size / 1024 / 1024 < 2;
-            if (!isLt2M) {
-                message.error('Image must smaller than 2MB!');
-            }
+            if (!isLt2M) { message.error('Image must smaller than 2MB! Otherwise fail to send.', 5); }
             return isPdfOrJpgOrPng && isLt2M;
         },
         normFile(e) {
@@ -939,6 +937,11 @@ const mapDispatchToProps = (dispatch) => {
         // componentDidMount()
         getAllBudgets() {
             dispatch(actionCreators.getAllBudgets());
+        },
+        // getPayAnInvoiceForm()
+        onFinishPayAnInvoiceForm(values) {
+            console.log(values)
+            dispatch(actionCreators.onFinishPayAnInvoiceForm(values));
         },
         // getTravelRequestForm()
         tra_changeWhetherUnitPayFlight(e) {
@@ -970,10 +973,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actionCreators.traRei_changeWasMealProvided(e.target.value));
         },
         onFinishTravelReimbursementForm(values) {
-            console.log(values)
-        },
-        // getPayAnInvoiceForm()
-        onFinishPayAnInvoiceForm(values) {
             console.log(values)
         },
         // getProcardReceipt()
