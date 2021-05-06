@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider } from 'antd';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider, Checkbox } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 
@@ -578,8 +578,8 @@ class FormForSubmitter extends Component {
                         <Fragment>
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
-                                    <Fragment>
-                                        <Space key={key} className='restBudgetRow' align="baseline" >
+                                    <div key={key}>
+                                        <Space className='restBudgetRow' align="baseline" >
                                             <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
                                                 <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                             </Form.Item>
@@ -593,7 +593,7 @@ class FormForSubmitter extends Component {
                                             <Form.Item name={'budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
                                             <Form.Item  name={'budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
                                         </Space>
-                                    </Fragment>
+                                    </div>
                                 ))
                             }
                             <Form.Item className='addBudgetBtn'>
@@ -639,7 +639,7 @@ class FormForSubmitter extends Component {
     }
 
     getTravelReimbursementForm() {
-        const { reimbursedBefore, requestForSelf, all_budget, whetherCitizen, whetherPersonalTravelInclude, claimMealPerDiem } = this.props;
+        const { reimbursedBefore, requestForSelf, all_budget, whetherCitizen, whetherPersonalTravelInclude, claimMealPerDiem, mealProvided } = this.props;
         const all_budgetJS = Immutable.List(all_budget).toJS();
         var all_budgetBeautifyJS = [];
 
@@ -656,7 +656,7 @@ class FormForSubmitter extends Component {
             })
         }
 
-        const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, traRei_changeWhetherCitizen, traRei_changeWhetherPersonalTravelInclude, traRei_changeClaimMealPerDiem, beforeUpload, normFile, onFinishTravelReimbursementForm } = this.props;
+        const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, traRei_changeWhetherCitizen, traRei_changeWhetherPersonalTravelInclude, traRei_changeClaimMealPerDiem, traRei_changeWasMealProvided, beforeUpload, normFile, onFinishTravelReimbursementForm } = this.props;
 
         return (
             <Form {...layout} name="travelreimbursementform" initialValues={{ remember: true, }} onFinish={onFinishTravelReimbursementForm}>
@@ -691,8 +691,8 @@ class FormForSubmitter extends Component {
                         <Fragment>
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
-                                    <Fragment>
-                                        <Space key={key} className='restBudgetRow' align="baseline" >
+                                    <div key={key}>
+                                        <Space className='restBudgetRow' align="baseline" >
                                             <Form.Item {...restField} name={[name, 'budget_restnumbers']} fieldKey={[fieldKey, 'first']} rules={[{ required: true, message: 'Miss budget' }]} >
                                                 <Select className='budgetSelect' placeholder="Select Another Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select>
                                             </Form.Item>
@@ -706,7 +706,7 @@ class FormForSubmitter extends Component {
                                             <Form.Item name={'budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
                                             <Form.Item  name={'budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
                                         </Space>
-                                    </Fragment>
+                                    </div>
                                 ))
                             }
                             <Form.Item className='addBudgetBtn'>
@@ -762,8 +762,8 @@ class FormForSubmitter extends Component {
                         <Fragment>
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
-                                    <Fragment>
-                                        <Space key={key} className='restBudgetRow' align="baseline" >
+                                    <div key={key}>
+                                        <Space className='restBudgetRow' align="baseline" >
                                             <Form.Item {...restField} name={[name, 'category']} fieldKey={[fieldKey, 'category']} >
                                                 <Select className='categorySelect' placeholder="Select Another Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
                                             </Form.Item>
@@ -774,7 +774,7 @@ class FormForSubmitter extends Component {
                                                 <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                                             </Form.Item>
                                         </div>
-                                    </Fragment>
+                                    </div>
                                 ))
                             }
                             <Form.Item className='addBudgetBtn'>
@@ -785,28 +785,94 @@ class FormForSubmitter extends Component {
                 </Form.List>
 
                 <Divider className='serviceDivider'>Meal Per Diem</Divider>
+                {/* Are you claiming meal per diem? */}
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Are you claiming meal per diem? :
                     <div className='uwPolicy'><Typography.Link href="https://finance.uw.edu/travel/meals">UW Policy</Typography.Link></div></span>
                     <Space className='firstBudgetRow'>
                         <Form.Item name="whetherclaimmealperdiem" >
                             <Radio.Group className='claimMealRadio' onChange={traRei_changeClaimMealPerDiem}><Space direction="vertical">
-                                <Radio value={'yesmaxallowableperdiem'}>Yes, maximum allowable perdiem</Radio>
-                                <Radio value={'yesspecificdaysandmeals'}>Yes, specifc days and meals</Radio>
-                                <Radio value={'yesspecificamount'}>Yes, specific amount</Radio>
-                                <Radio value={'no'}>No</Radio>
+                                <Radio value={'mealperdiem_yesmaxallowableperdiem'}>Yes, maximum allowable perdiem</Radio>
+                                <Radio value={'mealperdiem_yesspecificdaysandmeals'}>Yes, specifc days and meals</Radio>
+                                <Radio value={'mealperdiem_yesspecificamount'}>Yes, specific amount</Radio>
+                                <Radio value={'mealperdiem_no'}>No</Radio>
                                 </Space></Radio.Group>
                         </Form.Item>
                     </Space>
                 </div>
                 { 
-                    claimMealPerDiem === 'yesspecificdaysandmeals' ? 
-                        <Form.Item label="Reference Number" name="referencenumber" ><Input placeholder="Leave Blank If Not Known"/></Form.Item> 
-                    
-                    
-                    : claimMealPerDiem === 'yesspecificamount' ? <Form.Item label="Reference Number" name="referencenumber" ><Input placeholder="LONOIJown"/></Form.Item> : null }
-                
-                <Form.Item {...tailLayout}>
+                    claimMealPerDiem === 'mealperdiem_yesspecificdaysandmeals' ? 
+                        <Fragment>
+                            {/* Date */}
+                            <Form.Item label="Date" name="date_date" ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
+                            <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                            <Form.List name="date_rest">
+                                {(fields, { add, remove }) => (
+                                    <Fragment>
+                                        {
+                                            fields.map(({ key, name, fieldKey, ...restField }) => (
+                                                <div key={key}>
+                                                    <Space className='restBudgetRow' align="baseline" >
+                                                        <Form.Item {...restField} name={[name, 'date_restname']} fieldKey={[fieldKey, 'date_restname']}><DatePicker className='date_calendar' placeholder='YYYY-MM-DD'/></Form.Item>
+                                                        <MinusCircleOutlined className='minusSignDate' onClick={() => remove(name)} />
+                                                    </Space>
+                                                    <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                                                </div>
+                                            ))
+                                        }
+                                        <Form.Item className='addBudgetBtn'>
+                                            <Button type="dashed" className='addBudgetStyle' onClick={() => add()} block icon={<PlusOutlined />}> Add Date</Button>
+                                        </Form.Item>
+                                    </Fragment>
+                                )}
+                            </Form.List>
+                        </Fragment> : 
+                    claimMealPerDiem === 'mealperdiem_yesspecificamount' ? <Form.Item label="Amount" name={'amount'}><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item> : null 
+                }
+
+                {/* Were meals provided to you? */}
+                <div className="ant-row">
+                    <span className='budgetLabel'><span className='redMark'>*</span> Were meals provided to you? :
+                    <div className='uwPolicy'>(Per diem allowance not allowed for provided meals.)</div></span>
+                    <Space className='firstBudgetRow'>
+                        <Form.Item name="whetherclaimmealperdiem" >
+                            <Radio.Group className='claimMealRadio' onChange={traRei_changeWasMealProvided}><Space direction="vertical">
+                                <Radio value={'mealprovided_yes'}>Yes</Radio>
+                                <Radio value={'mealprovided_no'}>No</Radio>
+                                </Space></Radio.Group>
+                        </Form.Item>
+                    </Space>
+                </div>
+                { 
+                    mealProvided === 'mealprovided_yes' ? 
+                        <Fragment>
+                            {/* Date */}
+                            <Form.Item label="Date" name="date_date" ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
+                            <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                            <Form.List name="date_rest">
+                                {(fields, { add, remove }) => (
+                                    <Fragment>
+                                        {
+                                            fields.map(({ key, name, fieldKey, ...restField }) => (
+                                                <div key={key}>
+                                                    <Space className='restBudgetRow' align="baseline" >
+                                                        <Form.Item {...restField} name={[name, 'date_restname']} fieldKey={[fieldKey, 'date_restname']}><DatePicker className='date_calendar' placeholder='YYYY-MM-DD'/></Form.Item>
+                                                        <MinusCircleOutlined className='minusSignDate' onClick={() => remove(name)} />
+                                                    </Space>
+                                                    <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                                                </div>
+                                            ))
+                                        }
+                                        <Form.Item className='addBudgetBtn'>
+                                            <Button type="dashed" className='addBudgetStyle' onClick={() => add()} block icon={<PlusOutlined />}> Add Date</Button>
+                                        </Form.Item>
+                                    </Fragment>
+                                )}
+                            </Form.List>
+                        </Fragment> : null
+                }
+
+                <Form.Item className='traRei_finishBtn' {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
                 </Form.Item>
             </Form>
@@ -846,6 +912,7 @@ const mapStateToProps = (state) => {
         whetherCitizen: state.getIn(['form', 'traRei', 'whetherCitizen']),
         whetherPersonalTravelInclude: state.getIn(['form', 'traRei', 'whetherPersonalTravelInclude']),
         claimMealPerDiem: state.getIn(['form', 'traRei', 'claimMealPerDiem']),
+        mealProvided: state.getIn(['form', 'traRei', 'mealProvided']),
         whetherReimbursementFor: state.getIn(['form', 'rei', 'whetherReimbursementFor']),
         preferredPaymentMethod: state.getIn(['form', 'rei', 'preferredPaymentMethod']),
     }
@@ -898,6 +965,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         traRei_changeClaimMealPerDiem(e) {
             dispatch(actionCreators.traRei_changeClaimMealPerDiem(e.target.value));
+        },
+        traRei_changeWasMealProvided(e) {
+            dispatch(actionCreators.traRei_changeWasMealProvided(e.target.value));
         },
         onFinishTravelReimbursementForm(values) {
             console.log(values)

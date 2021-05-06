@@ -13,6 +13,7 @@ const defaultState = fromJS({
         whetherCitizen: '',
         whetherPersonalTravelInclude: '',
         claimMealPerDiem: '',
+        mealProvided: '',
     },
     rei: {
         whetherReimbursementFor: '',
@@ -36,6 +37,7 @@ const reducer = (state = defaultState, action) => {
                     whetherCitizen: '',
                     whetherPersonalTravelInclude: '',
                     claimMealPerDiem: '',
+                    mealProvided: '',
                 },
                 rei: {
                     whetherReimbursementFor: '',
@@ -61,6 +63,8 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['traRei', 'whetherPersonalTravelInclude'], action.data);
         case constants.CHANGE_CLAIMMEALPERDIEM:
             return state.setIn(['traRei', 'claimMealPerDiem'], action.data);
+        case constants.CHANGE_WASMEALPROVIDED:
+            return state.setIn(['traRei', 'mealProvided'], action.data);
         // getPayAnInvoiceForm()
         // getProcardReceipt()
         // getPurchaseRequestForm()

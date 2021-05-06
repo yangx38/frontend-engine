@@ -120,3 +120,19 @@ th {
 .claimMealRadio {
     width: 300px !important;
 }
+.checkBox {
+    margin-left: 33.3% !important;
+    margin-bottom: 17px !important;
+    margin-top: -6px !important;
+}
+.date_calendar {
+    width: 150px !important;
+}
+.minusSignDate {
+    color: #fa6986 !important;
+    font-size: 20px !important;
+    margin-left: 100px !important;
+}
+.traRei_finishBtn {
+    margin-top: 22px !important;
+}

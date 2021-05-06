@@ -15,6 +15,7 @@ export const CHANGE_REQUESTFORSELF = 'common/form/CHANGE_REQUESTFORSELF';
 export const CHANGE_WHTHERCITIZEN = 'common/form/CHANGE_WHTHERCITIZEN';
 export const CHANGE_WHETHERPERSONALTRAVELINCLUDE = 'common/form/CHANGE_WHETHERPERSONALTRAVELINCLUDE';
 export const CHANGE_CLAIMMEALPERDIEM = 'common/form/CHANGE_CLAIMMEALPERDIEM';
+export const CHANGE_WASMEALPROVIDED = 'common/form/CHANGE_WASMEALPROVIDED';
 // getPayAnInvoiceForm()
 // getProcardReceipt()
 // getPurchaseRequestForm()
@@ -72,6 +73,10 @@ export const traRei_changeWhetherPersonalTravelInclude = (data) => ({
 })
 export const traRei_changeClaimMealPerDiem = (data) => ({
     type: CHANGE_CLAIMMEALPERDIEM,
+    data
+})
+export const traRei_changeWasMealProvided = (data) => ({
+    type: CHANGE_WASMEALPROVIDED,
     data
 })
 // getPayAnInvoiceForm()
