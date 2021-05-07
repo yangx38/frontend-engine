@@ -78,9 +78,11 @@ export const onFinishPayAnInvoiceForm = (data) => {
             const { attachment } = pay_item;
             if (attachment && attachment.length > 0) {
                 attachment.map((att) => {
-                    const { name, response } = att; const { url } = response;
-                    const pay_perattachment = { name, url };
-                    pay_attachments.push(pay_perattachment)
+                    const { name, response } = att; 
+                    if (response) {
+                        const { url } = response; const pay_perattachment = { name, url };
+                        pay_attachments.push(pay_perattachment)
+                    }
                 })
             }
             const pay_peritem = { expensedescription: expensedescription || '', businesspurpose: businesspurpose || '', category: category || '', fullamount, pay_budgets, pay_attachments };
