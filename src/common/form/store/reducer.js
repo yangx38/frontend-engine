@@ -21,7 +21,7 @@ const defaultState = fromJS({
     },
     form_data: {
         pay: {},
-
+        pro: {},
     },
 });
 
@@ -49,7 +49,7 @@ const reducer = (state = defaultState, action) => {
                 },
                 form_data: {
                     pay: {},
-
+                    pro: {},
                 },
             }))
         // componentDidMount()
@@ -58,6 +58,9 @@ const reducer = (state = defaultState, action) => {
         // getPayAnInvoiceForm()
         case constants.SUBMIT_PAYANINVOICE:
             return state.setIn(['form_data', 'pay'], action.pay_formdata);
+        // getProcardReceipt()
+        case constants.SUBMIT_PROCARDRECEIPT:
+            return state.setIn(['form_data', 'pro'], action.pro_formdata);
         // getTravelRequestForm()
         case constants.CHANGE_WHETHERUNITPAYFLIGHT:
             return state.setIn(['tra', 'whetherUnitPayFlight'], action.data);
