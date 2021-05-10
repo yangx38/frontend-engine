@@ -10,6 +10,8 @@ export const GET_ALL_BUDGET = 'common/form/GET_ALL_BUDGET';
 export const SUBMIT_PAYANINVOICE = 'common/form/SUBMIT_PAYANINVOICE';
 // getProcardReceipt()
 export const SUBMIT_PROCARDRECEIPT = 'common/form/SUBMIT_PROCARDRECEIPT';
+// getPurchaseRequestForm()
+export const SUBMIT_PURCHASEREQUEST = 'common/form/SUBMIT_PURCHASEREQUEST';
 // getTravelRequestForm()
 export const CHANGE_WHETHERUNITPAYFLIGHT = 'common/form/CHANGE_WHETHERUNITPAYFLIGHT';
 export const CHANGE_WHETHERUNITPAYHOTEL = 'common/form/CHANGE_WHETHERUNITPAYHOTEL';
@@ -20,7 +22,6 @@ export const CHANGE_WHTHERCITIZEN = 'common/form/CHANGE_WHTHERCITIZEN';
 export const CHANGE_WHETHERPERSONALTRAVELINCLUDE = 'common/form/CHANGE_WHETHERPERSONALTRAVELINCLUDE';
 export const CHANGE_CLAIMMEALPERDIEM = 'common/form/CHANGE_CLAIMMEALPERDIEM';
 export const CHANGE_WASMEALPROVIDED = 'common/form/CHANGE_WASMEALPROVIDED';
-// getPurchaseRequestForm()
 // getReimbursementForm()
 export const CHANGE_REIMBURSEMENTFOR = 'common/form/CHANGE_REIMBURSEMENTFOR';
 export const CHANGE_PREFERREDPAYMENTMETHOD = 'common/form/CHANGE_PREFERREDPAYMENTMETHOD';
@@ -152,6 +153,59 @@ export const onFinishProcardReceiptForm = (data) => {
     }
     return { type: SUBMIT_PROCARDRECEIPT, pro_formdata }
 }
+// getPurchaseRequestForm()
+export const onFinishPurchaseRequestForm = (data) => {
+    // Purchase Request · Shipping Address
+    const { pur_fullname, pur_addressline1, pur_addressline2, pur_city, pur_state, pur_zipcode, pur_country } = data;
+    // Purchase Request · Vendor Information
+    const { pur_vendorname, pur_vendoremail, pur_vendorphone, pur_vendorwebsite } = data;
+    // Purchase Request · Items
+    const { pur_items } = data;
+    var pur_allitems = []
+    if (pur_items) {
+        pur_items.map((pur_item, idx) => {
+            const { expensedescription, businesspurpose, category, quantity, unitprice, budget_firstnumber } = pur_item;
+            
+            var pur_budgets = []; 
+            // budget_fisrt
+            const { budget_firstamount, budget_firsttask, budget_firstproject, budget_firstoption, budget_rest } = pur_item;
+            const pur_budget = { budget_firstnumber, budget_firstamount, budget_firsttask: budget_firsttask || '', budget_firstproject: budget_firstproject || '', budget_firstoption: budget_firstoption || '' }
+            pur_budgets.push(pur_budget)
+            // budget_rest
+            if (budget_rest && budget_rest.length > 0) {
+                budget_rest.map((budget_rest_peritem) => {
+                    const { budget_restnumbers, budget_restamounts, budget_firsttask, budget_firstproject, budget_firstoption } = budget_rest_peritem;
+                    const pur_budget_rest = { budget_restnumbers, budget_restamounts, budget_firsttask: budget_firsttask || '', budget_firstproject: budget_firstproject || '', budget_firstoption: budget_firstoption || '' }
+                    pur_budgets.push(pur_budget_rest)
+                })
+            }
+            console.log('pur_budgets', pur_budgets)
+            var pur_attachments = [];
+            // attachment
+            const { attachment } = pur_item;
+            if (attachment && attachment.length > 0) {
+                attachment.map((att) => {
+                    const { name, response } = att; 
+                    if (response) {
+                        const { url } = response; const pur_perattachment = { name, url };
+                        pur_attachments.push(pur_perattachment)
+                    }
+                })
+            }
+            const pay_peritem = { expensedescription: expensedescription || '', businesspurpose: businesspurpose || '', category, quantity, unitprice, pur_budgets, pur_attachments };
+            pur_allitems.push(pay_peritem);
+        })
+        console.log('pur_allitems', pur_allitems)
+    }
+    
+    const pur_formdata = {
+        pur_fullname, pur_addressline1, pur_addressline2: pur_addressline2 || '', pur_city, pur_state, pur_zipcode, pur_country,
+        pur_vendorname, pur_vendoremail: pur_vendoremail || '', pur_vendorphone: pur_vendorphone || '', pur_vendorwebsite: pur_vendorwebsite || '',
+        pur_allitems
+    }
+    console.log('pur_formdata', pur_formdata)
+    return { type: SUBMIT_PURCHASEREQUEST, pur_formdata }
+}
 // getTravelRequestForm()
 export const tra_changeWhetherUnitPayFlight = (data) => ({
     type: CHANGE_WHETHERUNITPAYFLIGHT,
@@ -186,7 +240,6 @@ export const traRei_changeWasMealProvided = (data) => ({
     type: CHANGE_WASMEALPROVIDED,
     data
 })
-// getPurchaseRequestForm()
 // getReimbursementForm()
 export const rei_changeReimbursedFor = (data) => ({
     type: CHANGE_REIMBURSEMENTFOR,

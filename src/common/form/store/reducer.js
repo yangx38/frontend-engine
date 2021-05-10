@@ -22,6 +22,7 @@ const defaultState = fromJS({
     form_data: {
         pay: {},
         pro: {},
+        pur: {},
     },
 });
 
@@ -50,6 +51,7 @@ const reducer = (state = defaultState, action) => {
                 form_data: {
                     pay: {},
                     pro: {},
+                    pur: {},
                 },
             }))
         // componentDidMount()
@@ -61,6 +63,9 @@ const reducer = (state = defaultState, action) => {
         // getProcardReceipt()
         case constants.SUBMIT_PROCARDRECEIPT:
             return state.setIn(['form_data', 'pro'], action.pro_formdata);
+        // getPurchaseRequestForm()
+        case constants.SUBMIT_PURCHASEREQUEST:
+            return state.setIn(['form_data', 'pur'], action.pur_formdata);
         // getTravelRequestForm()
         case constants.CHANGE_WHETHERUNITPAYFLIGHT:
             return state.setIn(['tra', 'whetherUnitPayFlight'], action.data);
@@ -79,8 +84,6 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['traRei', 'claimMealPerDiem'], action.data);
         case constants.CHANGE_WASMEALPROVIDED:
             return state.setIn(['traRei', 'mealProvided'], action.data);
-        // getProcardReceipt()
-        // getPurchaseRequestForm()
         // getReimbursementForm()
         case constants.CHANGE_REIMBURSEMENTFOR:
             return state.setIn(['rei', 'whetherReimbursementFor'], action.data);
