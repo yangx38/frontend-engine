@@ -191,7 +191,7 @@ class FormForSubmitter extends Component {
                                             </Form.Item>
                                             <Form.Item {...restField} label="Full Amount" name={[name, 'fullamount']} fieldKey={[fieldKey, 'fullamount']} rules={[ { required: true, message: 'Please input full amount!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                                             {/* Was Sales Tax Paid? */}
-                                            <Form.Item label="Was Sales Tax Paid?" name={[name, 'wassalestaxpaid']} ><Radio.Group><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio><Radio value={'itemnottaxable'}>Item Not Taxable</Radio></Radio.Group></Form.Item>
+                                            <Form.Item label="Was Sales Tax Paid?" name={[name, 'wassalestaxpaid']} ><Radio.Group><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio><Radio value={'Item Not Taxable'}>Item Not Taxable</Radio></Radio.Group></Form.Item>
                                             {/* Budget: */}
                                             <div className="ant-row">
                                                 <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
@@ -254,8 +254,9 @@ class FormForSubmitter extends Component {
                 </Form.List>
                 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Finish</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
+                    <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
+                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -876,7 +877,7 @@ class FormForSubmitter extends Component {
     }
 
     getConfirmModal() {
-        const { formType, pay } = this.props;
+        const { formType, pay, pro } = this.props;
 
         if (formType === 'Pay an Invoice') {
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
@@ -939,6 +940,61 @@ class FormForSubmitter extends Component {
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
                 </div>
             );
+        } else if (formType === 'Procard Receipt') {
+            const { pro_cardholder } = pro;
+            const { pro_vendorname, pro_vendoremail, pro_vendorphone, pro_vendorwebsite } = pro;
+            const { pro_allitems } = pro;
+            var pro_allitemsJS = [];
+            pro_allitems.map((pro_allitem, idx) => {
+                const { expensedescription, businesspurpose, category, fullamount, wassalestaxpaid, } = pro_allitem;
+                pro_allitemsJS.push(<Descriptions.Item key={idx} labelStyle={{background:'#d4bdff'}} label="Item#" span={2}>{idx+1}</Descriptions.Item>);
+                pro_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
+                pro_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
+                pro_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
+                pro_allitemsJS.push(<Descriptions.Item label="Full Amount">{fullamount}</Descriptions.Item>);
+                const { pro_budgets } = pro_allitem;
+                pro_budgets.map((pro_budget, budget_idx) => {
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = pro_budget;
+                    pro_allitemsJS.push(
+                        <Descriptions.Item label="Budget" span={2} key={budget_idx}>
+                            Number: {budget_number}
+                            <br />
+                            Amount: ${budget_amount}
+                            <br />
+                            Task: {budget_task}
+                            <br />
+                            Opinion: {budget_opinion}
+                            <br />
+                            Project: {budget_project}
+                        </Descriptions.Item>
+                    );
+                })
+                const { pro_attachments } = pro_allitem;
+                pro_attachments.map((pro_attachment, att_idx) => {
+                    const { name, url} = pro_attachment;
+                    pro_allitemsJS.push(
+                        <Descriptions.Item label="Attachment" span={2} key={att_idx}>
+                            <a href={url}>{name}</a>
+                        </Descriptions.Item>);
+                })
+            })
+            return (
+                <div className='confirmBox'>
+                    <Descriptions title="Procard Receipt · Card Information">
+                        <Descriptions.Item label="Cardholder">{pro_cardholder}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Procard Receipt · Vendor Information" column={2}>
+                        <Descriptions.Item label="Vendor Name">{pro_vendorname}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Email">{pro_vendoremail}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Phone">{pro_vendorphone}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Website">{pro_vendorwebsite}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Procard Receipt · Items" column={2} bordered>
+                        { pro_allitemsJS }
+                    </Descriptions>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                </div>
+            );
         }
       }
 
@@ -984,6 +1040,7 @@ const mapStateToProps = (state) => {
         // form data
         confirm_modal: state.getIn(['form', 'confirm_modal']),
         pay: state.getIn(['form', 'form_data', 'pay']),
+        pro: state.getIn(['form', 'form_data', 'pro']),
     }
 }
 
