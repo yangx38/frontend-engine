@@ -67,13 +67,13 @@ export const onFinishPayAnInvoiceForm = (data) => {
             var pay_budgets = []; 
             // budget_fisrt
             const { budget_firstamount, budget_firsttask, budget_firstproject, budget_firstoption, budget_rest } = pay_item;
-            const pay_budget = { budget_firstnumber, budget_firstamount, budget_firsttask: budget_firsttask || '', budget_firstproject: budget_firstproject || '', budget_firstoption: budget_firstoption || '' }
+            const pay_budget = { budget_number: budget_firstnumber, budget_amount: budget_firstamount, budget_task: budget_firsttask || '', budget_project: budget_firstproject || '', budget_option: budget_firstoption || '' }
             pay_budgets.push(pay_budget)
             // budget_rest
             if (budget_rest && budget_rest.length > 0) {
                 budget_rest.map((budget_rest_peritem) => {
                     const { budget_restnumbers, budget_restamounts, budget_firsttask, budget_firstproject, budget_firstoption } = budget_rest_peritem;
-                    const pay_budget_rest = { budget_restnumbers, budget_restamounts, budget_firsttask: budget_firsttask || '', budget_firstproject: budget_firstproject || '', budget_firstoption: budget_firstoption || '' }
+                    const pay_budget_rest = { budget_number: budget_restnumbers, budget_amount: budget_restamounts, budget_task: budget_firsttask || '', budget_project: budget_firstproject || '', budget_option: budget_firstoption || '' }
                     pay_budgets.push(pay_budget_rest)
                 })
             }

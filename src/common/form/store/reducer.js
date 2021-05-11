@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
     all_budget: [],
+    confirm_modal: false, 
     tra: {
         whetherUnitPayFlight: '',
         whetherUnitPayHotel: '',
@@ -35,6 +36,7 @@ const reducer = (state = defaultState, action) => {
         case constants.CHANGE_TO_LOGOUT: 
             return state.merge(fromJS({
                 all_budget: [],
+                confirm_modal: false,
                 tra: {
                     whetherUnitPayFlight: '',
                     whetherUnitPayHotel: '',
@@ -65,7 +67,7 @@ const reducer = (state = defaultState, action) => {
             return state.set('all_budget', action.data);
         // getPayAnInvoiceForm()
         case constants.SUBMIT_PAYANINVOICE:
-            return state.setIn(['form_data', 'pay'], action.pay_formdata);
+            return state.setIn(['form_data', 'pay'], action.pay_formdata).set('confirm_modal', true);
         // getProcardReceipt()
         case constants.SUBMIT_PROCARDRECEIPT:
             return state.setIn(['form_data', 'pro'], action.pro_formdata);

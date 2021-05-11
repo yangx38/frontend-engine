@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider, Checkbox, Tag } from 'antd';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider, Checkbox, Tag, Descriptions } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 
@@ -136,8 +136,8 @@ class FormForSubmitter extends Component {
                 </Form.List>
 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Finish</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
+                    <Button type="primary" htmlType="submit">Check</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Check'</Tag></div>
                 </Form.Item>
             </Form>
         );
@@ -874,8 +874,75 @@ class FormForSubmitter extends Component {
         );
     }
 
+    getConfirmModal() {
+        const { formType, pay } = this.props;
+
+        if (formType === 'Pay an Invoice') {
+            const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
+            const { pay_vendorname, pay_vendoremail, pay_vendorphone, pay_vendorwebsite } = pay;
+            const { pay_allitems } = pay;
+            var pay_allitemsJS = [];
+            pay_allitems.map((pay_allitem, idx) => {
+                const { expensedescription, businesspurpose, category, fullamount, } = pay_allitem;
+                pay_allitemsJS.push(<Descriptions.Item key={idx} labelStyle={{background:'#d4bdff'}} label="Item#" span={2}>{idx+1}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item label="Full Amount">{fullamount}</Descriptions.Item>);
+                const { pay_budgets } = pay_allitem;
+                pay_budgets.map((pay_budget, budget_idx) => {
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = pay_budget;
+                    pay_allitemsJS.push(
+                        <Descriptions.Item label="Budget" span={2} key={budget_idx}>
+                            Number: {budget_number}
+                            <br />
+                            Amount: ${budget_amount}
+                            <br />
+                            Task: {budget_task}
+                            <br />
+                            Opinion: {budget_opinion}
+                            <br />
+                            Project: {budget_project}
+                        </Descriptions.Item>
+                    );
+                })
+                const { pay_attachments } = pay_allitem;
+                pay_attachments.map((pay_attachment, att_idx) => {
+                    const { name, url} = pay_attachment;
+                    pay_allitemsJS.push(
+                        <Descriptions.Item label="Attachment" span={2} key={att_idx}>
+                            <a href={url}>{name}</a>
+                        </Descriptions.Item>);
+                })
+            })
+            return (
+                <div className='confirmBox'>
+                    <Descriptions title="Pay an Invoice · Shipping Address">
+                        <Descriptions.Item label="Full Name">{pay_fullname}</Descriptions.Item>
+                        <Descriptions.Item label="Address Line 1">{pay_addressline1}</Descriptions.Item>
+                        <Descriptions.Item label="Address Line 2">{pay_addressline2}</Descriptions.Item>
+                        <Descriptions.Item label="City">{pay_city}</Descriptions.Item>
+                        <Descriptions.Item label="State">{pay_state}</Descriptions.Item>
+                        <Descriptions.Item label="Zip Code">{pay_zipcode}</Descriptions.Item>
+                        <Descriptions.Item label="Country">{pay_country}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Pay an Invoice · Vendor Information">
+                        <Descriptions.Item label="Vendor Name">{pay_vendorname}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Email">{pay_vendoremail}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Phone">{pay_vendorphone}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Website">{pay_vendorwebsite}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Pay an Invoice · Items" column={2} bordered>
+                        { pay_allitemsJS }
+                    </Descriptions>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                </div>
+            );
+        }
+      }
+
     render() {
-        const { login, role, unit, subunit, formType } = this.props;
+        const { login, role, unit, subunit, formType, confirm_modal } = this.props;
         if (login && role !== '') {
             return (
                 <Fragment>
@@ -884,6 +951,9 @@ class FormForSubmitter extends Component {
                         { 
                             formType === 'Pay an Invoice' ? this.getPayAnInvoiceForm() : formType === 'Procard Receipt' ? this.getProcardReceipt() : formType === 'Purchase Request' ? this.getPurchaseRequestForm() : 
                             formType === 'Reimbursement' ? this.getReimbursementForm() : formType === 'Travel Request' ? this.getTravelRequestForm() : formType === 'Traval Reimbursement' ? this.getTravelReimbursementForm() : null
+                        }
+                        {
+                            confirm_modal ? this.getConfirmModal() : null
                         }
                     </HomeWrapper>
                 </Fragment>
@@ -910,6 +980,9 @@ const mapStateToProps = (state) => {
         mealProvided: state.getIn(['form', 'traRei', 'mealProvided']),
         whetherReimbursementFor: state.getIn(['form', 'rei', 'whetherReimbursementFor']),
         preferredPaymentMethod: state.getIn(['form', 'rei', 'preferredPaymentMethod']),
+        // form data
+        confirm_modal: state.getIn(['form', 'confirm_modal']),
+        pay: state.getIn(['form', 'form_data', 'pay']),
     }
 }
 

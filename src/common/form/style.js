@@ -11,7 +11,6 @@ export const TitleWrapper = styled.div`
     font-weight: bold;
     color: #6F42C1;
 `
-
 export const HomeWrapper = styled.div`
     overflow: hidden;
     width: 1000px;

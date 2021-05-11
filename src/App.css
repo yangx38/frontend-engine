@@ -139,3 +139,11 @@ th {
 .tag {
     margin-top: 12px !important;
 }
+.confirmModelSubmit {
+    margin-top: 40px !important;
+    margin-left: 450px !important;
+}
+.confirmBox {
+    border-top: 1px solid #a3a3a3;
+    padding-top: 15px !important;
+}
