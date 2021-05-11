@@ -136,8 +136,9 @@ class FormForSubmitter extends Component {
                 </Form.List>
 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Check</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Check'</Tag></div>
+                    <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
+                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
