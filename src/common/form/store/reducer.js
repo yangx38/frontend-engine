@@ -24,6 +24,7 @@ const defaultState = fromJS({
         pro: {},
         pur: {},
         rei: {},
+        tra: {},
     },
 });
 
@@ -54,6 +55,7 @@ const reducer = (state = defaultState, action) => {
                     pro: {},
                     pur: {},
                     rei: {},
+                    tra: {},
                 },
             }))
         // componentDidMount()
@@ -80,6 +82,8 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['tra', 'whetherUnitPayFlight'], action.data);
         case constants.CHANGE_WHETHERUNITPAYHOTEL:
             return state.setIn(['tra', 'whetherUnitPayHotel'], action.data);
+        case constants.SUBMIT_TRAVELREQUEST:
+            return state.setIn(['form_data', 'tra'], action.tra_formdata);
         // getTravelReimbursementForm()
         case constants.CHANGE_REIMBURSEBEFORE:
             return state.setIn(['traRei', 'reimbursedBefore'], action.data);

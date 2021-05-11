@@ -532,35 +532,35 @@ class FormForSubmitter extends Component {
         if (all_budgetJS.length > 0) {
             all_budgetJS.map(item => {
                 const { budgetnumber, budgetname } = item;
-                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber.concat(' - ').concat(budgetname)}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
             })
         }
 
         const { tra_changeWhetherUnitPayFlight, tra_changeWhetherUnitPayHotel, onFinishTravelRequestForm } = this.props;
         
         return (
-            <Form {...layout} name="travelform" initialValues={{ remember: true, }} onFinish={onFinishTravelRequestForm}>
+            <Form {...layout} name="tra_form" initialValues={{ remember: true, }} onFinish={onFinishTravelRequestForm}>
                 <Divider className='divider'>Travel Request · Travel Information</Divider>
-                <Form.Item label="Legal First Name" name="legalfirstname" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Legal Last Name" name="legallastname" rules={[ { required: true, message: 'Please input your legal last name!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Departure" name="departure" rules={[ { required: true, message: 'Please input your departure!', }, ]} ><Input placeholder="City of airport"/></Form.Item>
-                <Form.Item label="Destination" name="destination" rules={[ { required: true, message: 'Please input your destination!', }, ]} ><Input /></Form.Item>
-                <Form.Item label="Departing & Returning Date" name="departingreturningdate" rules={[ { type: 'array', required: true, message: 'Please select time!', }, ]}><RangePicker format="YYYY-MM-DD"/></Form.Item>
-                <Form.Item label="Reason" name="reason" rules={[ { required: true, message: 'Please input your reason!', }, ]} ><TextArea rows={4} /></Form.Item>
+                <Form.Item label="Legal First Name" name="tra_legalfirstname" rules={[ { required: true, message: 'Please input your legal first name!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Legal Last Name" name="tra_legallastname" rules={[ { required: true, message: 'Please input your legal last name!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Departure" name="tra_departure" rules={[ { required: true, message: 'Please input your departure!', }, ]} ><Input placeholder="City of airport"/></Form.Item>
+                <Form.Item label="Destination" name="tra_destination" rules={[ { required: true, message: 'Please input your destination!', }, ]} ><Input /></Form.Item>
+                <Form.Item label="Departing & Returning Date" name="tra_departingreturningdate" rules={[ { type: 'array', required: true, message: 'Please select time!', }, ]}><RangePicker format="YYYY-MM-DD"/></Form.Item>
+                <Form.Item label="Reason" name="tra_reason" rules={[ { required: true, message: 'Please input your reason!', }, ]} ><TextArea rows={4} /></Form.Item>
                 {/* Budget */}
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss budget' }]} ><Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select></Form.Item>
-                        <Form.Item name="budget_firstamount" rules={[{ required: true, message: 'Amount' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item name="tra_budget_firstnumber" rules={[{ required: true, message: 'Miss budget' }]} ><Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select></Form.Item>
+                        <Form.Item name="tra_budget_firstamount" rules={[{ required: true, message: 'Amount' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                     </Space>
                 </div>
                 <Space className='topRow'>
-                    <Form.Item name={'budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
-                    <Form.Item name={'budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
-                    <Form.Item  name={'budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
+                    <Form.Item name={'tra_budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
+                    <Form.Item name={'tra_budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
+                    <Form.Item  name={'tra_budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
                 </Space>
-                <Form.List name="budget_rest">
+                <Form.List name="tra_budget_rest">
                     {(fields, { add, remove }) => (
                         <Fragment>
                             {
@@ -576,9 +576,9 @@ class FormForSubmitter extends Component {
                                             <MinusCircleOutlined className='minusSign' onClick={() => remove(name)} />
                                         </Space>
                                         <Space className='topRow'>
-                                            <Form.Item name={'budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
-                                            <Form.Item name={'budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
-                                            <Form.Item  name={'budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
+                                            <Form.Item name={[name, 'budget_task']}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
+                                            <Form.Item name={[name, 'budget_option']}><Input className='budgetTop' placeholder="Option" /></Form.Item>
+                                            <Form.Item  name={[name, 'budget_project']}><Input className='budgetTop' placeholder="Project" /></Form.Item>
                                         </Space>
                                     </div>
                                 ))
@@ -589,37 +589,38 @@ class FormForSubmitter extends Component {
                         </Fragment>
                     )}
                 </Form.List>
-                <Form.Item label="Would you like unit to pay the flight?" name="whetherunitpayflight" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
-                    <Radio.Group onChange={tra_changeWhetherUnitPayFlight}><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Radio.Group>
+                <Form.Item label="Would you like unit to pay the flight?" name="tra_whetherunitpayflight" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={tra_changeWhetherUnitPayFlight}><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio></Radio.Group>
                 </Form.Item>
                 { 
-                    whetherUnitPayFlight === 'yes' ? <Fragment>
-                        <Form.Item label="Birthday" name="birthday" rules={[ { required: true, message: 'Please input birthday!', }, ]} ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
-                        <Form.Item label="Airline" name="airline" ><Input /></Form.Item>
-                        <Form.Item label="Flight Number" name="flightnumber" ><Input /></Form.Item>
-                        <Form.Item label="Flight From" name="flightfrom" ><Input /></Form.Item>
-                        <Form.Item label="Flight To" name="flightto" ><Input /></Form.Item>
-                        <Form.Item label="Departing & Returning Date" name="unitpayflight_departingreturningdate"><RangePicker format="YYYY-MM-DD"/></Form.Item>
-                        <Form.Item label="Amount" name="unitpayflight_amount"><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
-                        <Form.Item label="Flight Reference" name="flightreference" ><TextArea rows={2} placeholder='Window seat, flight in the morning...'/></Form.Item></Fragment> : null 
+                    whetherUnitPayFlight === 'Yes' ? <Fragment>
+                        <Form.Item label="Birthday" name="tra_birthday" rules={[ { required: true, message: 'Please input birthday!', }, ]} ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
+                        <Form.Item label="Airline" name="tra_airline" ><Input /></Form.Item>
+                        <Form.Item label="Flight Number" name="tra_flightnumber" ><Input /></Form.Item>
+                        <Form.Item label="Flight From" name="tra_flightfrom" ><Input /></Form.Item>
+                        <Form.Item label="Flight To" name="tra_flightto" ><Input /></Form.Item>
+                        <Form.Item label="Departing & Returning Date" name="tra_unitpayflight_departingreturningdate"><RangePicker format="YYYY-MM-DD"/></Form.Item>
+                        <Form.Item label="Amount" name="tra_unitpayflight_amount"><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item label="Flight Reference" name="tra_flightreference" ><TextArea rows={2} placeholder='Window seat, flight in the morning...'/></Form.Item></Fragment> : null 
                 }
-                <Form.Item label="Would you like unit to pay the hotel?" name="whetherunitpayhotel" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
-                    <Radio.Group onChange={tra_changeWhetherUnitPayHotel}><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Radio.Group>
+                <Form.Item label="Would you like unit to pay the hotel?" name="tra_whetherunitpayhotel" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={tra_changeWhetherUnitPayHotel}><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio></Radio.Group>
                 </Form.Item>
                 { 
-                    whetherUnitPayHotel === 'yes' ? <Fragment>
-                        <Form.Item label="Hotel Name" name="hotelname" ><Input /></Form.Item>
-                        <Form.Item label="Address" name="unitpayhotel_address" ><Input /></Form.Item>
-                        <Form.Item label="Number of People" name="unitpayhotel_numberofpeople"><InputNumber className='budgetAmount' formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
-                        <Form.Item label="Zip" name="unitpayhotel_zip" ><Input /></Form.Item>
-                        <Form.Item label="Check In & Check Out Date" name="unitpayhotel_checkincheckoutdate"><RangePicker format="YYYY-MM-DD"/></Form.Item>
-                        <Form.Item label="Amount" name="unitpayhotel_amount"><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
-                        <Form.Item label="Link" name="unitpayhotel_link" ><Input /></Form.Item>
-                        <Form.Item label="Hotel Note" name="unitpayhotel_hotelnote" ><TextArea rows={2} /></Form.Item></Fragment> : null     
+                    whetherUnitPayHotel === 'Yes' ? <Fragment>
+                        <Form.Item label="Hotel Name" name="tra_hotelname" ><Input /></Form.Item>
+                        <Form.Item label="Address" name="tra_unitpayhotel_address" ><Input /></Form.Item>
+                        <Form.Item label="Number of People" name="tra_unitpayhotel_numberofpeople"><InputNumber className='budgetAmount' formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item label="Zip" name="tra_unitpayhotel_zip" ><Input /></Form.Item>
+                        <Form.Item label="Check In & Check Out Date" name="tra_unitpayhotel_checkincheckoutdate"><RangePicker format="YYYY-MM-DD"/></Form.Item>
+                        <Form.Item label="Amount" name="tra_unitpayhotel_amount"><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item label="Link" name="tra_unitpayhotel_link" ><Input /></Form.Item>
+                        <Form.Item label="Hotel Note" name="tra_unitpayhotel_hotelnote" ><TextArea rows={2} /></Form.Item></Fragment> : null     
                 }
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
                 </Form.Item>
             </Form>
         );
@@ -958,6 +959,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         onFinishTravelRequestForm(values) {
             console.log(values)
+            dispatch(actionCreators.onFinishTravelRequestForm(values));
         },
         // getTravelReimbursementForm()
         traRei_changeReimbursedBefore(e) {

@@ -19,6 +19,7 @@ export const SUBMIT_REIMBURSEMENT = 'common/form/SUBMIT_REIMBURSEMENT';
 // getTravelRequestForm()
 export const CHANGE_WHETHERUNITPAYFLIGHT = 'common/form/CHANGE_WHETHERUNITPAYFLIGHT';
 export const CHANGE_WHETHERUNITPAYHOTEL = 'common/form/CHANGE_WHETHERUNITPAYHOTEL';
+export const SUBMIT_TRAVELREQUEST = 'common/form/SUBMIT_TRAVELREQUEST';
 // getTravelReimbursementForm()
 export const CHANGE_REIMBURSEBEFORE = 'common/form/CHANGE_REIMBURSEBEFORE';
 export const CHANGE_REQUESTFORSELF = 'common/form/CHANGE_REQUESTFORSELF';
@@ -277,6 +278,61 @@ export const tra_changeWhetherUnitPayHotel = (data) => ({
     type: CHANGE_WHETHERUNITPAYHOTEL,
     data
 })
+export const onFinishTravelRequestForm = (data) => {
+    // Travel Request · Travel Information
+    const { tra_legalfirstname, tra_legallastname, tra_departure, tra_destination, tra_departingreturningdate, tra_reason } = data;
+    const tra_departingdate = tra_departingreturningdate[0]._d.toString().substring(0, 15);
+    const tra_returning = tra_departingreturningdate[1]._d.toString().substring(0, 15);
+    // budgets
+    const { tra_budget_firstnumber, tra_budget_firstamount, tra_budget_firsttask, tra_budget_firstoption, tra_budget_firstproject } = data;
+    var tra_budgets = []
+    const tra_budget = { tra_budget_firstnumber, tra_budget_firstamount, tra_budget_firsttask: tra_budget_firsttask || '', tra_budget_firstoption: tra_budget_firstoption || '', tra_budget_firstproject: tra_budget_firstproject || '' }
+    tra_budgets.push(tra_budget)
+    const { tra_budget_rest } = data;
+    if (tra_budget_rest && tra_budget_rest.length > 0) {
+        tra_budget_rest.map((budget_rest_peritem) => {
+            const { budget_restnumbers, budget_restamounts, budget_task, budget_project, budget_option } = budget_rest_peritem;
+            const budget_rest = { budget_restnumbers, budget_restamounts, budget_task: budget_task || '', budget_project: budget_project || '', budget_option: budget_option || '' }
+            tra_budgets.push(budget_rest)
+        })
+    }
+    // Would you like unit to pay the flight?
+    const { tra_whetherunitpayflight } = data;
+    var tra_unitpayflight = {};
+    if (tra_whetherunitpayflight === 'Yes') {
+        const { tra_birthday, tra_airline, tra_flightnumber, tra_flightfrom, tra_flightto, tra_unitpayflight_departingreturningdate, tra_unitpayflight_amount, tra_flightreference } = data;
+        const tra_unitpayflight_birthday = tra_birthday._d.toString().substring(0, 15);
+        var tra_unitpayflight_departingdate = '';
+        var tra_unitpayflight_returningdate = '';
+        if (tra_unitpayflight_departingreturningdate) {
+            tra_unitpayflight_departingdate = tra_unitpayflight_departingreturningdate[0]._d.toString().substring(0, 15);
+            tra_unitpayflight_returningdate = tra_unitpayflight_departingreturningdate[1]._d.toString().substring(0, 15);
+        }
+        tra_unitpayflight = { tra_unitpayflight_birthday, tra_airline: tra_airline || '', tra_flightnumber: tra_flightnumber || '', tra_flightfrom: tra_flightfrom || '', tra_flightto: tra_flightto || '', tra_unitpayflight_departingdate: tra_unitpayflight_departingdate || '', tra_unitpayflight_returningdate: tra_unitpayflight_returningdate || '', tra_unitpayflight_amount: tra_unitpayflight_amount || '', tra_flightreference: tra_flightreference || '' }
+    }
+    // Would you like unit to pay the hotel?
+    const { tra_whetherunitpayhotel } = data;
+    var tra_unitpayhotel = {};
+    if (tra_whetherunitpayhotel == 'Yes') {
+        const { tra_hotelname, tra_unitpayhotel_address, tra_unitpayhotel_numberofpeople, tra_unitpayhotel_zip, tra_unitpayhotel_checkincheckoutdate, tra_unitpayhotel_amount, tra_unitpayhotel_link, tra_unitpayhotel_hotelnote } = data;
+        var tra_unitpayhotel_checkkindate = '';
+        var tra_unitpayhotel_checkoutdate = '';
+        if (tra_unitpayhotel_checkincheckoutdate) {
+            tra_unitpayhotel_checkkindate = tra_unitpayhotel_checkincheckoutdate[0]._d.toString().substring(0, 15);
+            tra_unitpayhotel_checkoutdate = tra_unitpayhotel_checkincheckoutdate[1]._d.toString().substring(0, 15);
+        }
+        tra_unitpayhotel = { tra_hotelname: tra_hotelname || '', tra_unitpayhotel_address: tra_unitpayhotel_address || '', tra_unitpayhotel_numberofpeople: tra_unitpayhotel_numberofpeople || '', tra_unitpayhotel_zip: tra_unitpayhotel_zip || '', tra_unitpayhotel_checkkindate: tra_unitpayhotel_checkkindate || '', tra_unitpayhotel_checkoutdate: tra_unitpayhotel_checkoutdate || '',  tra_unitpayhotel_amount: tra_unitpayhotel_amount || '', tra_unitpayhotel_link: tra_unitpayhotel_link || '', tra_unitpayhotel_hotelnote: tra_unitpayhotel_hotelnote || '' };
+    }
+
+    const tra_formdata = {
+        tra_legalfirstname, tra_legallastname, tra_departure, tra_destination, tra_departingdate, tra_returning, tra_reason,
+        tra_budgets,
+        tra_whetherunitpayflight, tra_unitpayflight,
+        tra_whetherunitpayhotel, tra_unitpayhotel,
+    }
+    console.log('tra_formdata', tra_formdata)
+    return { type: SUBMIT_TRAVELREQUEST, tra_formdata }
+}
 // getTravelReimbursementForm()
 export const traRei_changeReimbursedBefore = (data) => ({
     type: CHANGE_REIMBURSEBEFORE,
