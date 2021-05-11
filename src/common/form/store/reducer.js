@@ -23,6 +23,7 @@ const defaultState = fromJS({
         pay: {},
         pro: {},
         pur: {},
+        rei: {},
     },
 });
 
@@ -52,6 +53,7 @@ const reducer = (state = defaultState, action) => {
                     pay: {},
                     pro: {},
                     pur: {},
+                    rei: {},
                 },
             }))
         // componentDidMount()
@@ -66,6 +68,13 @@ const reducer = (state = defaultState, action) => {
         // getPurchaseRequestForm()
         case constants.SUBMIT_PURCHASEREQUEST:
             return state.setIn(['form_data', 'pur'], action.pur_formdata);
+        // getReimbursementForm()
+        case constants.CHANGE_REIMBURSEMENTFOR:
+            return state.setIn(['rei', 'whetherReimbursementFor'], action.data);
+        case constants.CHANGE_PREFERREDPAYMENTMETHOD:
+            return state.setIn(['rei', 'preferredPaymentMethod'], action.data);
+        case constants.SUBMIT_REIMBURSEMENT:
+            return state.setIn(['form_data', 'rei'], action.rei_formdata);
         // getTravelRequestForm()
         case constants.CHANGE_WHETHERUNITPAYFLIGHT:
             return state.setIn(['tra', 'whetherUnitPayFlight'], action.data);
@@ -84,11 +93,6 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['traRei', 'claimMealPerDiem'], action.data);
         case constants.CHANGE_WASMEALPROVIDED:
             return state.setIn(['traRei', 'mealProvided'], action.data);
-        // getReimbursementForm()
-        case constants.CHANGE_REIMBURSEMENTFOR:
-            return state.setIn(['rei', 'whetherReimbursementFor'], action.data);
-        case constants.CHANGE_PREFERREDPAYMENTMETHOD:
-            return state.setIn(['rei', 'preferredPaymentMethod'], action.data);
         default:
             return state;
     }

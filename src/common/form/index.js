@@ -69,7 +69,7 @@ class FormForSubmitter extends Component {
                                             <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
                                             <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
                                             <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
-                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} >
+                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} rules={[{ required: true, message: 'Please input category!' }]} >
                                                 <Select className='categorySelect' placeholder="Select Category" allowClear showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}><Option key='0530' value='Books (05-30)'>Books (05-30)</Option><Option key='0531' value='Chemicals and Chemical Products (05-31)'>Chemicals and Chemical Products (05-31)</Option><Option key='0540' value='Computer Equipment less than $5,000 (05-40)'>Computer Equipment less than $5,000 (05-40)</Option><Option key='02' value='Consultant or Professional Services (02)'>Consultant or Professional Services (02)</Option><Option key='06' value='Equipment more than $5000 (06)'>Equipment more than $5000 (06)</Option><Option key='foodandbeverage' value='Food and Beverage'>Food and Beverage</Option><Option key='022-' value='Honorarium (02-20)'>Honorarium (02-20)</Option><Option key='metaxexemptequipment' value='M&E Tax Exempt Equipment'>M&E Tax Exempt Equipment</Option><Option key='0330' value='Memberships & Dues (03-30)'>Memberships & Dues (03-30)</Option><Option key='0412' value='Mileage (04-12)'>Mileage (04-12)</Option><Option key='03' value='Misc Services (03)'>Misc Services (03)</Option><Option key='0564' value='Office Supplies (05-64)'>Office Supplies (05-64)</Option><Option key='other' value='Other/Not sure'>Other/Not sure</Option><Option key='0354' value='Publication Fees (03-54)'>Publication Fees (03-54)</Option><Option key='0334' value='Registration Fees (03-34)'>Registration Fees (03-34)</Option><Option key='0208' value='Research Subject Payments (02-08)'>Research Subject Payments (02-08)</Option><Option key='0364' value='Service/Maintenance Contract (03-64)'>Service/Maintenance Contract (03-64)</Option><Option key='0360' value='Service/Repair (03-60)'>Service/Repair (03-60)</Option><Option key='0324' value='Shipping (03-24)'>Shipping (03-24)</Option><Option key='05' value='Supplies/Consumables (05)'>Supplies/Consumables (05)</Option><Option key='04' value='Travel (04)'>Travel (04)</Option></Select>
                                             </Form.Item>
                                             <Form.Item  {...restField} label="Full Amount" name={[name, 'fullamount']} fieldKey={[fieldKey, 'fullamount']} rules={[ { required: true, message: 'Please input full amount!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
@@ -185,7 +185,7 @@ class FormForSubmitter extends Component {
                                             <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
                                             <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
                                             <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
-                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} >
+                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} rules={[{ required: true, message: 'Please input category!' }]} >
                                                 <Select className='categorySelect' placeholder="Select Category" allowClear showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}><Option key='0530' value='Books (05-30)'>Books (05-30)</Option><Option key='0531' value='Chemicals and Chemical Products (05-31)'>Chemicals and Chemical Products (05-31)</Option><Option key='0540' value='Computer Equipment less than $5,000 (05-40)'>Computer Equipment less than $5,000 (05-40)</Option><Option key='02' value='Consultant or Professional Services (02)'>Consultant or Professional Services (02)</Option><Option key='06' value='Equipment more than $5000 (06)'>Equipment more than $5000 (06)</Option><Option key='foodandbeverage' value='Food and Beverage'>Food and Beverage</Option><Option key='022-' value='Honorarium (02-20)'>Honorarium (02-20)</Option><Option key='metaxexemptequipment' value='M&E Tax Exempt Equipment'>M&E Tax Exempt Equipment</Option><Option key='0330' value='Memberships & Dues (03-30)'>Memberships & Dues (03-30)</Option><Option key='0412' value='Mileage (04-12)'>Mileage (04-12)</Option><Option key='03' value='Misc Services (03)'>Misc Services (03)</Option><Option key='0564' value='Office Supplies (05-64)'>Office Supplies (05-64)</Option><Option key='other' value='Other/Not sure'>Other/Not sure</Option><Option key='0354' value='Publication Fees (03-54)'>Publication Fees (03-54)</Option><Option key='0334' value='Registration Fees (03-34)'>Registration Fees (03-34)</Option><Option key='0208' value='Research Subject Payments (02-08)'>Research Subject Payments (02-08)</Option><Option key='0364' value='Service/Maintenance Contract (03-64)'>Service/Maintenance Contract (03-64)</Option><Option key='0360' value='Service/Repair (03-60)'>Service/Repair (03-60)</Option><Option key='0324' value='Shipping (03-24)'>Shipping (03-24)</Option><Option key='05' value='Supplies/Consumables (05)'>Supplies/Consumables (05)</Option><Option key='04' value='Travel (04)'>Travel (04)</Option></Select>
                                             </Form.Item>
                                             <Form.Item {...restField} label="Full Amount" name={[name, 'fullamount']} fieldKey={[fieldKey, 'fullamount']} rules={[ { required: true, message: 'Please input full amount!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
@@ -308,18 +308,7 @@ class FormForSubmitter extends Component {
                                             <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
                                             <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
                                             <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
-                                            {/* <div className="ant-row">
-                                                <span className='budgetLabel'><span className='redMark'>*</span> Category & Quantity: </span>
-                                                <Space className='firstBudgetRow'>
-                                                    <Form.Item name={[name, 'category']} rules={[{ required: true, message: 'Miss catogory' }]} >
-                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select>
-                                                    </Form.Item>
-                                                    <Form.Item name={[name, 'quantity']} rules={[{ required: true, message: 'Quantity' }]} >
-                                                        <InputNumber className='budgetAmount' formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
-                                                    </Form.Item>
-                                                </Space>
-                                            </div> */}
-                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} >
+                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} rules={[{ required: true, message: 'Please input category!' }]} >
                                                 <Select className='categorySelect' placeholder="Select Category" allowClear showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}><Option key='0530' value='Books (05-30)'>Books (05-30)</Option><Option key='0531' value='Chemicals and Chemical Products (05-31)'>Chemicals and Chemical Products (05-31)</Option><Option key='0540' value='Computer Equipment less than $5,000 (05-40)'>Computer Equipment less than $5,000 (05-40)</Option><Option key='02' value='Consultant or Professional Services (02)'>Consultant or Professional Services (02)</Option><Option key='06' value='Equipment more than $5000 (06)'>Equipment more than $5000 (06)</Option><Option key='foodandbeverage' value='Food and Beverage'>Food and Beverage</Option><Option key='022-' value='Honorarium (02-20)'>Honorarium (02-20)</Option><Option key='metaxexemptequipment' value='M&E Tax Exempt Equipment'>M&E Tax Exempt Equipment</Option><Option key='0330' value='Memberships & Dues (03-30)'>Memberships & Dues (03-30)</Option><Option key='0412' value='Mileage (04-12)'>Mileage (04-12)</Option><Option key='03' value='Misc Services (03)'>Misc Services (03)</Option><Option key='0564' value='Office Supplies (05-64)'>Office Supplies (05-64)</Option><Option key='other' value='Other/Not sure'>Other/Not sure</Option><Option key='0354' value='Publication Fees (03-54)'>Publication Fees (03-54)</Option><Option key='0334' value='Registration Fees (03-34)'>Registration Fees (03-34)</Option><Option key='0208' value='Research Subject Payments (02-08)'>Research Subject Payments (02-08)</Option><Option key='0364' value='Service/Maintenance Contract (03-64)'>Service/Maintenance Contract (03-64)</Option><Option key='0360' value='Service/Repair (03-60)'>Service/Repair (03-60)</Option><Option key='0324' value='Shipping (03-24)'>Shipping (03-24)</Option><Option key='05' value='Supplies/Consumables (05)'>Supplies/Consumables (05)</Option><Option key='04' value='Travel (04)'>Travel (04)</Option></Select>
                                             </Form.Item>
                                             <Form.Item {...restField} label="Quantity" name={[name, 'quantity']} fieldKey={[fieldKey, 'quantity']} rules={[ { required: true, message: 'Please input quantity!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
@@ -409,39 +398,39 @@ class FormForSubmitter extends Component {
         if (all_budgetJS.length > 0) {
             all_budgetJS.map(item => {
                 const { budgetnumber, budgetname } = item;
-                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber.concat(' - ').concat(budgetname)}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
             })
         }
 
         const { rei_changeReimbursedFor, rei_changePreferredPaymentMethod, beforeUpload, normFile, onFinishReimbursementForm } = this.props;
 
         return (
-            <Form {...layout} name="reimbursementform" initialValues={{ remember: true, }} onFinish={onFinishReimbursementForm}>
+            <Form {...layout} name="rei_form" initialValues={{ remember: true, }} onFinish={onFinishReimbursementForm}>
                 <Divider className='divider'>Reimbursement · Requester Information</Divider>
-                <Form.Item label="Reimbursement for" name="reimbursementfor" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
-                    <Radio.Group onChange={rei_changeReimbursedFor}><Radio value={'myself'}>Myself</Radio><Radio value={'onbehalfofsomeone'}>On behalf of someone</Radio></Radio.Group>
+                <Form.Item label="Reimbursement for" name="rei_reimbursementfor" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={rei_changeReimbursedFor}><Radio value={'Myself'}>Myself</Radio><Radio value={'On behalf of someone'}>On behalf of someone</Radio></Radio.Group>
                 </Form.Item>
-                { whetherReimbursementFor === 'onbehalfofsomeone' ? <Fragment><Form.Item label="Name" name="requestforself_name" rules={[ { required: true, message: 'Please input name!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Affiliation" name="requestforself_affiliation" rules={[ { required: true, message: 'Please input affilication!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Email" name="requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null }
-                <Form.Item label="Individual to be reimbursed?" name={'individualtobereimbursed'} rules={[ { required: true, message: 'Please input your choice!', }, ]} ><Radio.Group><Radio value={'employee'}>Employee</Radio><Radio value={'student'}>Student</Radio><Radio value={'nonuw'}>Non-UW</Radio></Radio.Group></Form.Item>
+                { whetherReimbursementFor === 'On behalf of someone' ? <Fragment><Form.Item label="Name" name="rei_requestforself_name" rules={[ { required: true, message: 'Please input name!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Affiliation" name="rei_requestforself_affiliation" rules={[ { required: true, message: 'Please input affilication!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Email" name="rei_requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null }
+                <Form.Item label="Individual to be reimbursed?" name={'rei_individualtobereimbursed'} rules={[ { required: true, message: 'Please input your choice!', }, ]} ><Radio.Group><Radio value={'Employee'}>Employee</Radio><Radio value={'Student'}>Student</Radio><Radio value={'Non-UW'}>Non-UW</Radio></Radio.Group></Form.Item>
 
                 <Divider className='divider'>Reimbursement · Delivery Method</Divider>
-                <Form.Item label="Preferred Payment Method:" name="preferredpaymentmethod" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
-                    <Radio.Group onChange={rei_changePreferredPaymentMethod}><Radio value={'mailthecheck'}>Mail the check</Radio><Radio value={'pickupindepartment'}>Pick up in department</Radio></Radio.Group>
+                <Form.Item label="Preferred Payment Method:" name="rei_preferredpaymentmethod" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={rei_changePreferredPaymentMethod}><Radio value={'Mail the check'}>Mail the check</Radio><Radio value={'Pick up in department'}>Pick up in department</Radio></Radio.Group>
                 </Form.Item>
-                { preferredPaymentMethod === 'mailthecheck' ? <Fragment>
+                { preferredPaymentMethod === 'Mail the check' ? <Fragment>
                         <Divider className='billingDivider'>Billing Information</Divider>
-                        <Form.Item label="Full Name" name="fullname" rules={[ { required: true, message: 'Please input your name!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Address Line 1" name="addressline1" rules={[ { required: true, message: 'Please input your address!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Address Line 2" name="addressline2" ><Input /></Form.Item>
-                        <Form.Item label="City" name="city" rules={[ { required: true, message: 'Please input city!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="State" name="state" rules={[ { required: true, message: 'Please input state!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Zip Code" name="zipcode" rules={[ { required: true, message: 'Please input zip code!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Country" name="country" rules={[ { required: true, message: 'Please input country!', }, ]} ><Input /></Form.Item></Fragment> : null }
+                        <Form.Item label="Full Name" name="rei_fullname" rules={[ { required: true, message: 'Please input your name!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Address Line 1" name="rei_addressline1" rules={[ { required: true, message: 'Please input your address!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Address Line 2" name="rei_addressline2" ><Input /></Form.Item>
+                        <Form.Item label="City" name="rei_city" rules={[ { required: true, message: 'Please input city!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="State" name="rei_state" rules={[ { required: true, message: 'Please input state!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Zip Code" name="rei_zipcode" rules={[ { required: true, message: 'Please input zip code!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Country" name="rei_country" rules={[ { required: true, message: 'Please input country!', }, ]} ><Input /></Form.Item></Fragment> : null }
                 
                 <Divider className='divider'>Reimbursement · Items</Divider>
-                <Form.List name="items">
+                <Form.List name="rei_items">
                     {(fields, { add, remove }) => (
                         <Fragment>
                             {
@@ -452,17 +441,12 @@ class FormForSubmitter extends Component {
                                             <CloseCircleOutlined className='crossSign' onClick={() => remove(name)} />
                                             <Form.Item {...restField} label="Expense Description" name={[name, 'expensedescription']} fieldKey={[fieldKey, 'expensedescription']} ><TextArea className='firstLineItem' rows={2} /></Form.Item>
                                             <Form.Item {...restField} label="Business Purpose" name={[name, 'businesspurpose']}  fieldKey={[fieldKey, 'businesspurpose']} ><TextArea rows={2} /></Form.Item>
-                                            <div className="ant-row">
-                                                <span className='budgetLabel'><span className='redMark'>*</span> Category & Amount: </span>
-                                                <Space className='firstBudgetRow'>
-                                                    <Form.Item name={[name, 'category']} rules={[{ required: true, message: 'Miss catogory' }]} >
-                                                        <Select className='budgetSelect' placeholder="category"><Option key='foodandbeverage' value='foodandbeverage'>Food and Beverage</Option><Option key='other' value='other'>Other</Option></Select>
-                                                    </Form.Item>
-                                                    <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Amount' }]} >
-                                                        <InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
-                                                    </Form.Item>
-                                                </Space>
-                                            </div>
+                                            {/* Category */}
+                                            <Form.Item {...restField} label="Category" name={[name, 'category']} fieldKey={[fieldKey, 'category']} rules={[{ required: true, message: 'Please input category!' }]} >
+                                                <Select className='categorySelect' placeholder="Select Category" allowClear showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}><Option key='0530' value='Books (05-30)'>Books (05-30)</Option><Option key='0531' value='Chemicals and Chemical Products (05-31)'>Chemicals and Chemical Products (05-31)</Option><Option key='0540' value='Computer Equipment less than $5,000 (05-40)'>Computer Equipment less than $5,000 (05-40)</Option><Option key='02' value='Consultant or Professional Services (02)'>Consultant or Professional Services (02)</Option><Option key='06' value='Equipment more than $5000 (06)'>Equipment more than $5000 (06)</Option><Option key='foodandbeverage' value='Food and Beverage'>Food and Beverage</Option><Option key='022-' value='Honorarium (02-20)'>Honorarium (02-20)</Option><Option key='metaxexemptequipment' value='M&E Tax Exempt Equipment'>M&E Tax Exempt Equipment</Option><Option key='0330' value='Memberships & Dues (03-30)'>Memberships & Dues (03-30)</Option><Option key='0412' value='Mileage (04-12)'>Mileage (04-12)</Option><Option key='03' value='Misc Services (03)'>Misc Services (03)</Option><Option key='0564' value='Office Supplies (05-64)'>Office Supplies (05-64)</Option><Option key='other' value='Other/Not sure'>Other/Not sure</Option><Option key='0354' value='Publication Fees (03-54)'>Publication Fees (03-54)</Option><Option key='0334' value='Registration Fees (03-34)'>Registration Fees (03-34)</Option><Option key='0208' value='Research Subject Payments (02-08)'>Research Subject Payments (02-08)</Option><Option key='0364' value='Service/Maintenance Contract (03-64)'>Service/Maintenance Contract (03-64)</Option><Option key='0360' value='Service/Repair (03-60)'>Service/Repair (03-60)</Option><Option key='0324' value='Shipping (03-24)'>Shipping (03-24)</Option><Option key='05' value='Supplies/Consumables (05)'>Supplies/Consumables (05)</Option><Option key='04' value='Travel (04)'>Travel (04)</Option></Select>
+                                            </Form.Item>
+                                            {/* Amount */}
+                                            <Form.Item {...restField} label="Full Amount" name={[name, 'fullamount']} fieldKey={[fieldKey, 'fullamount']} rules={[ { required: true, message: 'Please input amount!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                                             {/* Was Sales Tax Paid? */}
                                             <Form.Item label="Was Sales Tax Paid?" name={[name, 'wassalestaxpaid']} ><Radio.Group><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio><Radio value={'itemnottaxable'}>Item Not Taxable</Radio></Radio.Group></Form.Item>
                                             {/* Budget: */}
@@ -513,7 +497,7 @@ class FormForSubmitter extends Component {
                                                 )}
                                             </Form.List>
                                             <Form.Item label="Attachment" name={[name, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile}>
-                                                <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                                                <Upload name="file" accept={"image/png, image/jpeg, application/pdf"} action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                                             </Form.Item>
                                         </div>
                                     </div>
@@ -528,6 +512,7 @@ class FormForSubmitter extends Component {
                 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
                 </Form.Item>
             </Form>
         );
@@ -953,6 +938,17 @@ const mapDispatchToProps = (dispatch) => {
             console.log(values)
             dispatch(actionCreators.onFinishPurchaseRequestForm(values));
         },
+        // getReimbursementForm()
+        rei_changeReimbursedFor(e) {
+            dispatch(actionCreators.rei_changeReimbursedFor(e.target.value));
+        },
+        rei_changePreferredPaymentMethod(e) {
+            dispatch(actionCreators.rei_changePreferredPaymentMethod(e.target.value));
+        },
+        onFinishReimbursementForm(values) {
+            console.log(values)
+            dispatch(actionCreators.onFinishReimbursementForm(values));
+        },
         // getTravelRequestForm()
         tra_changeWhetherUnitPayFlight(e) {
             dispatch(actionCreators.tra_changeWhetherUnitPayFlight(e.target.value));
@@ -983,16 +979,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actionCreators.traRei_changeWasMealProvided(e.target.value));
         },
         onFinishTravelReimbursementForm(values) {
-            console.log(values)
-        },
-        // getReimbursementForm()
-        rei_changeReimbursedFor(e) {
-            dispatch(actionCreators.rei_changeReimbursedFor(e.target.value));
-        },
-        rei_changePreferredPaymentMethod(e) {
-            dispatch(actionCreators.rei_changePreferredPaymentMethod(e.target.value));
-        },
-        onFinishReimbursementForm(values) {
             console.log(values)
         },
     }
