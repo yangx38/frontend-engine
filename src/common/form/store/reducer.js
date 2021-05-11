@@ -62,6 +62,8 @@ const reducer = (state = defaultState, action) => {
                     trarei: {},
                 },
             }))
+        case constants.SET_CONFIRMMODAL:
+            return state.set('confirm_modal', false);
         // componentDidMount()
         case constants.GET_ALL_BUDGET:
             return state.set('all_budget', action.data);

@@ -136,6 +136,7 @@ const mapDispatchToProps = (dispatch) => {
         }, 
         // getSubmitterNavItems()
         readSu_selectedSubunitANDForm(unit, subunit, formType) {
+            dispatch(formActionCreators.setConfirmModal());
             dispatch(actionCreators.readSu_selectedSubunitANDForm(unit, subunit, formType))
         },
 

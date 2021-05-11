@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 // ****************  Types  ****************
 // logout()
 export const CHANGE_TO_LOGOUT = 'common/form/CHANGE_TO_LOGOUT';
+export const SET_CONFIRMMODAL = 'common/form/SET_CONFIRMMODAL';
 // componentDidMount()
 export const GET_ALL_BUDGET = 'common/form/GET_ALL_BUDGET';
 // getPayAnInvoiceForm()
@@ -33,6 +34,9 @@ export const SUBMIT_TRAVELREIMBURSEMENT = 'common/form/SUBMIT_TRAVELREIMBURSEMEN
 // logout()
 export const logout = () => ({
     type: CHANGE_TO_LOGOUT
+})
+export const setConfirmModal = () => ({
+    type: SET_CONFIRMMODAL
 })
 // componentDidMount()
 const getAllBudgetsAction = (data) => ({
