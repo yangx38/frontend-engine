@@ -75,7 +75,7 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['form_data', 'pro'], action.pro_formdata).set('confirm_modal', true);
         // getPurchaseRequestForm()
         case constants.SUBMIT_PURCHASEREQUEST:
-            return state.setIn(['form_data', 'pur'], action.pur_formdata);
+            return state.setIn(['form_data', 'pur'], action.pur_formdata).set('confirm_modal', true);
         // getReimbursementForm()
         case constants.CHANGE_REIMBURSEMENTFOR:
             return state.setIn(['rei', 'whetherReimbursementFor'], action.data);

@@ -380,8 +380,9 @@ class FormForSubmitter extends Component {
 
 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Finish</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
+                    <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
+                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -877,7 +878,7 @@ class FormForSubmitter extends Component {
     }
 
     getConfirmModal() {
-        const { formType, pay, pro } = this.props;
+        const { formType, pay, pro, pur } = this.props;
 
         if (formType === 'Pay an Invoice') {
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
@@ -928,7 +929,7 @@ class FormForSubmitter extends Component {
                         <Descriptions.Item label="Zip Code">{pay_zipcode}</Descriptions.Item>
                         <Descriptions.Item label="Country">{pay_country}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Pay an Invoice · Vendor Information">
+                    <Descriptions title="Pay an Invoice · Vendor Information" column={2}>
                         <Descriptions.Item label="Vendor Name">{pay_vendorname}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Email">{pay_vendoremail}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Phone">{pay_vendorphone}</Descriptions.Item>
@@ -995,6 +996,69 @@ class FormForSubmitter extends Component {
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
                 </div>
             );
+        } else if (formType === 'Purchase Request') {
+            const { pur_fullname, pur_addressline1, pur_addressline2, pur_city, pur_state, pur_zipcode, pur_country } = pur;
+            const { pur_vendorname, pur_vendoremail, pur_vendorphone, pur_vendorwebsite } = pur;
+            const { pur_allitems } = pur;
+            var pur_allitemsJS = [];
+            pur_allitems.map((pur_allitem, idx) => {
+                const { expensedescription, businesspurpose, category, quantity, unitprice } = pur_allitem;
+                pur_allitemsJS.push(<Descriptions.Item key={idx} labelStyle={{background:'#d4bdff'}} label="Item#" span={2}>{idx+1}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item label="Quantity">{quantity}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item label="Unit Price">{unitprice}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item labelStyle={{background:'#ffd791'}} label="Full Amount (Calculated)">{unitprice*quantity}</Descriptions.Item>);
+                const { pur_budgets } = pur_allitem;
+                pur_budgets.map((pur_budget, budget_idx) => {
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = pur_budget;
+                    pur_allitemsJS.push(
+                        <Descriptions.Item label="Budget" span={2} key={budget_idx}>
+                            Number: {budget_number}
+                            <br />
+                            Amount: ${budget_amount}
+                            <br />
+                            Task: {budget_task}
+                            <br />
+                            Opinion: {budget_opinion}
+                            <br />
+                            Project: {budget_project}
+                        </Descriptions.Item>
+                    );
+                })
+                const { pur_attachments } = pur_allitem;
+                pur_attachments.map((pur_attachment, att_idx) => {
+                    const { name, url} = pur_attachment;
+                    pur_allitemsJS.push(
+                        <Descriptions.Item label="Attachment" span={2} key={att_idx}>
+                            <a href={url}>{name}</a>
+                        </Descriptions.Item>);
+                })
+            })
+            return (
+                <div className='confirmBox'>
+                    <Descriptions title="Purchase Request · Shipping Address">
+                        <Descriptions.Item label="Full Name">{pur_fullname}</Descriptions.Item>
+                        <Descriptions.Item label="Address Line 1">{pur_addressline1}</Descriptions.Item>
+                        <Descriptions.Item label="Address Line 2">{pur_addressline2}</Descriptions.Item>
+                        <Descriptions.Item label="City">{pur_city}</Descriptions.Item>
+                        <Descriptions.Item label="State">{pur_state}</Descriptions.Item>
+                        <Descriptions.Item label="Zip Code">{pur_zipcode}</Descriptions.Item>
+                        <Descriptions.Item label="Country">{pur_country}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Purchase Request · Vendor Information" column={2}>
+                        <Descriptions.Item label="Vendor Name">{pur_vendorname}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Email">{pur_vendoremail}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Phone">{pur_vendorphone}</Descriptions.Item>
+                        <Descriptions.Item label="Vendor Website">{pur_vendorwebsite}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Purchase Request · Items" column={2} bordered>
+                        { pur_allitemsJS }
+                    </Descriptions>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                </div>
+            );
         }
       }
 
@@ -1041,6 +1105,7 @@ const mapStateToProps = (state) => {
         confirm_modal: state.getIn(['form', 'confirm_modal']),
         pay: state.getIn(['form', 'form_data', 'pay']),
         pro: state.getIn(['form', 'form_data', 'pro']),
+        pur: state.getIn(['form', 'form_data', 'pur']),
     }
 }
 
