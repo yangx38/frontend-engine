@@ -25,6 +25,7 @@ const defaultState = fromJS({
         pur: {},
         rei: {},
         tra: {},
+        trarei: {},
     },
 });
 
@@ -56,6 +57,7 @@ const reducer = (state = defaultState, action) => {
                     pur: {},
                     rei: {},
                     tra: {},
+                    trarei: {},
                 },
             }))
         // componentDidMount()
@@ -97,6 +99,8 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['traRei', 'claimMealPerDiem'], action.data);
         case constants.CHANGE_WASMEALPROVIDED:
             return state.setIn(['traRei', 'mealProvided'], action.data);
+        case constants.SUBMIT_TRAVELREIMBURSEMENT: 
+            return state.setIn(['form_data', 'trarei'], action.trarei_formdata);
         default:
             return state;
     }

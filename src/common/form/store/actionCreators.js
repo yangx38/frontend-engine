@@ -27,6 +27,7 @@ export const CHANGE_WHTHERCITIZEN = 'common/form/CHANGE_WHTHERCITIZEN';
 export const CHANGE_WHETHERPERSONALTRAVELINCLUDE = 'common/form/CHANGE_WHETHERPERSONALTRAVELINCLUDE';
 export const CHANGE_CLAIMMEALPERDIEM = 'common/form/CHANGE_CLAIMMEALPERDIEM';
 export const CHANGE_WASMEALPROVIDED = 'common/form/CHANGE_WASMEALPROVIDED';
+export const SUBMIT_TRAVELREIMBURSEMENT = 'common/form/SUBMIT_TRAVELREIMBURSEMENT';
 
 // **************** Actions ****************
 // logout()
@@ -358,3 +359,146 @@ export const traRei_changeWasMealProvided = (data) => ({
     type: CHANGE_WASMEALPROVIDED,
     data
 })
+export const onFinishTravelReimbursementForm = (data) => {
+    // Travel Reimbursement · Travel Reimbursement
+    const { trarei_reimbursedbefore, trarei_referencenumber, trarei_requestforself, trarei_requestforself_name, trarei_requestforself_affiliation, trarei_requestforself_email } = data;
+    // budgets
+    const { trarei_budget_firstnumber, trarei_budget_firstamount, trarei_budget_firsttask, trarei_budget_firstoption, trarei_budget_firstproject } = data;
+    var trarei_budgets = []
+    const trarei_budget = { trarei_budget_firstnumber, trarei_budget_firstamount, trarei_budget_firsttask: trarei_budget_firsttask || '', trarei_budget_firstoption: trarei_budget_firstoption || '', trarei_budget_firstproject: trarei_budget_firstproject || '' }
+    trarei_budgets.push(trarei_budget)
+    const { trarei_budget_rest } = data;
+    if (trarei_budget_rest && trarei_budget_rest.length > 0) {
+        trarei_budget_rest.map((budget_rest_peritem) => {
+            const { budget_restnumbers, budget_restamounts, budget_task, budget_project, budget_option } = budget_rest_peritem;
+            const budget_rest = { budget_restnumbers, budget_restamounts, budget_task: budget_task || '', budget_project: budget_project || '', budget_option: budget_option || '' }
+            trarei_budgets.push(budget_rest)
+        })
+    }
+    //  US Citizen or Permanent Resident?
+    const { trarei_whethercitizen, trarei_whethercitizen_passport, trarei_whethercitizen_i94 } = data;
+    var trarei_passport = [];
+    if (trarei_whethercitizen_passport && trarei_whethercitizen_passport.length > 0) {
+        trarei_whethercitizen_passport.map((att) => {
+            const { name, response } = att; 
+            if (response) {
+                const { url } = response; const trarei_perattachment = { name, url };
+                trarei_passport.push(trarei_perattachment)
+            }
+        })
+    }
+    var trarei_i94 = [];
+    if (trarei_whethercitizen_i94 && trarei_whethercitizen_i94.length > 0) {
+        trarei_whethercitizen_i94.map((att) => {
+            const { name, response } = att; 
+            if (response) {
+                const { url } = response; const trarei_attachment_i94 = { name, url };
+                trarei_i94.push(trarei_attachment_i94)
+            }
+        })
+    }
+    // Purpose of Travel
+    const { trarei_purposeoftravel } = data;
+    // Was personal travel included?
+    const { trarein_whetherpersontravelinclude, trarei_departingreturningtime } = data;
+    var trarei_departingtime = '';
+    var trarei_returningtime = '';
+    if (trarei_departingreturningtime) {
+        trarei_departingtime = trarei_departingreturningtime[0]._d.toString().substring(0, 21);
+        trarei_returningtime = trarei_departingreturningtime[1]._d.toString().substring(0, 21);
+    }
+    // Travel Reimbursement · Travel Costs
+    // Service
+    const { trarei_category, trarei_amount, trarei_attachment } = data;
+    var trarei_cat_attachment = [];
+    if (trarei_attachment && trarei_attachment.length > 0) {
+        trarei_attachment.map((att) => {
+            const { name, response } = att; 
+            if (response) {
+                const { url } = response; const trarei_cat_att = { name, url };
+                trarei_cat_attachment.push(trarei_cat_att)
+            }
+        })
+    }
+    var trarei_services = [];
+    const trarei_service = { trarei_category, trarei_amount, trarei_cat_attachment };
+    trarei_services.push(trarei_service);
+    const { trarei_category_rest } = data;
+    if (trarei_category_rest && trarei_category_rest.length > 0) {
+        trarei_category_rest.map((cat_rest_peritem) => {
+            const { category, amount, attachment} = cat_rest_peritem;
+            var trarei_map_attachment = [];
+            if (attachment && attachment.length > 0) {
+                attachment.map((att) => {
+                    const { name, response } = att; 
+                    if (response) {
+                        const { url } = response; const trarei_cat_att = { name, url };
+                        trarei_map_attachment.push(trarei_cat_att)
+                    }
+                })
+            }
+            const trarei_rest = { category, amount, trarei_map_attachment };
+            trarei_services.push(trarei_rest);
+        })
+    }
+    // Meal Per Diem
+    // Are you claiming meal per diem?
+    const { trarei_whetherclaimmealperdiem, trarei_date_date, trarei_date_checkbox, trarei_meal_amount } = data;
+    var trarei_date_datespec = '';
+    if (trarei_date_date) {
+        trarei_date_datespec = trarei_date_date._d.toString().substring(0, 15);
+    }
+    var trarei_claimingmeals = [];
+    if (trarei_whetherclaimmealperdiem === 'Yes, specifc days and meals') {
+        const trarei_claimingmeal = { trarei_date_datespec, trarei_date_checkbox }
+        trarei_claimingmeals.push(trarei_claimingmeal);
+        const { trarei_date_rest } = data;
+        if (trarei_date_rest && trarei_date_rest.length > 0) {
+            trarei_date_rest.map((date_rest_peritem) => {
+                const { date_restname, date_checkbox } = date_rest_peritem;
+                var date_restname_val = '';
+                if (date_restname) {
+                    date_restname_val = date_restname._d.toString().substring(0, 15);
+                }
+                const date_rest = { date_restname_val: date_restname_val || '', date_checkbox: date_checkbox || ''}
+                trarei_claimingmeals.push(date_rest);
+            })
+        }
+    }
+    // Were meals provided to you?
+    const { trarei_weremealprovided, trarei_mealdate_date, trarei_mealdate_checkbox } = data;
+    var trarei_mealdate_datespec = '';
+    if (trarei_mealdate_date) {
+        trarei_mealdate_datespec = trarei_mealdate_date._d.toString().substring(0, 15);
+    }
+    var trarei_weremealprovided_arr = [];
+    if (trarei_weremealprovided === 'Yes') {
+        const trarei_weremeal = { trarei_mealdate_datespec, trarei_mealdate_checkbox }
+        trarei_weremealprovided_arr.push(trarei_weremeal);
+        const { trarei_mealdate_rest } = data;
+        if (trarei_mealdate_rest && trarei_mealdate_rest.length > 0) {
+            trarei_mealdate_rest.map((date_rest_peritem) => {
+                const { date_restname, date_checkbox } = date_rest_peritem;
+                var date_restname_val = '';
+                if (date_restname) {
+                    date_restname_val = date_restname._d.toString().substring(0, 15);
+                }
+                const date_rest = { date_restname_val: date_restname_val || '', date_checkbox: date_checkbox || ''}
+                trarei_weremealprovided_arr.push(date_rest);
+            })
+        }
+    }
+
+    const trarei_formdata = {
+        trarei_reimbursedbefore, trarei_referencenumber: trarei_referencenumber || '', trarei_requestforself, trarei_requestforself_name: trarei_requestforself_name || '', trarei_requestforself_affiliation: trarei_requestforself_affiliation || '', trarei_requestforself_email: trarei_requestforself_email || '',
+        trarei_budgets,
+        trarei_whethercitizen, trarei_passport, trarei_i94,
+        trarei_purposeoftravel,
+        trarein_whetherpersontravelinclude, trarei_departingtime: trarei_departingtime || '', trarei_returningtime: trarei_returningtime || '',
+        trarei_services,
+        trarei_whetherclaimmealperdiem, trarei_claimingmeals, trarei_meal_amount: trarei_meal_amount || '',
+        trarei_weremealprovided, trarei_weremealprovided_arr
+    }
+    console.log('trareiformdata', trarei_formdata)
+    return { type: SUBMIT_TRAVELREIMBURSEMENT, trarei_formdata }
+}

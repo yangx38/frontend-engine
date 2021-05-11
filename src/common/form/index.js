@@ -640,41 +640,41 @@ class FormForSubmitter extends Component {
         if (all_budgetJS.length > 0) {
             all_budgetJS.map(item => {
                 const { budgetnumber, budgetname } = item;
-                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
+                all_budgetBeautifyJS.push(<Option key={budgetnumber} value={budgetnumber.concat(' - ').concat(budgetname)}>{budgetnumber.concat(' - ').concat(budgetname)}</Option>);
             })
         }
 
         const { traRei_changeReimbursedBefore, traRei_changeRequestForSelf, traRei_changeWhetherCitizen, traRei_changeWhetherPersonalTravelInclude, traRei_changeClaimMealPerDiem, traRei_changeWasMealProvided, beforeUpload, normFile, onFinishTravelReimbursementForm } = this.props;
 
         return (
-            <Form {...layout} name="travelreimbursementform" initialValues={{ remember: true, }} onFinish={onFinishTravelReimbursementForm}>
+            <Form {...layout} name="trarei_form" initialValues={{ remember: true, }} onFinish={onFinishTravelReimbursementForm}>
                 <Divider className='divider'>Travel Reimbursement · Travel Reimbursement</Divider>
-                <Form.Item label="Have you been reimbursed before this trip?" name="reimbursedbefore" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
-                    <Radio.Group onChange={traRei_changeReimbursedBefore}><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Radio.Group>
+                <Form.Item label="Have you been reimbursed before this trip?" name="trarei_reimbursedbefore" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={traRei_changeReimbursedBefore}><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio></Radio.Group>
                 </Form.Item>
-                { reimbursedBefore === 'yes' ? <Form.Item label="Reference Number" name="referencenumber" ><Input placeholder="Leave Blank If Not Known"/></Form.Item> : null }
-                <Form.Item label="Requesting this reimbursement for yourself?" name="requestforself" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
-                    <Radio.Group onChange={traRei_changeRequestForSelf}><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Radio.Group>
+                { reimbursedBefore === 'Yes' ? <Form.Item label="Reference Number" name="trarei_referencenumber" ><Input placeholder="Leave Blank If Not Known"/></Form.Item> : null }
+                <Form.Item label="Requesting this reimbursement for yourself?" name="trarei_requestforself" rules={[ { required: true, message: 'Please input your choice!', }, ]} >
+                    <Radio.Group onChange={traRei_changeRequestForSelf}><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio></Radio.Group>
                 </Form.Item>
                 { 
-                    requestForSelf === 'no' ? <Fragment><Form.Item label="Name" name="requestforself_name" rules={[ { required: true, message: 'Please input name!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Affiliation" name="requestforself_affiliation" rules={[ { required: true, message: 'Please input affilication!', }, ]} ><Input /></Form.Item>
-                        <Form.Item label="Email" name="requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null 
+                    requestForSelf === 'No' ? <Fragment><Form.Item label="Name" name="trarei_requestforself_name" rules={[ { required: true, message: 'Please input name!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Affiliation" name="trarei_requestforself_affiliation" rules={[ { required: true, message: 'Please input affilication!', }, ]} ><Input /></Form.Item>
+                        <Form.Item label="Email" name="trarei_requestforself_email" rules={[ { type: 'email', message: 'Not valid email!', }, { required: true, message: 'Please input email!', }, ]} ><Input /></Form.Item></Fragment> : null 
                 }
                 {/* Budget */}
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="budget_firstnumber" rules={[{ required: true, message: 'Miss budget' }]} ><Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select></Form.Item>
-                        <Form.Item name="budget_firstamount" rules={[{ required: true, message: 'Amount' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                        <Form.Item name="trarei_budget_firstnumber" rules={[{ required: true, message: 'Miss budget' }]} ><Select className='budgetSelect' placeholder="Select Budget" showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>{all_budgetBeautifyJS}</Select></Form.Item>
+                        <Form.Item name="trarei_budget_firstamount" rules={[{ required: true, message: 'Amount' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                     </Space>
                 </div>
                 <Space className='topRow'>
-                    <Form.Item name={'budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
-                    <Form.Item name={'budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
-                    <Form.Item  name={'budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
+                    <Form.Item name={'trarei_budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
+                    <Form.Item name={'trarei_budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
+                    <Form.Item  name={'trarei_budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
                 </Space>
-                <Form.List name="budget_rest">
+                <Form.List name="trarei_budget_rest">
                     {(fields, { add, remove }) => (
                         <Fragment>
                             {
@@ -690,9 +690,9 @@ class FormForSubmitter extends Component {
                                             <MinusCircleOutlined className='minusSign' onClick={() => remove(name)} />
                                         </Space>
                                         <Space className='topRow'>
-                                            <Form.Item name={'budget_firsttask'}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
-                                            <Form.Item name={'budget_firstoption'}><Input className='budgetTop' placeholder="Option" /></Form.Item>
-                                            <Form.Item  name={'budget_firstproject'}><Input className='budgetTop' placeholder="Project" /></Form.Item>
+                                            <Form.Item name={[name, 'budget_task']}><Input className='budgetTop' placeholder="Budget Task" /></Form.Item>
+                                            <Form.Item name={[name, 'budget_option']}><Input className='budgetTop' placeholder="Option" /></Form.Item>
+                                            <Form.Item  name={[name, 'budget_project']}><Input className='budgetTop' placeholder="Project" /></Form.Item>
                                         </Space>
                                     </div>
                                 ))
@@ -707,29 +707,31 @@ class FormForSubmitter extends Component {
                     <span className='budgetLabel'><span className='redMark'>*</span> US Citizen or Permanent Resident? :
                     <div className='uwPolicy'><Typography.Link href="https://finance.uw.edu/travel/foreigntravel">UW Policy</Typography.Link></div></span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="whethercitizen" rules={[ { required: true, message: 'Select!', }, ]} >
-                            <Radio.Group onChange={traRei_changeWhetherCitizen}><Space direction="vertical"><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Space></Radio.Group>
+                        <Form.Item name="trarei_whethercitizen" rules={[ { required: true, message: 'Select!', }, ]} >
+                            <Radio.Group onChange={traRei_changeWhetherCitizen}><Space direction="vertical"><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio></Space></Radio.Group>
                         </Form.Item>
                     </Space>
                 </div>
                 { 
-                    whetherCitizen === 'no' ? <Fragment>
-                        <Form.Item label="Passport Identity Page Copy" name="whethercitizen_passportidentitypagecopy" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Miss Passport Copy' }]} >
-                            <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload></Form.Item>
-                        <Form.Item label="I-94 or US port entry stamp (visa)" name="whethercitizen_i94" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Miss File' }]} >
-                            <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload></Form.Item></Fragment> : null 
+                    whetherCitizen === 'No' ? <Fragment>
+                        <Form.Item label="Passport Identity Page Copy" name="trarei_whethercitizen_passport" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Miss Passport Copy' }]} >
+                            <Upload name="file" accept={"image/png, image/jpeg, application/pdf"} action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                        </Form.Item>
+                        <Form.Item label="I-94 or US port entry stamp (visa)" name="trarei_whethercitizen_i94" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Miss File' }]} >
+                            <Upload name="file" accept={"image/png, image/jpeg, application/pdf"} action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                        </Form.Item></Fragment> : null 
                 }
-                <Form.Item label="Purpose of Travel" name="purposeoftravel" rules={[ { required: true, message: 'Please input your purpose!', }, ]} ><TextArea rows={2} /></Form.Item>
+                <Form.Item label="Purpose of Travel" name="trarei_purposeoftravel" rules={[ { required: true, message: 'Please input your purpose!', }, ]} ><TextArea rows={2} /></Form.Item>
                 <div className="ant-row">
                     <span className='budgetLabel'><span className='redMark'>*</span> Was personal travel included? :
                     <div className='uwPolicy'><Typography.Link href="https://finance.uw.edu/travel/responsibility#personal">UW Policy</Typography.Link></div></span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="whetherpersontravelinclude" rules={[ { required: true, message: 'Select!', }, ]} >
-                            <Radio.Group onChange={traRei_changeWhetherPersonalTravelInclude}><Space direction="vertical"><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio></Space></Radio.Group>
+                        <Form.Item name="trarein_whetherpersontravelinclude" rules={[ { required: true, message: 'Select!', }, ]} >
+                            <Radio.Group onChange={traRei_changeWhetherPersonalTravelInclude}><Space direction="vertical"><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio></Space></Radio.Group>
                         </Form.Item>
                     </Space>
                 </div>
-                { whetherPersonalTravelInclude === 'yes' ? <Form.Item label="Departing & Returning Time" name="departingreturningtime"><RangePicker showTime format="YYYY-MM-DD HH:mm" /></Form.Item>: null }
+                { whetherPersonalTravelInclude === 'Yes' ? <Form.Item label="Departing & Returning Time" name="trarei_departingreturningtime"><RangePicker showTime format="YYYY-MM-DD HH:mm" /></Form.Item>: null }
 
                 <Divider className='divider'>Travel Reimbursement · Travel Costs</Divider>
                 <Divider className='serviceDivider'>Service</Divider>
@@ -739,26 +741,28 @@ class FormForSubmitter extends Component {
                 <div className='categoryHeader lastLine'>For Car Rental, attach "final car rental agreement"</div>
                 </div>
                 {/* Category */}
-                <Form.Item label="Category" name={'category'} >
+                <Form.Item label="Category" name={'trarei_category'} rules={[{ required: true, message: 'Please input category!' }]} >
                     <Select className='categorySelect' placeholder="Select Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
                 </Form.Item>
-                <Form.Item label="Attachment" name={'attachment'} valuePropName="fileList" getValueFromEvent={normFile} >
-                    <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                <Form.Item label="Amount" name="trarei_amount" rules={[{ required: true, message: 'Please input amount!' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                <Form.Item label="Attachment" name={'trarei_attachment'} valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Please upload receipt!' }]} >
+                    <Upload name="file" accept={"image/png, image/jpeg, application/pdf"} action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                 </Form.Item>
-                <Form.List name="category_rest">
+                <Form.List name="trarei_category_rest">
                     {(fields, { add, remove }) => (
                         <Fragment>
                             {
                                 fields.map(({ key, name, fieldKey, ...restField }) => (
                                     <div key={key}>
                                         <Space className='restBudgetRow' align="baseline" >
-                                            <Form.Item {...restField} name={[name, 'category']} fieldKey={[fieldKey, 'category']} >
+                                            <Form.Item {...restField} name={[name, 'category']} fieldKey={[fieldKey, 'category']} rules={[{ required: true, message: 'Please input category!' }]}>
                                                 <Select className='categorySelect' placeholder="Select Another Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
                                             </Form.Item>
                                             <MinusCircleOutlined className='minusSign' onClick={() => remove(name)} />
                                         </Space>
                                         <div className='addBudgetBtn'>
-                                            <Form.Item {...restField} name={[name, 'attachment']} fieldKey={[fieldKey, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile} >
+                                            <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Please input amount!' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
+                                            <Form.Item {...restField} name={[name, 'attachment']} fieldKey={[fieldKey, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Please upload attachment!' }]}>
                                                 <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                                             </Form.Item>
                                         </div>
@@ -778,33 +782,33 @@ class FormForSubmitter extends Component {
                     <span className='budgetLabel'><span className='redMark'>*</span> Are you claiming meal per diem? :
                     <div className='uwPolicy'><Typography.Link href="https://finance.uw.edu/travel/meals">UW Policy</Typography.Link></div></span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="whetherclaimmealperdiem" >
+                        <Form.Item name="trarei_whetherclaimmealperdiem" rules={[{ required: true, message: 'Please select!' }]}>
                             <Radio.Group className='claimMealRadio' onChange={traRei_changeClaimMealPerDiem}><Space direction="vertical">
-                                <Radio value={'mealperdiem_yesmaxallowableperdiem'}>Yes, maximum allowable perdiem</Radio>
-                                <Radio value={'mealperdiem_yesspecificdaysandmeals'}>Yes, specifc days and meals</Radio>
-                                <Radio value={'mealperdiem_yesspecificamount'}>Yes, specific amount</Radio>
-                                <Radio value={'mealperdiem_no'}>No</Radio>
+                                <Radio value={'Yes, maximum allowable perdiem'}>Yes, maximum allowable perdiem</Radio>
+                                <Radio value={'Yes, specifc days and meals'}>Yes, specifc days and meals</Radio>
+                                <Radio value={'Yes, specific amount'}>Yes, specific amount</Radio>
+                                <Radio value={'No'}>No</Radio>
                                 </Space></Radio.Group>
                         </Form.Item>
                     </Space>
                 </div>
                 { 
-                    claimMealPerDiem === 'mealperdiem_yesspecificdaysandmeals' ? 
+                    claimMealPerDiem === 'Yes, specifc days and meals' ? 
                         <Fragment>
                             {/* Date */}
-                            <Form.Item label="Date" name="date_date" ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
-                            <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
-                            <Form.List name="date_rest">
+                            <Form.Item name="trarei_date_date" label="Date" rules={[{ required: true, message: 'Please input date!' }]}><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
+                            <Form.Item name="trarei_date_checkbox" className='checkBox'><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                            <Form.List name="trarei_date_rest">
                                 {(fields, { add, remove }) => (
                                     <Fragment>
                                         {
                                             fields.map(({ key, name, fieldKey, ...restField }) => (
                                                 <div key={key}>
                                                     <Space className='restBudgetRow' align="baseline" >
-                                                        <Form.Item {...restField} name={[name, 'date_restname']} fieldKey={[fieldKey, 'date_restname']}><DatePicker className='date_calendar' placeholder='YYYY-MM-DD'/></Form.Item>
+                                                        <Form.Item {...restField} name={[name, 'date_restname']} fieldKey={[fieldKey, 'date_restname']} rules={[{ required: true, message: 'Input!' }]} ><DatePicker className='date_calendar' placeholder='YYYY-MM-DD'/></Form.Item>
                                                         <MinusCircleOutlined className='minusSignDate' onClick={() => remove(name)} />
                                                     </Space>
-                                                    <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                                                    <Form.Item name={[name, 'date_checkbox']} className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
                                                 </div>
                                             ))
                                         }
@@ -815,7 +819,9 @@ class FormForSubmitter extends Component {
                                 )}
                             </Form.List>
                         </Fragment> : 
-                    claimMealPerDiem === 'mealperdiem_yesspecificamount' ? <Form.Item label="Amount" name={'amount'}><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item> : null 
+                    claimMealPerDiem === 'Yes, specific amount' ? 
+                        <Form.Item label="Amount" name={'trarei_meal_amount'}><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item> 
+                        : null 
                 }
 
                 {/* Were meals provided to you? */}
@@ -823,31 +829,31 @@ class FormForSubmitter extends Component {
                     <span className='budgetLabel'><span className='redMark'>*</span> Were meals provided to you? :
                     <div className='uwPolicy'>(Per diem allowance not allowed for provided meals.)</div></span>
                     <Space className='firstBudgetRow'>
-                        <Form.Item name="whetherclaimmealperdiem" >
+                        <Form.Item name="trarei_weremealprovided" rules={[{ required: true, message: 'Please select!' }]}>
                             <Radio.Group className='claimMealRadio' onChange={traRei_changeWasMealProvided}><Space direction="vertical">
-                                <Radio value={'mealprovided_yes'}>Yes</Radio>
-                                <Radio value={'mealprovided_no'}>No</Radio>
+                                <Radio value={'Yes'}>Yes</Radio>
+                                <Radio value={'No'}>No</Radio>
                                 </Space></Radio.Group>
                         </Form.Item>
                     </Space>
                 </div>
                 { 
-                    mealProvided === 'mealprovided_yes' ? 
+                    mealProvided === 'Yes' ? 
                         <Fragment>
                             {/* Date */}
-                            <Form.Item label="Date" name="date_date" ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
-                            <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
-                            <Form.List name="date_rest">
+                            <Form.Item label="Date" name="trarei_mealdate_date"rules={[{ required: true, message: 'Please input date!' }]} ><DatePicker placeholder='YYYY-MM-DD'/></Form.Item>
+                            <Form.Item name="trarei_mealdate_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                            <Form.List name="trarei_mealdate_rest">
                                 {(fields, { add, remove }) => (
                                     <Fragment>
                                         {
                                             fields.map(({ key, name, fieldKey, ...restField }) => (
                                                 <div key={key}>
                                                     <Space className='restBudgetRow' align="baseline" >
-                                                        <Form.Item {...restField} name={[name, 'date_restname']} fieldKey={[fieldKey, 'date_restname']}><DatePicker className='date_calendar' placeholder='YYYY-MM-DD'/></Form.Item>
+                                                        <Form.Item {...restField} name={[name, 'date_restname']} fieldKey={[fieldKey, 'date_restname']} rules={[{ required: true, message: 'Input!' }]}><DatePicker className='date_calendar' placeholder='YYYY-MM-DD'/></Form.Item>
                                                         <MinusCircleOutlined className='minusSignDate' onClick={() => remove(name)} />
                                                     </Space>
-                                                    <Form.Item name="date_checkbox" className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
+                                                    <Form.Item name={[name, 'date_checkbox']}  className='checkBox' ><Checkbox.Group options={['Breakfast', 'Lunch', 'Dinner']} /></Form.Item>
                                                 </div>
                                             ))
                                         }
@@ -860,8 +866,9 @@ class FormForSubmitter extends Component {
                         </Fragment> : null
                 }
 
-                <Form.Item className='traRei_finishBtn' {...tailLayout}>
+                <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Finish</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
                 </Form.Item>
             </Form>
         );
@@ -982,6 +989,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         onFinishTravelReimbursementForm(values) {
             console.log(values)
+            dispatch(actionCreators.onFinishTravelReimbursementForm(values));
         },
     }
 }
