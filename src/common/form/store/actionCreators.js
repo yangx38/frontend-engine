@@ -425,7 +425,7 @@ export const onFinishTravelReimbursementForm = (data) => {
         })
     }
     var trarei_services = [];
-    const trarei_service = { trarei_category, trarei_amount, trarei_cat_attachment };
+    const trarei_service = { category: trarei_category, amount: trarei_amount, attachment: trarei_cat_attachment };
     trarei_services.push(trarei_service);
     const { trarei_category_rest } = data;
     if (trarei_category_rest && trarei_category_rest.length > 0) {
@@ -441,7 +441,7 @@ export const onFinishTravelReimbursementForm = (data) => {
                     }
                 })
             }
-            const trarei_rest = { category, amount, trarei_map_attachment };
+            const trarei_rest = { category, amount, attachment: trarei_map_attachment };
             trarei_services.push(trarei_rest);
         })
     }
@@ -454,7 +454,7 @@ export const onFinishTravelReimbursementForm = (data) => {
     }
     var trarei_claimingmeals = [];
     if (trarei_whetherclaimmealperdiem === 'Yes, specifc days and meals') {
-        const trarei_claimingmeal = { trarei_date_datespec, trarei_date_checkbox }
+        const trarei_claimingmeal = { date: trarei_date_datespec, meal: trarei_date_checkbox }
         trarei_claimingmeals.push(trarei_claimingmeal);
         const { trarei_date_rest } = data;
         if (trarei_date_rest && trarei_date_rest.length > 0) {
@@ -464,7 +464,7 @@ export const onFinishTravelReimbursementForm = (data) => {
                 if (date_restname) {
                     date_restname_val = date_restname._d.toString().substring(0, 15);
                 }
-                const date_rest = { date_restname_val: date_restname_val || '', date_checkbox: date_checkbox || ''}
+                const date_rest = { date: date_restname_val || '', meal: date_checkbox || ''}
                 trarei_claimingmeals.push(date_rest);
             })
         }
@@ -477,7 +477,7 @@ export const onFinishTravelReimbursementForm = (data) => {
     }
     var trarei_weremealprovided_arr = [];
     if (trarei_weremealprovided === 'Yes') {
-        const trarei_weremeal = { trarei_mealdate_datespec, trarei_mealdate_checkbox }
+        const trarei_weremeal = { date: trarei_mealdate_datespec, meal: trarei_mealdate_checkbox }
         trarei_weremealprovided_arr.push(trarei_weremeal);
         const { trarei_mealdate_rest } = data;
         if (trarei_mealdate_rest && trarei_mealdate_rest.length > 0) {
@@ -487,7 +487,7 @@ export const onFinishTravelReimbursementForm = (data) => {
                 if (date_restname) {
                     date_restname_val = date_restname._d.toString().substring(0, 15);
                 }
-                const date_rest = { date_restname_val: date_restname_val || '', date_checkbox: date_checkbox || ''}
+                const date_rest = { date: date_restname_val || '', meal: date_checkbox || ''}
                 trarei_weremealprovided_arr.push(date_rest);
             })
         }

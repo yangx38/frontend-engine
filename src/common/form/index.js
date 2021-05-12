@@ -747,7 +747,7 @@ class FormForSubmitter extends Component {
                 </div>
                 {/* Category */}
                 <Form.Item label="Category" name={'trarei_category'} rules={[{ required: true, message: 'Please input category!' }]} >
-                    <Select className='categorySelect' placeholder="Select Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
+                    <Select className='categorySelect' placeholder="Select Category" allowClear><Option key='registration' value='Registration'>Registration</Option> <Option key='airfare' value='Airfare (upgrades, change fee require prior approval)'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='>Car Service (Lyft, UBER, Taxi)'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='Train / Rail'>Train / Rail</Option><Option key='carrental' value='Car Rental'>Car Rental</Option><Option key='hotel' value='Hotel'>Hotel</Option></Select>
                 </Form.Item>
                 <Form.Item label="Amount" name="trarei_amount" rules={[{ required: true, message: 'Please input amount!' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                 <Form.Item label="Attachment" name={'trarei_attachment'} valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Please upload receipt!' }]} >
@@ -761,7 +761,7 @@ class FormForSubmitter extends Component {
                                     <div key={key}>
                                         <Space className='restBudgetRow' align="baseline" >
                                             <Form.Item {...restField} name={[name, 'category']} fieldKey={[fieldKey, 'category']} rules={[{ required: true, message: 'Please input category!' }]}>
-                                                <Select className='categorySelect' placeholder="Select Another Category" allowClear><Option key='registration' value='registration'>Registration</Option> <Option key='airfare' value='airfare'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='carservice'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='train/rail'>Train / Rail</Option><Option key='carrental' value='carrental'>Car Rental</Option><Option key='hotel' value='hotel'>Hotel</Option></Select>
+                                                <Select className='categorySelect' placeholder="Select Category" allowClear><Option key='registration' value='Registration'>Registration</Option> <Option key='airfare' value='Airfare (upgrades, change fee require prior approval)'>Airfare (upgrades, change fee require prior approval)</Option><Option key='carservice' value='>Car Service (Lyft, UBER, Taxi)'>Car Service (Lyft, UBER, Taxi)</Option><Option key='train/rail' value='Train / Rail'>Train / Rail</Option><Option key='carrental' value='Car Rental'>Car Rental</Option><Option key='hotel' value='Hotel'>Hotel</Option></Select>
                                             </Form.Item>
                                             <MinusCircleOutlined className='minusSign' onClick={() => remove(name)} />
                                         </Space>
@@ -1264,6 +1264,49 @@ class FormForSubmitter extends Component {
             }
             const { trarei_purposeoftravel } = trarei;
             const { trarein_whetherpersontravelinclude, trarei_departingtime, trarei_returningtime } = trarei;
+            const { trarei_services } = trarei;
+            var serviceJS = [];
+            trarei_services.map((trarei_service, trarei_idx) => {
+                const { category, amount, attachment} = trarei_service;
+                var attachmentJS = [];
+                attachment.map((att, trarei_att_idx) => {
+                    const { name, url} = att;
+                    attachmentJS.push(<div key={trarei_att_idx} ><a href={url}>{name}</a></div>)
+                })
+                serviceJS.push(
+                    <Descriptions.Item label="Service" span={2} key={trarei_idx}>
+                        Category: {category}
+                        <br />
+                        Amount: ${amount}
+                        <br />
+                        Attachment: {attachmentJS}
+                    </Descriptions.Item>);
+            })
+            const { trarei_whetherclaimmealperdiem, trarei_meal_amount } = trarei;
+            const { trarei_claimingmeals } = trarei;
+            var trarei_mealJS = [];
+            trarei_claimingmeals.map((claimingmeal, meal_idx) => {
+                const { date, meal } = claimingmeal;
+                trarei_mealJS.push(
+                    <Descriptions.Item label="Days & Meals" span={2} key={meal_idx}>
+                        Date: {date}
+                        <br />
+                        Meal: {meal ? meal.join(', ') : ''}
+                     </Descriptions.Item>
+                    );
+            })
+            const { trarei_weremealprovided, trarei_weremealprovided_arr } = trarei;
+            var trarei_weremealprovidedJS = [];
+            trarei_weremealprovided_arr.map((providedmeal, mealprovide_idx) => {
+                const { date, meal } = providedmeal;
+                trarei_weremealprovidedJS.push(
+                    <Descriptions.Item label="Days & Meals" span={2} key={mealprovide_idx}>
+                        Date: {date}
+                        <br />
+                        Meal: {meal ? meal.join(', ') : ''}
+                     </Descriptions.Item>
+                    );
+            })
             return (
                 <div className='confirmBox'>
                     <Descriptions title="Travel Reimbursement · Travel Reimbursement">
@@ -1292,14 +1335,25 @@ class FormForSubmitter extends Component {
                         { 
                             trarein_whetherpersontravelinclude === 'Yes' ? 
                                 <Fragment>
-                                    <Descriptions.Item label="Departing Date">{trarei_departingtime}</Descriptions.Item> 
-                                    <Descriptions.Item label="Returning Date">{trarei_returningtime}</Descriptions.Item> 
+                                    <Descriptions.Item label="Departing Time">{trarei_departingtime}</Descriptions.Item> 
+                                    <Descriptions.Item label="Returning Time">{trarei_returningtime}</Descriptions.Item> 
                                 </Fragment>
                             : null 
                         }
                     </Descriptions>
-                    <Descriptions title="Travel Reimbursement · Travel Costs">
-
+                    <Descriptions title="Travel Reimbursement · Travel Costs" column={2} bordered>
+                        { serviceJS }
+                        <Descriptions.Item label="Are you claiming meal per diem?" span={2}>{trarei_whetherclaimmealperdiem}</Descriptions.Item>
+                        {
+                            trarei_whetherclaimmealperdiem === 'Yes, specifc days and meals' ? <Fragment>{trarei_mealJS}</Fragment> : null
+                        }
+                        {
+                            trarei_whetherclaimmealperdiem === 'Yes, specific amount' ? <Descriptions.Item label="Amount" span={2}>${trarei_meal_amount}</Descriptions.Item> : null
+                        }
+                        <Descriptions.Item label="Were meals provided to you?" span={2}>{trarei_weremealprovided}</Descriptions.Item>
+                        {
+                            trarei_weremealprovided === 'Yes' ? <Fragment>{trarei_weremealprovidedJS}</Fragment> : null
+                        }
                     </Descriptions>
                     
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
