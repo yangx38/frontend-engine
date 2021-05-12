@@ -82,7 +82,7 @@ const reducer = (state = defaultState, action) => {
         case constants.CHANGE_PREFERREDPAYMENTMETHOD:
             return state.setIn(['rei', 'preferredPaymentMethod'], action.data);
         case constants.SUBMIT_REIMBURSEMENT:
-            return state.setIn(['form_data', 'rei'], action.rei_formdata);
+            return state.setIn(['form_data', 'rei'], action.rei_formdata).set('confirm_modal', true);
         // getTravelRequestForm()
         case constants.CHANGE_WHETHERUNITPAYFLIGHT:
             return state.setIn(['tra', 'whetherUnitPayFlight'], action.data);

@@ -451,7 +451,7 @@ class FormForSubmitter extends Component {
                                             {/* Amount */}
                                             <Form.Item {...restField} label="Full Amount" name={[name, 'fullamount']} fieldKey={[fieldKey, 'fullamount']} rules={[ { required: true, message: 'Please input amount!', }, ]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                                             {/* Was Sales Tax Paid? */}
-                                            <Form.Item label="Was Sales Tax Paid?" name={[name, 'wassalestaxpaid']} ><Radio.Group><Radio value={'yes'}>Yes</Radio><Radio value={'no'}>No</Radio><Radio value={'itemnottaxable'}>Item Not Taxable</Radio></Radio.Group></Form.Item>
+                                            <Form.Item label="Was Sales Tax Paid?" name={[name, 'wassalestaxpaid']} ><Radio.Group><Radio value={'Yes'}>Yes</Radio><Radio value={'No'}>No</Radio><Radio value={'Item Not Taxable'}>Item Not Taxable</Radio></Radio.Group></Form.Item>
                                             {/* Budget: */}
                                             <div className="ant-row">
                                                 <span className='budgetLabel'><span className='redMark'>*</span> Budget: </span>
@@ -514,8 +514,9 @@ class FormForSubmitter extends Component {
                 </Form.List>
                 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Finish</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
+                    <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
+                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -878,7 +879,7 @@ class FormForSubmitter extends Component {
     }
 
     getConfirmModal() {
-        const { formType, pay, pro, pur } = this.props;
+        const { formType, pay, pro, pur, rei } = this.props;
 
         if (formType === 'Pay an Invoice') {
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
@@ -1059,6 +1060,82 @@ class FormForSubmitter extends Component {
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
                 </div>
             );
+        } else if (formType === 'Reimbursement') {
+            const { rei_reimbursementfor, rei_requestforself_name, rei_requestforself_affiliation, rei_requestforself_email } = rei;
+            const { rei_individualtobereimbursed } = rei;
+            const { rei_preferredpaymentmethod } = rei;
+            const { rei_fullname, rei_addressline1, rei_addressline2, rei_city, rei_state, rei_zipcode, rei_country } = rei;
+            const { rei_allitems } = rei;
+            var rei_allitemsJS = [];
+            rei_allitems.map((rei_allitem, idx) => {
+                const { expensedescription, businesspurpose, category, fullamount, wassalestaxpaid } = rei_allitem;
+                rei_allitemsJS.push(<Descriptions.Item key={idx} labelStyle={{background:'#d4bdff'}} label="Item#" span={2}>{idx+1}</Descriptions.Item>);
+                rei_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
+                rei_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
+                rei_allitemsJS.push(<Descriptions.Item label="Category" span={2}>{category}</Descriptions.Item>);
+                rei_allitemsJS.push(<Descriptions.Item label="Full Amount">{fullamount}</Descriptions.Item>);
+                rei_allitemsJS.push(<Descriptions.Item label="Was Sales Tax Paid">{wassalestaxpaid}</Descriptions.Item>);
+                const { rei_budgets } = rei_allitem;
+                rei_budgets.map((rei_budget, budget_idx) => {
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = rei_budget;
+                    rei_allitemsJS.push(
+                        <Descriptions.Item label="Budget" span={2} key={budget_idx}>
+                            Number: {budget_number}
+                            <br />
+                            Amount: ${budget_amount}
+                            <br />
+                            Task: {budget_task}
+                            <br />
+                            Opinion: {budget_opinion}
+                            <br />
+                            Project: {budget_project}
+                        </Descriptions.Item>
+                    );
+                })
+                const { rei_attachments } = rei_allitem;
+                rei_attachments.map((rei_attachment, att_idx) => {
+                    const { name, url} = rei_attachment;
+                    rei_allitemsJS.push(
+                        <Descriptions.Item label="Attachment" span={2} key={att_idx}>
+                            <a href={url}>{name}</a>
+                        </Descriptions.Item>);
+                })
+            })
+            return (
+                <div className='confirmBox'>
+                    <Descriptions title="Reimbursement · Requester Information">
+                        <Descriptions.Item label="Reimbursement for" span={3}>{rei_reimbursementfor}</Descriptions.Item>
+                        { 
+                            rei_reimbursementfor === 'On behalf of someone' ? 
+                            <Fragment>
+                                <Descriptions.Item label="Name">{rei_requestforself_name}</Descriptions.Item>
+                                <Descriptions.Item label="Affiliation">{rei_requestforself_affiliation}</Descriptions.Item>
+                                <Descriptions.Item label="Email">{rei_requestforself_email}</Descriptions.Item>
+                            </Fragment> : null
+                        }
+                        <Descriptions.Item label="Individual to be reimbursed" span={3}>{rei_individualtobereimbursed}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Reimbursement · Delivery Method">
+                        <Descriptions.Item label="Preferred Payment Method" span={3}>{rei_preferredpaymentmethod}</Descriptions.Item>
+                        { 
+                            rei_preferredpaymentmethod === 'Mail the check' ? 
+                            <Fragment>
+                                <Descriptions.Item label="Full Name">{rei_fullname}</Descriptions.Item>
+                                <Descriptions.Item label="Address Line 1">{rei_addressline1}</Descriptions.Item>
+                                <Descriptions.Item label="Address Line 2">{rei_addressline2}</Descriptions.Item>
+                                <Descriptions.Item label="City">{rei_city}</Descriptions.Item>
+                                <Descriptions.Item label="State">{rei_state}</Descriptions.Item>
+                                <Descriptions.Item label="Zip Code">{rei_zipcode}</Descriptions.Item>
+                                <Descriptions.Item label="Country">{rei_country}</Descriptions.Item>
+                            </Fragment> : null
+                        }
+                    </Descriptions>
+                    <Descriptions title="Reimbursement · Items" column={2} bordered>
+                        { rei_allitemsJS }
+                    </Descriptions>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                </div>
+            );
         }
       }
 
@@ -1106,6 +1183,7 @@ const mapStateToProps = (state) => {
         pay: state.getIn(['form', 'form_data', 'pay']),
         pro: state.getIn(['form', 'form_data', 'pro']),
         pur: state.getIn(['form', 'form_data', 'pur']),
+        rei: state.getIn(['form', 'form_data', 'rei']),
     }
 }
 
