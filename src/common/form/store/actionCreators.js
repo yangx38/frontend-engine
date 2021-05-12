@@ -369,13 +369,13 @@ export const onFinishTravelReimbursementForm = (data) => {
     // budgets
     const { trarei_budget_firstnumber, trarei_budget_firstamount, trarei_budget_firsttask, trarei_budget_firstoption, trarei_budget_firstproject } = data;
     var trarei_budgets = []
-    const trarei_budget = { trarei_budget_firstnumber, trarei_budget_firstamount, trarei_budget_firsttask: trarei_budget_firsttask || '', trarei_budget_firstoption: trarei_budget_firstoption || '', trarei_budget_firstproject: trarei_budget_firstproject || '' }
+    const trarei_budget = { budget_number: trarei_budget_firstnumber, budget_amount: trarei_budget_firstamount, budget_task: trarei_budget_firsttask || '', budget_option: trarei_budget_firstoption || '', budget_project: trarei_budget_firstproject || '' }
     trarei_budgets.push(trarei_budget)
     const { trarei_budget_rest } = data;
     if (trarei_budget_rest && trarei_budget_rest.length > 0) {
         trarei_budget_rest.map((budget_rest_peritem) => {
             const { budget_restnumbers, budget_restamounts, budget_task, budget_project, budget_option } = budget_rest_peritem;
-            const budget_rest = { budget_restnumbers, budget_restamounts, budget_task: budget_task || '', budget_project: budget_project || '', budget_option: budget_option || '' }
+            const budget_rest = { budget_number: budget_restnumbers, budget_amount: budget_restamounts, budget_task: budget_task || '', budget_project: budget_project || '', budget_option: budget_option || '' }
             trarei_budgets.push(budget_rest)
         })
     }

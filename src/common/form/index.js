@@ -872,15 +872,16 @@ class FormForSubmitter extends Component {
                 }
 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Finish</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
+                    <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
+                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
     }
 
     getConfirmModal() {
-        const { formType, pay, pro, pur, rei, tra } = this.props;
+        const { formType, pay, pro, pur, rei, tra, trarei } = this.props;
 
         if (formType === 'Pay an Invoice') {
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
@@ -941,6 +942,7 @@ class FormForSubmitter extends Component {
                         { pay_allitemsJS }
                     </Descriptions>
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
         } else if (formType === 'Procard Receipt') {
@@ -996,6 +998,7 @@ class FormForSubmitter extends Component {
                         { pro_allitemsJS }
                     </Descriptions>
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
         } else if (formType === 'Purchase Request') {
@@ -1059,6 +1062,7 @@ class FormForSubmitter extends Component {
                         { pur_allitemsJS }
                     </Descriptions>
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
         } else if (formType === 'Reimbursement') {
@@ -1135,6 +1139,7 @@ class FormForSubmitter extends Component {
                         { rei_allitemsJS }
                     </Descriptions>
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
         } else if (formType === 'Travel Request') {
@@ -1174,10 +1179,10 @@ class FormForSubmitter extends Component {
                         <Descriptions.Item label="Returning Date">{tra_returning}</Descriptions.Item>
                         <Descriptions.Item label="Reason" span={2}>{tra_reason}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Budgets" column={2} bordered>
+                    <Descriptions title="" column={2} bordered>
                         { tra_allitemsJS }
                     </Descriptions>
-                    <Descriptions title="Whether Unit Pay the Flight / Hotel" column={2} >
+                    <Descriptions title="" column={2}>
                         <Descriptions.Item labelStyle={{color:'#6F42C1', fontWeight:'bold'}} label="Unit to pay the flight?" span={2}>{tra_whetherunitpayflight}</Descriptions.Item>
                         { 
                             tra_whetherunitpayflight === 'Yes' ? 
@@ -1209,6 +1214,94 @@ class FormForSubmitter extends Component {
                             </Fragment> : null
                         }
                     </Descriptions>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
+                </div>
+            );
+        } else if (formType === 'Traval Reimbursement') {
+            const { trarei_reimbursedbefore, trarei_referencenumber } = trarei;
+            const { trarei_requestforself, trarei_requestforself_name, trarei_requestforself_affiliation, trarei_requestforself_email } = trarei;
+            const { trarei_budgets } = trarei;
+            var trarei_allitemsJS = [];
+            if (trarei_budgets && trarei_budgets.length > 0) {
+                trarei_budgets.map((trarei_budget, budget_idx) => {
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_option} = trarei_budget;
+                    trarei_allitemsJS.push(
+                        <Descriptions.Item label="Budget" span={2} key={budget_idx}>
+                            Number: {budget_number}
+                            <br />
+                            Amount: ${budget_amount}
+                            <br />
+                            Task: {budget_task}
+                            <br />
+                            Option: {budget_option}
+                            <br />
+                            Project: {budget_project}
+                        </Descriptions.Item>
+                    );
+                })
+            }
+            const { trarei_whethercitizen, trarei_passport, trarei_i94 } = trarei;
+            var trarei_passportJS = [];
+            if (trarei_passport && trarei_passport.length > 0) {
+                trarei_passport.map((passport, pass_idx) => {
+                    const { name, url} = passport;
+                    trarei_passportJS.push(
+                        <Descriptions.Item label="Passport Identity Page Copy" span={2} key={pass_idx}>
+                            <a href={url}>{name}</a>
+                        </Descriptions.Item>);
+                })
+            }
+            var trarei_i94JS = [];
+            if (trarei_i94 && trarei_i94.length > 0) {
+                trarei_i94.map((i94, i94_idx) => {
+                    const { name, url} = i94;
+                    trarei_i94JS.push(
+                        <Descriptions.Item label="I-94 or US port entry stamp (visa)" span={2} key={i94_idx}>
+                            <a href={url}>{name}</a>
+                        </Descriptions.Item>);
+                })
+            }
+            const { trarei_purposeoftravel } = trarei;
+            const { trarein_whetherpersontravelinclude, trarei_departingtime, trarei_returningtime } = trarei;
+            return (
+                <div className='confirmBox'>
+                    <Descriptions title="Travel Reimbursement · Travel Reimbursement">
+                        <Descriptions.Item label="Reimbursed before this trip?" span={3}>{trarei_reimbursedbefore}</Descriptions.Item>
+                        { trarei_reimbursedbefore === 'Yes' ? <Descriptions.Item label="Reference Number" span={3}>{trarei_referencenumber}</Descriptions.Item> : null }
+                        <Descriptions.Item label="Requesting this reimbursement for yourself" span={3}>{trarei_requestforself}</Descriptions.Item>
+                        { 
+                            trarei_requestforself === 'No' ? 
+                                <Fragment>
+                                    <Descriptions.Item label="Name">{trarei_requestforself_name}</Descriptions.Item> 
+                                    <Descriptions.Item label="Affiliation">{trarei_requestforself_affiliation}</Descriptions.Item> 
+                                    <Descriptions.Item label="Email">{trarei_requestforself_email}</Descriptions.Item> 
+                                </Fragment>
+                            : null 
+                        }
+                    </Descriptions>
+                    <Descriptions title="" column={2} bordered>
+                        { trarei_allitemsJS }
+                    </Descriptions>
+                    <Descriptions title="" column={2} >
+                        <Descriptions.Item label="US Citizen or Permanent Resident?" span={2}>{trarei_whethercitizen}</Descriptions.Item>
+                        { trarei_passportJS }
+                        { trarei_i94JS }
+                        <Descriptions.Item label="Purpose of Travel?" span={2}>{trarei_purposeoftravel}</Descriptions.Item>
+                        <Descriptions.Item label="Was personal travel included?" span={2}>{trarein_whetherpersontravelinclude}</Descriptions.Item>
+                        { 
+                            trarein_whetherpersontravelinclude === 'Yes' ? 
+                                <Fragment>
+                                    <Descriptions.Item label="Departing Date">{trarei_departingtime}</Descriptions.Item> 
+                                    <Descriptions.Item label="Returning Date">{trarei_returningtime}</Descriptions.Item> 
+                                </Fragment>
+                            : null 
+                        }
+                    </Descriptions>
+                    <Descriptions title="Travel Reimbursement · Travel Costs">
+
+                    </Descriptions>
+                    
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
@@ -1262,6 +1355,7 @@ const mapStateToProps = (state) => {
         pur: state.getIn(['form', 'form_data', 'pur']),
         rei: state.getIn(['form', 'form_data', 'rei']),
         tra: state.getIn(['form', 'form_data', 'tra']),
+        trarei: state.getIn(['form', 'form_data', 'trarei']),
     }
 }
 
