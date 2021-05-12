@@ -147,3 +147,7 @@ th {
     border-top: 1px solid #a3a3a3;
     padding-top: 15px !important;
 }
+.confirmModelWarn {
+    margin-top: 20px !important;
+    margin-left: 330px !important;
+}

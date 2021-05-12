@@ -291,13 +291,13 @@ export const onFinishTravelRequestForm = (data) => {
     // budgets
     const { tra_budget_firstnumber, tra_budget_firstamount, tra_budget_firsttask, tra_budget_firstoption, tra_budget_firstproject } = data;
     var tra_budgets = []
-    const tra_budget = { tra_budget_firstnumber, tra_budget_firstamount, tra_budget_firsttask: tra_budget_firsttask || '', tra_budget_firstoption: tra_budget_firstoption || '', tra_budget_firstproject: tra_budget_firstproject || '' }
+    const tra_budget = { budget_number: tra_budget_firstnumber, budget_amount: tra_budget_firstamount, budget_task: tra_budget_firsttask || '', budget_option: tra_budget_firstoption || '', budget_project: tra_budget_firstproject || '' }
     tra_budgets.push(tra_budget)
     const { tra_budget_rest } = data;
     if (tra_budget_rest && tra_budget_rest.length > 0) {
         tra_budget_rest.map((budget_rest_peritem) => {
             const { budget_restnumbers, budget_restamounts, budget_task, budget_project, budget_option } = budget_rest_peritem;
-            const budget_rest = { budget_restnumbers, budget_restamounts, budget_task: budget_task || '', budget_project: budget_project || '', budget_option: budget_option || '' }
+            const budget_rest = { budget_number: budget_restnumbers, budget_amount: budget_restamounts, budget_task: budget_task || '', budget_project: budget_project || '', budget_option: budget_option || '' }
             tra_budgets.push(budget_rest)
         })
     }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
 import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider, Checkbox, Tag, Descriptions } from 'antd';
-import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 
 import {
@@ -623,8 +623,9 @@ class FormForSubmitter extends Component {
                 }
 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Finish</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if no direct after clicking 'Finish'</Tag></div>
+                    <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
+                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
+                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -879,7 +880,7 @@ class FormForSubmitter extends Component {
     }
 
     getConfirmModal() {
-        const { formType, pay, pro, pur, rei } = this.props;
+        const { formType, pay, pro, pur, rei, tra } = this.props;
 
         if (formType === 'Pay an Invoice') {
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
@@ -892,10 +893,10 @@ class FormForSubmitter extends Component {
                 pay_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
                 pay_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
                 pay_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
-                pay_allitemsJS.push(<Descriptions.Item label="Full Amount">{fullamount}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
                 const { pay_budgets } = pay_allitem;
                 pay_budgets.map((pay_budget, budget_idx) => {
-                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = pay_budget;
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pay_budget;
                     pay_allitemsJS.push(
                         <Descriptions.Item label="Budget" span={2} key={budget_idx}>
                             Number: {budget_number}
@@ -904,7 +905,7 @@ class FormForSubmitter extends Component {
                             <br />
                             Task: {budget_task}
                             <br />
-                            Opinion: {budget_opinion}
+                            Option: {budget_option}
                             <br />
                             Project: {budget_project}
                         </Descriptions.Item>
@@ -953,10 +954,10 @@ class FormForSubmitter extends Component {
                 pro_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
                 pro_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
                 pro_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
-                pro_allitemsJS.push(<Descriptions.Item label="Full Amount">{fullamount}</Descriptions.Item>);
+                pro_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
                 const { pro_budgets } = pro_allitem;
                 pro_budgets.map((pro_budget, budget_idx) => {
-                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = pro_budget;
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pro_budget;
                     pro_allitemsJS.push(
                         <Descriptions.Item label="Budget" span={2} key={budget_idx}>
                             Number: {budget_number}
@@ -965,7 +966,7 @@ class FormForSubmitter extends Component {
                             <br />
                             Task: {budget_task}
                             <br />
-                            Opinion: {budget_opinion}
+                            Option: {budget_option}
                             <br />
                             Project: {budget_project}
                         </Descriptions.Item>
@@ -1009,11 +1010,11 @@ class FormForSubmitter extends Component {
                 pur_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
                 pur_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
                 pur_allitemsJS.push(<Descriptions.Item label="Quantity">{quantity}</Descriptions.Item>);
-                pur_allitemsJS.push(<Descriptions.Item label="Unit Price">{unitprice}</Descriptions.Item>);
-                pur_allitemsJS.push(<Descriptions.Item labelStyle={{background:'#ffd791'}} label="Full Amount (Calculated)">{unitprice*quantity}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item label="Unit Price">${unitprice}</Descriptions.Item>);
+                pur_allitemsJS.push(<Descriptions.Item labelStyle={{background:'#ffd791'}} label="Full Amount (Calculated)">${unitprice*quantity}</Descriptions.Item>);
                 const { pur_budgets } = pur_allitem;
                 pur_budgets.map((pur_budget, budget_idx) => {
-                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = pur_budget;
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pur_budget;
                     pur_allitemsJS.push(
                         <Descriptions.Item label="Budget" span={2} key={budget_idx}>
                             Number: {budget_number}
@@ -1022,7 +1023,7 @@ class FormForSubmitter extends Component {
                             <br />
                             Task: {budget_task}
                             <br />
-                            Opinion: {budget_opinion}
+                            Option: {budget_option}
                             <br />
                             Project: {budget_project}
                         </Descriptions.Item>
@@ -1073,11 +1074,11 @@ class FormForSubmitter extends Component {
                 rei_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
                 rei_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
                 rei_allitemsJS.push(<Descriptions.Item label="Category" span={2}>{category}</Descriptions.Item>);
-                rei_allitemsJS.push(<Descriptions.Item label="Full Amount">{fullamount}</Descriptions.Item>);
+                rei_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
                 rei_allitemsJS.push(<Descriptions.Item label="Was Sales Tax Paid">{wassalestaxpaid}</Descriptions.Item>);
                 const { rei_budgets } = rei_allitem;
                 rei_budgets.map((rei_budget, budget_idx) => {
-                    const { budget_number, budget_amount, budget_task, budget_project, budget_opinion} = rei_budget;
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_option} = rei_budget;
                     rei_allitemsJS.push(
                         <Descriptions.Item label="Budget" span={2} key={budget_idx}>
                             Number: {budget_number}
@@ -1086,7 +1087,7 @@ class FormForSubmitter extends Component {
                             <br />
                             Task: {budget_task}
                             <br />
-                            Opinion: {budget_opinion}
+                            Option: {budget_option}
                             <br />
                             Project: {budget_project}
                         </Descriptions.Item>
@@ -1134,6 +1135,82 @@ class FormForSubmitter extends Component {
                         { rei_allitemsJS }
                     </Descriptions>
                     <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                </div>
+            );
+        } else if (formType === 'Travel Request') {
+            const { tra_legalfirstname, tra_legallastname, tra_departure, tra_destination, tra_departingdate, tra_returning, tra_reason } = tra;
+            const { tra_budgets } = tra;
+            var tra_allitemsJS = [];
+            if (tra_budgets && tra_budgets.length > 0) {
+                tra_budgets.map((tra_budget, budget_idx) => {
+                    const { budget_number, budget_amount, budget_task, budget_project, budget_option} = tra_budget;
+                    tra_allitemsJS.push(
+                        <Descriptions.Item label="Budget" span={2} key={budget_idx}>
+                            Number: {budget_number}
+                            <br />
+                            Amount: ${budget_amount}
+                            <br />
+                            Task: {budget_task}
+                            <br />
+                            Option: {budget_option}
+                            <br />
+                            Project: {budget_project}
+                        </Descriptions.Item>
+                    );
+                })
+            }
+            const { tra_whetherunitpayflight, tra_unitpayflight } = tra;
+            const { tra_unitpayflight_birthday, tra_airline, tra_flightnumber, tra_flightfrom, tra_flightto, tra_unitpayflight_departingdate, tra_unitpayflight_returningdate, tra_unitpayflight_amount, tra_flightreference } = tra_unitpayflight;
+            const { tra_whetherunitpayhotel, tra_unitpayhotel } = tra;
+            const { tra_hotelname, tra_unitpayhotel_address, tra_unitpayhotel_numberofpeople, tra_unitpayhotel_zip, tra_unitpayhotel_checkkindate, tra_unitpayhotel_checkoutdate, tra_unitpayhotel_amount, tra_unitpayhotel_link, tra_unitpayhotel_hotelnote } = tra_unitpayhotel;
+            return (
+                <div className='confirmBox'>
+                    <Descriptions title="Travel Request · Travel Information" column={2} >
+                        <Descriptions.Item label="Legal First Name">{tra_legalfirstname}</Descriptions.Item>
+                        <Descriptions.Item label="Legal Last Name">{tra_legallastname}</Descriptions.Item>
+                        <Descriptions.Item label="Departure">{tra_departure}</Descriptions.Item>
+                        <Descriptions.Item label="Destination">{tra_destination}</Descriptions.Item>
+                        <Descriptions.Item label="Departing Date">{tra_departingdate}</Descriptions.Item>
+                        <Descriptions.Item label="Returning Date">{tra_returning}</Descriptions.Item>
+                        <Descriptions.Item label="Reason" span={2}>{tra_reason}</Descriptions.Item>
+                    </Descriptions>
+                    <Descriptions title="Budgets" column={2} bordered>
+                        { tra_allitemsJS }
+                    </Descriptions>
+                    <Descriptions title="Whether Unit Pay the Flight / Hotel" column={2} >
+                        <Descriptions.Item labelStyle={{color:'#6F42C1', fontWeight:'bold'}} label="Unit to pay the flight?" span={2}>{tra_whetherunitpayflight}</Descriptions.Item>
+                        { 
+                            tra_whetherunitpayflight === 'Yes' ? 
+                            <Fragment>
+                                <Descriptions.Item label="Birthday" span={2}>{tra_unitpayflight_birthday}</Descriptions.Item>
+                                <Descriptions.Item label="Airline">{tra_airline}</Descriptions.Item>
+                                <Descriptions.Item label="Flight Number">{tra_flightnumber}</Descriptions.Item>
+                                <Descriptions.Item label="Flight From">{tra_flightfrom}</Descriptions.Item>
+                                <Descriptions.Item label="Flight To">{tra_flightto}</Descriptions.Item>
+                                <Descriptions.Item label="Departing Date">{tra_unitpayflight_departingdate}</Descriptions.Item>
+                                <Descriptions.Item label="Returning Date">{tra_unitpayflight_returningdate}</Descriptions.Item>
+                                <Descriptions.Item label="Amount" span={2}>${tra_unitpayflight_amount}</Descriptions.Item>
+                                <Descriptions.Item label="Flight Reference" span={2}>{tra_flightreference}</Descriptions.Item>
+                            </Fragment> : null
+                        }
+                        <Descriptions.Item labelStyle={{color:'#6F42C1', fontWeight:'bold'}} label="Unit to pay the hotel?" span={2}>{tra_whetherunitpayhotel}</Descriptions.Item>
+                        { 
+                            tra_whetherunitpayhotel === 'Yes' ? 
+                            <Fragment>
+                                <Descriptions.Item label="Hotel Name">{tra_hotelname}</Descriptions.Item>
+                                <Descriptions.Item label="Address">{tra_unitpayhotel_address}</Descriptions.Item>
+                                <Descriptions.Item label="Number of People">{tra_unitpayhotel_numberofpeople}</Descriptions.Item>
+                                <Descriptions.Item label="Zip">{tra_unitpayhotel_zip}</Descriptions.Item>
+                                <Descriptions.Item label="Check In Date">{tra_unitpayhotel_checkkindate}</Descriptions.Item>
+                                <Descriptions.Item label="Check Out Date">{tra_unitpayhotel_checkoutdate}</Descriptions.Item>
+                                <Descriptions.Item label="Amount">${tra_unitpayhotel_amount}</Descriptions.Item>
+                                <Descriptions.Item label="Link">{tra_unitpayhotel_link}</Descriptions.Item>
+                                <Descriptions.Item label="Hotel Note">{tra_unitpayhotel_hotelnote}</Descriptions.Item>
+                            </Fragment> : null
+                        }
+                    </Descriptions>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
         }
@@ -1184,6 +1261,7 @@ const mapStateToProps = (state) => {
         pro: state.getIn(['form', 'form_data', 'pro']),
         pur: state.getIn(['form', 'form_data', 'pur']),
         rei: state.getIn(['form', 'form_data', 'rei']),
+        tra: state.getIn(['form', 'form_data', 'tra']),
     }
 }
 

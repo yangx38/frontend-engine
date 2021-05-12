@@ -89,7 +89,7 @@ const reducer = (state = defaultState, action) => {
         case constants.CHANGE_WHETHERUNITPAYHOTEL:
             return state.setIn(['tra', 'whetherUnitPayHotel'], action.data);
         case constants.SUBMIT_TRAVELREQUEST:
-            return state.setIn(['form_data', 'tra'], action.tra_formdata);
+            return state.setIn(['form_data', 'tra'], action.tra_formdata).set('confirm_modal', true);
         // getTravelReimbursementForm()
         case constants.CHANGE_REIMBURSEBEFORE:
             return state.setIn(['traRei', 'reimbursedBefore'], action.data);
