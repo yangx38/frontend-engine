@@ -17,11 +17,11 @@ import {
 
 class Header extends Component {
     getSubmitterNavItems() {
-        const { login, role, submitterSubunitsOfGivenNetId, fiscalStaffSubunitsOfGivenNetId } = this.props;
+        const { login, role, submitterSubunitsOfGivenNetId, fiscalStaffUnitsOfGivenNetId } = this.props;
         const submitterSubunitsOfGivenNetIdJS = Immutable.List(submitterSubunitsOfGivenNetId).toJS();
-        const fiscalStaffSubunitsOfGivenNetIdJS = Immutable.List(fiscalStaffSubunitsOfGivenNetId).toJS();
+        const fiscalStaffUnitsOfGivenNetIdJS = Immutable.List(fiscalStaffUnitsOfGivenNetId).toJS();
         const { SubMenu } = Menu;
-        const { readSu_selectedSubunitANDForm, readFs_SelectedSubunit } = this.props;
+        const { readSu_selectedSubunitANDForm, readFs_SelectedUnit } = this.props;
         const submitterSubunitsOfGivenNetIdList = [];
         submitterSubunitsOfGivenNetIdJS.map(item => {
             const { unit, subunits } = item;
@@ -41,13 +41,8 @@ class Header extends Component {
             }
         })
         const fiscalStaffSubunitsOfGivenNetIdList = [];
-        fiscalStaffSubunitsOfGivenNetIdJS.map(item => {
-            const { unit, subunits } = item;
-            fiscalStaffSubunitsOfGivenNetIdList.push(<Menu.ItemGroup key={unit} title={unit}> </Menu.ItemGroup>)
-            for(let i = 0; i < subunits.length; i++) {
-                const subunit = subunits[i]
-                fiscalStaffSubunitsOfGivenNetIdList.push(<Menu.Item key={subunit} onClick={()=> readFs_SelectedSubunit(unit, subunit)}>{subunit}</Menu.Item>)
-            }      
+        fiscalStaffUnitsOfGivenNetIdJS.map(unit => {
+            fiscalStaffSubunitsOfGivenNetIdList.push(<Menu.Item key={unit} onClick={()=> readFs_SelectedUnit(unit)}>{unit}</Menu.Item>)
         })
 
         if (login) {
@@ -122,7 +117,7 @@ const mapStateToProps = (state) => {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
         submitterSubunitsOfGivenNetId: state.getIn(['login', 'user', 'submitterSubunitsOfGivenNetId']),
-        fiscalStaffSubunitsOfGivenNetId: state.getIn(['login', 'user', 'fiscalStaffSubunitsOfGivenNetId']),
+        fiscalStaffUnitsOfGivenNetId: state.getIn(['login', 'user', 'fiscalStaffUnitsOfGivenNetId']),
     }
 }
 
@@ -139,12 +134,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(formActionCreators.setConfirmModal());
             dispatch(actionCreators.readSu_selectedSubunitANDForm(unit, subunit, formType))
         },
-
-
-        
-        readFs_SelectedSubunit(unit, subunit) {
+        readFs_SelectedUnit(unit) {
             console.log(unit)
-            console.log(subunit)
         },
     }
 }

@@ -29,53 +29,72 @@ export const getAllUnitSubunit = () => {
             })
     }
 }
+var allPeople = [];
 const getAllPeopleAction = (data) => ({
     type: GET_ALL_PEOPLE,
     data: fromJS(data)
 })
 export const getAllPeople = () => {
+    allPeople = [];
     return (dispatch) => {
-        axios.get(`http://localhost:8080/api/systemadmin/getAllPeople`)
+        return getAllSubmitters()
+            .then(res => getAllFiscalStaffs())
             .then(res => {
-                console.log('Pages, unitsbudgetspeople, getAllPeople, res.data', res.data);
-                dispatch(getAllPeopleAction(res.data));
+                dispatch(getAllPeopleAction(allPeople))
             })
             .catch(error => {
                 console.log(error)
             })
     }
+}
+const getAllSubmitters = () => {
+    return axios.get(`http://localhost:8080/api/systemadmin/getAllSubmitter`)
+        .then(res => {
+            if (res.data.length > 0) allPeople = allPeople.concat(res.data);
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+const getAllFiscalStaffs = () => {
+    return axios.get(`http://localhost:8080/api/systemadmin/getAllFiscalStaff`)
+        .then(res => {
+            if (res.data.length > 0) allPeople = allPeople.concat(res.data);
+        })
+        .catch(error => {
+            console.log(error)
+        })
 }
 // getUnitSubunitTable()
-export const changeUSTSelectedUnit = (data) => ({
+const changePTfromSelectedUnitAction = (unitname, allPeopleOfUnit) => ({
     type: CHANGE_UST_SELECTED_UNIT,
-    data
+    unitname,
+    data: fromJS(allPeopleOfUnit)
 })
-export const changePTfromSelectedUnit = (unitname) => {
+export const changePTfromSelectedUnit = (unitname, pt_allpeople_unchangedJS) => {
     return (dispatch) => {
-        axios.get(`http://localhost:8080/api/systemadmin/getPeopleOfUnit/${unitname}`)
-            .then(res => {
-                console.log('Pages, unitsbudgetspeople, getPeopleOfUnit, res.data', res.data);
-                dispatch(getAllPeopleAction(res.data));
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        var allPeopleOfUnit = [];
+        pt_allpeople_unchangedJS.map((people) => {
+            const { unit } = people;
+            if (unit === unitname) allPeopleOfUnit.push(people);
+        })
+        dispatch(changePTfromSelectedUnitAction(unitname, allPeopleOfUnit))
     }
 }
-export const changeUSTSelectedSubunit = (data) => ({
+const changePTfromSelectedSubunitAction = (subunitname, allPeopleOfSubunit) => ({
     type: CHANGE_UST_SELECTED_SUBUNIT,
-    data
+    subunitname,
+    data: fromJS(allPeopleOfSubunit)
 })
-export const changePTfromSelectedSubunit = (subunitname) => {
+export const changePTfromSelectedSubunit = (subunitname, pt_allpeople_unchangedJS) => {
     return (dispatch) => {
-        axios.get(`http://localhost:8080/api/systemadmin/getPeopleOfSubunit/${subunitname}`)
-            .then(res => {
-                console.log('Pages, unitsbudgetspeople, getPeopleOfSubunit, res.data', res.data);
-                dispatch(getAllPeopleAction(res.data));
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        var allPeopleOfSubunit = [];
+        const subunitname_short = subunitname.split('@')[0];
+        pt_allpeople_unchangedJS.map((people) => {
+            const { subunit } = people;
+            if (subunit === subunitname_short) allPeopleOfSubunit.push(people);
+        })
+        dispatch(changePTfromSelectedSubunitAction(subunitname, allPeopleOfSubunit))
     }
 }
 export const showUSTEditModal = (data) => ({

@@ -768,7 +768,7 @@ class FormForSubmitter extends Component {
                                         <div className='addBudgetBtn'>
                                             <Form.Item name={[name, 'amount']} rules={[{ required: true, message: 'Please input amount!' }]} ><InputNumber className='budgetAmount' formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} /></Form.Item>
                                             <Form.Item {...restField} name={[name, 'attachment']} fieldKey={[fieldKey, 'attachment']} valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: 'Please upload attachment!' }]}>
-                                                <Upload name="file" action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
+                                                <Upload name="file" accept={"image/png, image/jpeg, application/pdf"} action="http://localhost:8080/upload" listType="picture" beforeUpload={beforeUpload} ><Button icon={<UploadOutlined />}>Click to upload</Button></Upload>
                                             </Form.Item>
                                         </div>
                                     </div>

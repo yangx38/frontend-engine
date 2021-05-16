@@ -29,8 +29,9 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     }
 
     getUnitSubunitTable() {
-        const { ust_allunitsubunit, ust_selectedUnit } = this.props;
+        const { ust_allunitsubunit, ust_selectedUnit, pt_allpeople_unchanged } = this.props;
         const unitSubunitsJS = Immutable.List(ust_allunitsubunit).toJS();
+        const pt_allpeople_unchangedJS = Immutable.List(pt_allpeople_unchanged).toJS();
         const { changeUSTSelectedUnitSubunit, showUSTEditModal } = this.props;
         const unitSubunitTableColumns = [ { title: 'Units & Subunits', dataIndex: 'name', key: 'name', sorter: (a, b) => {
                 if (a.children !== undefined && b.children !== undefined) return a.name.localeCompare(b.name);
@@ -38,11 +39,10 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                 return 0;
             }
         } ];
-        console.log(unitSubunitsJS)
         return (
             <Fragment>
                 <Table className='tableCursor' columns={unitSubunitTableColumns} dataSource={unitSubunitsJS} 
-                    rowSelection={{ type: 'radio',  onChange: (selectedRowKeys, selectedRows) => { changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows) }}} />
+                    rowSelection={{ type: 'radio',  onChange: (selectedRowKeys, selectedRows) => { changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows, pt_allpeople_unchangedJS) }}} />
                 { 
                     ust_selectedUnit ? <Button type='primary' onClick={() => showUSTEditModal()} className='unitSubunitBtn'>Edit Unit</Button> : <Button disabled className='unitSubunitBtn'>Edit Unit</Button>
                 }
@@ -75,7 +75,6 @@ class SystemAdminUnitsBudgetsPeople extends Component {
     getPeopleTable() {
         const { pt_allpeople, ust_selectedSubunit } = this.props;
         const pt_allpeopleJS = Immutable.List(pt_allpeople).toJS();
-        console.log(pt_allpeopleJS)
         const peopleTableColumns = [
             {
               title: 'Name',
@@ -100,6 +99,12 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                 dataIndex: 'subunit',
                 key: 'subunit',
                 sorter: (a, b) => a.subunit.localeCompare(b.subunit)
+            },
+            {
+                title: 'Unit',
+                dataIndex: 'unit',
+                key: 'unit',
+                sorter: (a, b) => a.unit.localeCompare(b.unit)
             },
         ];
         return (
@@ -145,6 +150,7 @@ const mapStateToProps = (state) => {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
         ust_allunitsubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_allunitsubunit']),
+        pt_allpeople_unchanged: state.getIn(['systemadmin_unitsbudgetspeople', 'pt_allpeople_unchanged']),
         pt_allpeople: state.getIn(['systemadmin_unitsbudgetspeople', 'pt_allpeople']),
         ust_selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_selectedUnit']),
         ust_selectedSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_selectedSubunit']),
@@ -162,13 +168,12 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actionCreators.getAllPeople());
         },
         // getUnitSubunitTable()
-        changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows) {
-            if (selectedRows[0].children !== undefined) {           
-                dispatch(actionCreators.changeUSTSelectedUnit(selectedRows[0].key));
-                dispatch(actionCreators.changePTfromSelectedUnit(selectedRows[0].key));
+        changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows, pt_allpeople_unchangedJS) {
+            if (selectedRows[0].children !== undefined) { 
+                dispatch(actionCreators.changePTfromSelectedUnit(selectedRows[0].key, pt_allpeople_unchangedJS));
             } else {
-                dispatch(actionCreators.changeUSTSelectedSubunit(selectedRows[0].key));
-                dispatch(actionCreators.changePTfromSelectedSubunit(selectedRowKeys));  
+                //dispatch(actionCreators.changeUSTSelectedSubunit(selectedRows[0].key));
+                dispatch(actionCreators.changePTfromSelectedSubunit(selectedRows[0].key, pt_allpeople_unchangedJS));
             }
         },
         showUSTEditModal() {

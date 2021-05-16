@@ -2,17 +2,17 @@ import styled from 'styled-components';
 
 export const HomeWrapper = styled.div`
     overflow: hidden;
-    width: 1000px;
+    width: 1200px;
     margin: 0 auto;
 `
 export const HomeLeft = styled.div`
     float: left;
     padding-top: 10px;
-    width: 350px;
+    width: 330px;
 `
 export const HomeRight = styled.div`
     padding-top: 19px;
-    width: 625px;
+    width: 840px;
     float: right;
 `
 export const ModalWrapper = styled.div`
