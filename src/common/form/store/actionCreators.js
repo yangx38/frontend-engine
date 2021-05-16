@@ -506,3 +506,34 @@ export const onFinishTravelReimbursementForm = (data) => {
     console.log('trareiformdata', trarei_formdata)
     return { type: SUBMIT_TRAVELREIMBURSEMENT, trarei_formdata }
 }
+// getConfirmModal()
+export const submitForm = (netId, formType, unit, subunit, form_data, budgets) => {
+    const data = {
+        'form_creator': netId,
+        'form_type': formType,
+        'form_unit': unit,
+        'form_subunit': subunit,
+        form_data,
+        'used_budget': budgets,
+    }
+    console.log(data)
+    return (dispatch) => {
+        const options = {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        }
+        console.log(options)
+        fetch(`http://localhost:8080/api/form/createOneForm`, options)
+            .then(res => {
+                console.log(res)
+                // dispatch(showApprovedMessage())
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+}
+// "{"pay_fullname":"Xiaotong Yang","pay_addressline1":"McCarty Hall, Room 313, 2100 NE Whitman Ln NE","pay_addressline2":"","pay_city":"Seattle","pay_state":"WA","pay_zipcode":"98195","pay_country":"United States","pay_vendorname":"sfd","pay_vendoremail":"syangx38@gmail.com","pay_vendorphone":"2067397095","pay_vendorwebsite":"","pay_allitems":[]}"

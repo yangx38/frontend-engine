@@ -129,12 +129,12 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                             {this.getUnitSubunitTable()}
                         </HomeLeft>
                         <HomeRight>
-                            <Tabs defaultActiveKey="2">
-                                <TabPane tab="Budgets" key="1">
-                                    {this.getBudgetTable()}
-                                </TabPane>
-                                <TabPane tab="People" key="2">
+                            <Tabs defaultActiveKey="1">
+                                <TabPane tab="People" key="1">
                                     {this.getPeopleTable()}
+                                </TabPane>
+                                <TabPane tab="Budget" key="2">
+                                    {this.getBudgetTable()}
                                 </TabPane>
                             </Tabs>
                         </HomeRight>

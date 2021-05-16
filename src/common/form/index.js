@@ -137,8 +137,8 @@ class FormForSubmitter extends Component {
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
-                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
+                    <div className='tag'><Tag color='purple' icon={<ExclamationCircleOutlined />}>Note: check missing field(s) if the page does not respond</Tag></div>
+                    <Tag color='processing'>Click (Re)generate Confirmation Page button <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -255,8 +255,8 @@ class FormForSubmitter extends Component {
                 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
-                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
+                    <div className='tag'><Tag color='purple' icon={<ExclamationCircleOutlined />}>Note: check missing field(s) if the page does not respond</Tag></div>
+                    <Tag color='processing'>Click (Re)generate Confirmation Page button <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -381,8 +381,8 @@ class FormForSubmitter extends Component {
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
-                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
+                    <div className='tag'><Tag color='purple' icon={<ExclamationCircleOutlined />}>Note: check missing field(s) if the page does not respond</Tag></div>
+                    <Tag color='processing'>Click (Re)generate Confirmation Page button <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -515,8 +515,8 @@ class FormForSubmitter extends Component {
                 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
-                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
+                    <div className='tag'><Tag color='purple' icon={<ExclamationCircleOutlined />}>Note: check missing field(s) if the page does not respond</Tag></div>
+                    <Tag color='processing'>Click (Re)generate Confirmation Page button <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -624,8 +624,8 @@ class FormForSubmitter extends Component {
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
-                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
+                    <div className='tag'><Tag color='purple' icon={<ExclamationCircleOutlined />}>Note: check missing field(s) if the page does not respond</Tag></div>
+                    <Tag color='processing'>Click (Re)generate Confirmation Page button <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
@@ -873,15 +873,19 @@ class FormForSubmitter extends Component {
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">(Re)generate Confirmation Page</Button>
-                    <div className='tag'><Tag color='purple'>Note: check missing field(s) if nothing shows up</Tag></div>
-                    <Tag color='processing'>Click <b>Again</b> if changing anything</Tag>
+                    <div className='tag'><Tag color='purple' icon={<ExclamationCircleOutlined />}>Note: check missing field(s) if the page does not respond</Tag></div>
+                    <Tag color='processing'>Click (Re)generate Confirmation Page button <b>Again</b> if changing anything</Tag>
                 </Form.Item>
             </Form>
         );
     }
 
     getConfirmModal() {
-        const { formType, pay, pro, pur, rei, tra, trarei } = this.props;
+        const { email, unit, subunit, formType, pay, pro, pur, rei, tra, trarei } = this.props;
+        const netId = email.split('@')[0];
+        const { submitForm } = this.props;
+
+        var budgets = [];
 
         if (formType === 'Pay an Invoice') {
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
@@ -896,6 +900,7 @@ class FormForSubmitter extends Component {
                 pay_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
                 pay_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
                 const { pay_budgets } = pay_allitem;
+                budgets = pay_budgets;
                 pay_budgets.map((pay_budget, budget_idx) => {
                     const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pay_budget;
                     pay_allitemsJS.push(
@@ -941,8 +946,10 @@ class FormForSubmitter extends Component {
                     <Descriptions title="Pay an Invoice · Items" column={2} bordered>
                         { pay_allitemsJS }
                     </Descriptions>
-                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+
+                    { pay_allitems.length > 0 ? <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, pay, budgets)}>Submit</Button> : <Button type="primary" shape='round' size='large' className='confirmModelSubmit' disabled>Submit</Button>}
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
+                    <div><Tag color="processing" className='confirmModelWarnSecond'>Must contain <b>at least one</b> budget to proceed. Otherwise <b>disabled</b> button</Tag></div>
                 </div>
             );
         } else if (formType === 'Procard Receipt') {
@@ -1387,6 +1394,7 @@ class FormForSubmitter extends Component {
 const mapStateToProps = (state) => {
     return {
         login: state.getIn(['login', 'login']),
+        email: state.getIn(['login', 'profileObj', 'email']),
         role: state.getIn(['login', 'user', 'role']),
         unit: state.getIn(['header', 'submit_form', 'unit']),
         subunit: state.getIn(['header', 'submit_form', 'subunit']),
@@ -1491,6 +1499,10 @@ const mapDispatchToProps = (dispatch) => {
             console.log(values)
             dispatch(actionCreators.onFinishTravelReimbursementForm(values));
         },
+        // getConfirmModal()
+        submitForm(netId, formType, unit, subunit, form_data, budgets) {
+            dispatch(actionCreators.submitForm(netId, formType, unit, subunit, form_data, budgets));
+        }
     }
 }
 

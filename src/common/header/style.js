@@ -38,6 +38,9 @@ export const NavItem = styled.div`
     border-bottom: 2px solid #F0F0F0;
     &.left {
         float: left;
+        width: 160px !important;
+        text-align: center !important;
+        color: #000000D9 !important;
     }
     &.right {
         float: right;
