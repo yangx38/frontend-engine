@@ -28,8 +28,8 @@ export const Nav = styled.div`
 `
 export const NavItem = styled.div`
     line-height: 54px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
     cursor: pointer;
     font-size: 15px;
     color: #626262;
@@ -38,9 +38,6 @@ export const NavItem = styled.div`
     border-bottom: 2px solid #F0F0F0;
     &.left {
         float: left;
-        width: 160px !important;
-        text-align: center !important;
-        color: #000000D9 !important;
     }
     &.right {
         float: right;
@@ -53,3 +50,4 @@ export const NavItem = styled.div`
         color: #1890ff !important;
     }
 `
+// width: 160px !important;

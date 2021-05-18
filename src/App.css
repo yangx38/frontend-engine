@@ -1,6 +1,12 @@
 th {
     font-weight: bold !important;
 }
+.unitbudget {
+    font-size: 14px !important;
+    text-align: center !important;
+    color: #626262 !important;
+    width: 130px !important;
+}
 .importantText {
     font-weight: bold;
     text-decoration: underline;

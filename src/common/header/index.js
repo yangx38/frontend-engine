@@ -17,11 +17,12 @@ import {
 
 class Header extends Component {
     getSubmitterNavItems() {
-        const { login, role, submitterSubunitsOfGivenNetId, fiscalStaffUnitsOfGivenNetId } = this.props;
+        const { login, role, submitterSubunitsOfGivenNetId, approverBudgetNumberssOfGivenNetId, fiscalStaffUnitsOfGivenNetId } = this.props;
         const submitterSubunitsOfGivenNetIdJS = Immutable.List(submitterSubunitsOfGivenNetId).toJS();
         const fiscalStaffUnitsOfGivenNetIdJS = Immutable.List(fiscalStaffUnitsOfGivenNetId).toJS();
+        const approverBudgetNumberssOfGivenNetIdJS = Immutable.List(approverBudgetNumberssOfGivenNetId).toJS();
         const { SubMenu } = Menu;
-        const { readSu_selectedSubunitANDForm, readFs_SelectedUnit } = this.props;
+        const { readSu_selectedSubunitANDForm, readFs_SelectedUnit, readAp_SelectedBudgetNumber } = this.props;
         const submitterSubunitsOfGivenNetIdList = [];
         submitterSubunitsOfGivenNetIdJS.map(item => {
             const { unit, subunits } = item;
@@ -44,18 +45,40 @@ class Header extends Component {
         fiscalStaffUnitsOfGivenNetIdJS.map(unit => {
             fiscalStaffSubunitsOfGivenNetIdList.push(<Menu.Item key={unit} onClick={()=> readFs_SelectedUnit(unit)}>{unit}</Menu.Item>)
         })
+        const approverBudgetNumbersOfGivenNetIdList = [];
+        approverBudgetNumberssOfGivenNetIdJS.map(budgetnumber => {
+            approverBudgetNumbersOfGivenNetIdList.push(<Menu.Item key={budgetnumber} onClick={()=> readAp_SelectedBudgetNumber(budgetnumber)}>{budgetnumber}</Menu.Item>)
+        })
 
         if (login) {
             if (role === 'system administrator') {
                 return (
                     <Fragment>
                         <Link to={'/systemadministrator/unitsbudgetspeople'}>
-                            <NavItem className='left'>Units/Budgets/People</NavItem>
+                            <NavItem className='left unitbudget'>Units/Budgets</NavItem>
+                        </Link>
+                        <Link to={'/fiscalstaff/approverequests'}>
+                            <NavItem className='left'>
+                                <Menu mode="horizontal">
+                                    <SubMenu key="SubMenu" title="Unit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
+                                        { fiscalStaffSubunitsOfGivenNetIdList }
+                                    </SubMenu>
+                                </Menu>
+                            </NavItem>
+                        </Link>
+                        <Link to={'/approver/approverequests'}>
+                            <NavItem className='left'>
+                                <Menu mode="horizontal">
+                                    <SubMenu key="SubMenu" title="Approve Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
+                                        { approverBudgetNumbersOfGivenNetIdList }
+                                    </SubMenu>
+                                </Menu>
+                            </NavItem>
                         </Link>
                         <Link to={'/submitrequests'}>
                             <NavItem className='left'>
                                 <Menu mode="horizontal">
-                                    <SubMenu key="SubMenu" title="Submit Request">
+                                    <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
                                         { submitterSubunitsOfGivenNetIdList }
                                     </SubMenu>
                                 </Menu>
@@ -66,20 +89,66 @@ class Header extends Component {
             } else if (role === 'fiscal staff') {
                 return (
                     <Fragment>
+                        <Link to={'/fiscalstaff/approverequests'}>
+                            <NavItem className='left'>
+                                <Menu mode="horizontal">
+                                    <SubMenu key="SubMenu" title="Unit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
+                                        { fiscalStaffSubunitsOfGivenNetIdList }
+                                    </SubMenu>
+                                </Menu>
+                            </NavItem>
+                        </Link>
+                        <Link to={'/approver/approverequests'}>
+                            <NavItem className='left'>
+                                <Menu mode="horizontal">
+                                    <SubMenu key="SubMenu" title="Approve Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
+                                        { approverBudgetNumbersOfGivenNetIdList }
+                                    </SubMenu>
+                                </Menu>
+                            </NavItem>
+                        </Link>
                         <Link to={'/submitrequests'}>
                             <NavItem className='left'>
                                 <Menu mode="horizontal">
-                                    <SubMenu key="SubMenu" title="Submit Request">
+                                    <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
                                         { submitterSubunitsOfGivenNetIdList }
                                     </SubMenu>
                                 </Menu>
                             </NavItem>
                         </Link>
-                        <Link to={'/fiscalstaff/approverequests'}>
+                    </Fragment>
+                );
+            } else if (role === 'approver') {
+                return (
+                    <Fragment>
+                        <Link to={'/approver/approverequests'}>
                             <NavItem className='left'>
                                 <Menu mode="horizontal">
-                                    <SubMenu key="SubMenu" title="Approve Request">
-                                        { fiscalStaffSubunitsOfGivenNetIdList }
+                                    <SubMenu key="SubMenu" title="Approve Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
+                                        { approverBudgetNumbersOfGivenNetIdList }
+                                    </SubMenu>
+                                </Menu>
+                            </NavItem>
+                        </Link>
+                        <Link to={'/submitrequests'}>
+                            <NavItem className='left'>
+                                <Menu mode="horizontal">
+                                    <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
+                                        { submitterSubunitsOfGivenNetIdList }
+                                    </SubMenu>
+                                </Menu>
+                            </NavItem>
+                        </Link>
+                    </Fragment>
+                );
+            } else if (role === 'submitter') {
+                return (
+                    <Fragment>
+                        <Link to={'/submitrequests'}>
+                            <NavItem className='left'>
+                                <Menu mode="horizontal">
+                                    <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
+                                        { submitterSubunitsOfGivenNetIdList }
                                     </SubMenu>
                                 </Menu>
                             </NavItem>
@@ -117,6 +186,7 @@ const mapStateToProps = (state) => {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
         submitterSubunitsOfGivenNetId: state.getIn(['login', 'user', 'submitterSubunitsOfGivenNetId']),
+        approverBudgetNumberssOfGivenNetId: state.getIn(['login', 'user', 'approverBudgetNumberssOfGivenNetId']),
         fiscalStaffUnitsOfGivenNetId: state.getIn(['login', 'user', 'fiscalStaffUnitsOfGivenNetId']),
     }
 }
@@ -128,8 +198,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(loginActionCreators.logout());
             dispatch(formActionCreators.logout());
             dispatch(sysmtemAdminUnitsBudgetsPeopleActionCreators.logout());
-        }, 
-        // getSubmitterNavItems()
+        },
         readSu_selectedSubunitANDForm(unit, subunit, formType) {
             dispatch(formActionCreators.setConfirmModal());
             dispatch(actionCreators.readSu_selectedSubunitANDForm(unit, subunit, formType))
@@ -137,6 +206,9 @@ const mapDispatchToProps = (dispatch) => {
         readFs_SelectedUnit(unit) {
             console.log(unit)
         },
+        readAp_SelectedBudgetNumber(budgetnumber) {
+            console.log(budgetnumber)
+        }
     }
 }
 
