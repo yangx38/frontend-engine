@@ -507,33 +507,64 @@ export const onFinishTravelReimbursementForm = (data) => {
     return { type: SUBMIT_TRAVELREIMBURSEMENT, trarei_formdata }
 }
 // getConfirmModal()
+// TODO
 export const submitForm = (netId, formType, unit, subunit, form_data, budgets) => {
+    const timestamp = Date.now();
     const data = {
-        'form_creator': netId,
+        'form_creator_netId': netId,
         'form_type': formType,
         'form_unit': unit,
         'form_subunit': subunit,
         form_data,
         'used_budget': budgets,
+        'created_time': timestamp,
+        'approvers_numer_left': budgets.length,
+        'status': 'under review'
     }
-    console.log(data)
     return (dispatch) => {
-        const options = {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        }
-        console.log(options)
-        fetch(`http://localhost:8080/api/form/createOneForm`, options)
+        return sendFormData(data)
+            .then(res => updateApproversOnForm(budgets))
             .then(res => {
-                console.log(res)
-                // dispatch(showApprovedMessage())
+                //dispatch(changeFiscalStaffUnitsOfGivenNetId(fiscalStaffUnitsOfGivenNetId))
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error)
             })
     }
 }
-// "{"pay_fullname":"Xiaotong Yang","pay_addressline1":"McCarty Hall, Room 313, 2100 NE Whitman Ln NE","pay_addressline2":"","pay_city":"Seattle","pay_state":"WA","pay_zipcode":"98195","pay_country":"United States","pay_vendorname":"sfd","pay_vendoremail":"syangx38@gmail.com","pay_vendorphone":"2067397095","pay_vendorwebsite":"","pay_allitems":[]}"
+const sendFormData = (data) => {
+    const options = {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }
+    return fetch(`http://localhost:8080/api/form/createOneForm`, options)
+        .then(res => res.json())
+        .then(res => {
+            console.log('receipt', res)
+            // receipt = 
+            // dispatch(showApprovedMessage())
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+const updateApproversOnForm = (budgets) => {
+    const options = {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(budgets)
+    }
+    console.log('budgets', budgets)
+    return fetch(`http://localhost:8080/api/form/updateApproversOnForm/`, options)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}

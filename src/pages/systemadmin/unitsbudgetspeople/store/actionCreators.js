@@ -1,13 +1,18 @@
 import axios from 'axios';
 import { fromJS } from 'immutable';
 
+// ****************  Types  ****************
+// logout()
 export const CHANGE_TO_LOGOUT = 'pages/unitsbudgetspeople/CHANGE_TO_LOGOUT';
+// componentDidMount()
 export const GET_ALL_UNIT_SUBUNIT = 'pages/unitsbudgetspeople/GET_ALL_UNIT_SUBUNIT';
 export const GET_ALL_PEOPLE = 'pages/unitsbudgetspeople/GET_ALL_PEOPLE';
+export const GET_ALL_BUDGETS = 'pages/unitsbudgetspeople/GET_ALL_BUDGETS';
 export const CHANGE_UST_SELECTED_SUBUNIT = 'pages/unitsbudgetspeople/CHANGE_UST_SELECTED_SUBUNIT';
 export const CHANGE_UST_SELECTED_UNIT = 'pages/unitsbudgetspeople/CHANGE_UST_SELECTED_UNIT';
 export const SHOW_UST_EDIT_MODAL = 'pages/unitsbudgetspeople/SHOW_UST_EDIT_MODAL';
 
+// **************** Actions ****************
 // logout()
 export const logout = () => ({
     type: CHANGE_TO_LOGOUT
@@ -64,6 +69,36 @@ const getAllFiscalStaffs = () => {
         .catch(error => {
             console.log(error)
         })
+}
+const getAllBudgetsAction = (data) => ({
+    type: GET_ALL_BUDGETS,
+    data: fromJS(data)
+})
+export const getAllBudgets = () => {
+    return (dispatch) => {
+        axios.get(`http://localhost:8080/api/systemadmin/getAllBudgets`)
+            .then(res => {
+                console.log('Pages, unitsbudgetspeople, getAllBudgets, res.data', res.data);
+                const allBudgetsJS = res.data;
+                var allBudgets_ForTable = [];
+                allBudgetsJS.map(budget => {
+                    const { approvers, budgetnumber, budgetname, startdate, enddate, key } = budget;
+                    var renamedApprover = [];
+                    approvers.map(approver => {
+                        const { name, netId, amount, key } = approver;
+                        var newAmount = '';
+                        if (amount === -1) newAmount = 'infinity';
+                        else newAmount = amount;
+                        renamedApprover.push({ 'budgetnumber': name, 'budgetname': netId, 'startdate': newAmount, 'key': key })
+                    })
+                    allBudgets_ForTable.push({ 'children': renamedApprover, 'budgetnumber': budgetnumber, 'budgetname': budgetname, 'startdate': startdate, 'enddate': enddate, 'key': key })
+                })
+                dispatch(getAllBudgetsAction(allBudgets_ForTable))
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 }
 // getUnitSubunitTable()
 const changePTfromSelectedUnitAction = (unitname, allPeopleOfUnit) => ({

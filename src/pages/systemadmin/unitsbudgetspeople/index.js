@@ -21,10 +21,11 @@ import {
 class SystemAdminUnitsBudgetsPeople extends Component {
     componentDidMount() {
         const { login } = this.props;
-        const { getAllUnitSubunit, getAllPeople } = this.props;
+        const { getAllUnitSubunit, getAllPeople, getAllBudgets } = this.props;
         if (login) {
             getAllUnitSubunit();
             getAllPeople();
+            getAllBudgets();
         }
     }
 
@@ -66,10 +67,6 @@ class SystemAdminUnitsBudgetsPeople extends Component {
                 </AddMoalBox>
             </ModalWrapper>
         );
-    }
-
-    getBudgetTable() {
-        return null;
     }
 
     getPeopleTable() {
@@ -117,6 +114,45 @@ class SystemAdminUnitsBudgetsPeople extends Component {
         //rowSelection={{ type: 'radio', onChange: (selectedRowKeys, selectedRows) => { changeSelectedPeople(selectedRowKeys, selectedRows) }}} />
     }
 
+    getBudgetTable() {
+        const { bt_allbudgets } = this.props;
+        const bt_allbudgetsJS = Immutable.List(bt_allbudgets).toJS();
+        const budgetTableColumns = [
+            {
+              title: 'Budget Number',
+              dataIndex: 'budgetnumber',
+              key: 'budgetnumber',
+              sorter: (a, b) => a.budgetnumber.localeCompare(b.budgetnumber)
+            },
+            {
+              title: 'Budget Name',
+              dataIndex: 'budgetname',
+              key: 'budgetname',
+              sorter: (a, b) => a.budgetname.localeCompare(b.budgetname)
+            },
+            {
+              title: 'Start Date',
+              dataIndex: 'startdate',
+              key: 'startdate',
+              sorter: (a, b) => a.startdate.toString().localeCompare(b.startdate.toString())
+            },
+            {
+                title: 'End Date',
+                dataIndex: 'enddate',
+                key: 'enddate',
+                sorter: (a, b) => {
+                    if (a.enddate !== undefined && b.enddate !== undefined) return a.enddate.localeCompare(b.enddate)
+                    return 0;
+                }
+            }
+        ];
+        return (
+            <Fragment>
+                <Table className='tableCursor' columns={budgetTableColumns} dataSource={bt_allbudgetsJS}  />
+            </Fragment>
+        );
+    }
+
     render() {
         const { login, role, ust_editmodal } = this.props;
         const { TabPane } = Tabs;
@@ -149,9 +185,11 @@ const mapStateToProps = (state) => {
     return {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
+        // componentDidMount()
         ust_allunitsubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_allunitsubunit']),
         pt_allpeople_unchanged: state.getIn(['systemadmin_unitsbudgetspeople', 'pt_allpeople_unchanged']),
         pt_allpeople: state.getIn(['systemadmin_unitsbudgetspeople', 'pt_allpeople']),
+        bt_allbudgets: state.getIn(['systemadmin_unitsbudgetspeople', 'bt_allbudgets']),
         ust_selectedUnit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_selectedUnit']),
         ust_selectedSubunit: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_selectedSubunit']),
         ust_editmodal: state.getIn(['systemadmin_unitsbudgetspeople', 'ust_editmodal']),   
@@ -166,6 +204,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         getAllPeople() {
             dispatch(actionCreators.getAllPeople());
+        },
+        getAllBudgets() {
+            dispatch(actionCreators.getAllBudgets());
         },
         // getUnitSubunitTable()
         changeUSTSelectedUnitSubunit(selectedRowKeys, selectedRows, pt_allpeople_unchangedJS) {
