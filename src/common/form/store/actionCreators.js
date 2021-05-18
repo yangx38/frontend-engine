@@ -506,8 +506,8 @@ export const onFinishTravelReimbursementForm = (data) => {
     console.log('trareiformdata', trarei_formdata)
     return { type: SUBMIT_TRAVELREIMBURSEMENT, trarei_formdata }
 }
+var receipt_number = '';
 // getConfirmModal()
-// TODO
 export const submitForm = (netId, formType, unit, subunit, form_data, budgets) => {
     const timestamp = Date.now();
     const data = {
@@ -516,14 +516,20 @@ export const submitForm = (netId, formType, unit, subunit, form_data, budgets) =
         'form_unit': unit,
         'form_subunit': subunit,
         form_data,
-        'used_budget': budgets,
         'created_time': timestamp,
         'approvers_numer_left': budgets.length,
         'status': 'under review'
     }
+    receipt_number = '';
     return (dispatch) => {
-        return sendFormData(data)
-            .then(res => updateApproversOnForm(budgets))
+        return createOneForm(data)
+            .then(res => {
+                budgets.map((budget) => {
+                    const { budget_number, budget_amount } = budget;
+                    const budgetnumber = budget_number.split(' - ')[0];
+                    updateApproversOnForm(budgetnumber, budget_amount, receipt_number)
+                })
+            })
             .then(res => {
                 //dispatch(changeFiscalStaffUnitsOfGivenNetId(fiscalStaffUnitsOfGivenNetId))
             })
@@ -532,7 +538,7 @@ export const submitForm = (netId, formType, unit, subunit, form_data, budgets) =
             })
     }
 }
-const sendFormData = (data) => {
+const createOneForm = (data) => {
     const options = {
         method: 'post',
         headers: {
@@ -543,24 +549,24 @@ const sendFormData = (data) => {
     return fetch(`http://localhost:8080/api/form/createOneForm`, options)
         .then(res => res.json())
         .then(res => {
-            console.log('receipt', res)
-            // receipt = 
-            // dispatch(showApprovedMessage())
+            console.log('1 -- receipt_number', res)
+            receipt_number = res;
         })
         .catch(error => {
             console.log(error)
         })
 }
-const updateApproversOnForm = (budgets) => {
+const updateApproversOnForm = (budgetnumber, budget_amount, receipt_number) => {
+    const data = { budgetnumber, budgetamount: budget_amount, receipt_number };
     const options = {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(budgets)
+        body: JSON.stringify(data)
     }
-    console.log('budgets', budgets)
-    return fetch(`http://localhost:8080/api/form/updateApproversOnForm/`, options)
+    console.log('2 -- budget', data)
+    return fetch(`http://localhost:8080/api/form/updateApproversOnForm`, options)
         .then(res => {
             console.log(res)
         })

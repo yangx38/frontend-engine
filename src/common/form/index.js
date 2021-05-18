@@ -888,6 +888,7 @@ class FormForSubmitter extends Component {
         var budgets = [];
 
         if (formType === 'Pay an Invoice') {
+            budgets = [];
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = pay;
             const { pay_vendorname, pay_vendoremail, pay_vendorphone, pay_vendorwebsite } = pay;
             const { pay_allitems } = pay;
@@ -900,7 +901,7 @@ class FormForSubmitter extends Component {
                 pay_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
                 pay_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
                 const { pay_budgets } = pay_allitem;
-                budgets = pay_budgets;
+                budgets = budgets.concat(pay_budgets);
                 pay_budgets.map((pay_budget, budget_idx) => {
                     const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pay_budget;
                     pay_allitemsJS.push(
@@ -953,6 +954,7 @@ class FormForSubmitter extends Component {
                 </div>
             );
         } else if (formType === 'Procard Receipt') {
+            budgets = [];
             const { pro_cardholder } = pro;
             const { pro_vendorname, pro_vendoremail, pro_vendorphone, pro_vendorwebsite } = pro;
             const { pro_allitems } = pro;
@@ -962,9 +964,11 @@ class FormForSubmitter extends Component {
                 pro_allitemsJS.push(<Descriptions.Item key={idx} labelStyle={{background:'#d4bdff'}} label="Item#" span={2}>{idx+1}</Descriptions.Item>);
                 pro_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
                 pro_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
-                pro_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
+                pro_allitemsJS.push(<Descriptions.Item label="Category" span={2}>{category}</Descriptions.Item>);
                 pro_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
+                pro_allitemsJS.push(<Descriptions.Item label="Was Sales Tax Paid?">{wassalestaxpaid}</Descriptions.Item>);
                 const { pro_budgets } = pro_allitem;
+                budgets = budgets.concat(pro_budgets);
                 pro_budgets.map((pro_budget, budget_idx) => {
                     const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pro_budget;
                     pro_allitemsJS.push(
@@ -1004,11 +1008,13 @@ class FormForSubmitter extends Component {
                     <Descriptions title="Procard Receipt · Items" column={2} bordered>
                         { pro_allitemsJS }
                     </Descriptions>
-                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    { pro_allitems.length > 0 ? <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, pro, budgets)}>Submit</Button> : <Button type="primary" shape='round' size='large' className='confirmModelSubmit' disabled>Submit</Button>}
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
+                    <div><Tag color="processing" className='confirmModelWarnSecond'>Must contain <b>at least one</b> budget to proceed. Otherwise <b>disabled</b> button</Tag></div>
                 </div>
             );
         } else if (formType === 'Purchase Request') {
+            budgets = [];
             const { pur_fullname, pur_addressline1, pur_addressline2, pur_city, pur_state, pur_zipcode, pur_country } = pur;
             const { pur_vendorname, pur_vendoremail, pur_vendorphone, pur_vendorwebsite } = pur;
             const { pur_allitems } = pur;
@@ -1023,6 +1029,7 @@ class FormForSubmitter extends Component {
                 pur_allitemsJS.push(<Descriptions.Item label="Unit Price">${unitprice}</Descriptions.Item>);
                 pur_allitemsJS.push(<Descriptions.Item labelStyle={{background:'#ffd791'}} label="Full Amount (Calculated)">${unitprice*quantity}</Descriptions.Item>);
                 const { pur_budgets } = pur_allitem;
+                budgets = budgets.concat(pur_budgets);
                 pur_budgets.map((pur_budget, budget_idx) => {
                     const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pur_budget;
                     pur_allitemsJS.push(
@@ -1068,11 +1075,13 @@ class FormForSubmitter extends Component {
                     <Descriptions title="Purchase Request · Items" column={2} bordered>
                         { pur_allitemsJS }
                     </Descriptions>
-                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    { pur_allitems.length > 0 ? <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, pur, budgets)}>Submit</Button> : <Button type="primary" shape='round' size='large' className='confirmModelSubmit' disabled>Submit</Button>}
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
+                    <div><Tag color="processing" className='confirmModelWarnSecond'>Must contain <b>at least one</b> budget to proceed. Otherwise <b>disabled</b> button</Tag></div>
                 </div>
             );
         } else if (formType === 'Reimbursement') {
+            budgets = [];
             const { rei_reimbursementfor, rei_requestforself_name, rei_requestforself_affiliation, rei_requestforself_email } = rei;
             const { rei_individualtobereimbursed } = rei;
             const { rei_preferredpaymentmethod } = rei;
@@ -1088,6 +1097,7 @@ class FormForSubmitter extends Component {
                 rei_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
                 rei_allitemsJS.push(<Descriptions.Item label="Was Sales Tax Paid">{wassalestaxpaid}</Descriptions.Item>);
                 const { rei_budgets } = rei_allitem;
+                budgets = budgets.concat(rei_budgets);
                 rei_budgets.map((rei_budget, budget_idx) => {
                     const { budget_number, budget_amount, budget_task, budget_project, budget_option} = rei_budget;
                     rei_allitemsJS.push(
@@ -1145,13 +1155,16 @@ class FormForSubmitter extends Component {
                     <Descriptions title="Reimbursement · Items" column={2} bordered>
                         { rei_allitemsJS }
                     </Descriptions>
-                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    { rei_allitems.length > 0 ? <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, rei, budgets)}>Submit</Button> : <Button type="primary" shape='round' size='large' className='confirmModelSubmit' disabled>Submit</Button>}
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
+                    <div><Tag color="processing" className='confirmModelWarnSecond'>Must contain <b>at least one</b> budget to proceed. Otherwise <b>disabled</b> button</Tag></div>
                 </div>
             );
         } else if (formType === 'Travel Request') {
+            budgets = [];
             const { tra_legalfirstname, tra_legallastname, tra_departure, tra_destination, tra_departingdate, tra_returning, tra_reason } = tra;
             const { tra_budgets } = tra;
+            budgets = budgets.concat(tra_budgets);
             var tra_allitemsJS = [];
             if (tra_budgets && tra_budgets.length > 0) {
                 tra_budgets.map((tra_budget, budget_idx) => {
@@ -1221,14 +1234,16 @@ class FormForSubmitter extends Component {
                             </Fragment> : null
                         }
                     </Descriptions>
-                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, tra, budgets)}>Submit</Button>
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
         } else if (formType === 'Traval Reimbursement') {
+            budgets = [];
             const { trarei_reimbursedbefore, trarei_referencenumber } = trarei;
             const { trarei_requestforself, trarei_requestforself_name, trarei_requestforself_affiliation, trarei_requestforself_email } = trarei;
             const { trarei_budgets } = trarei;
+            budgets = budgets.concat(trarei_budgets);
             var trarei_allitemsJS = [];
             if (trarei_budgets && trarei_budgets.length > 0) {
                 trarei_budgets.map((trarei_budget, budget_idx) => {
@@ -1363,7 +1378,7 @@ class FormForSubmitter extends Component {
                         }
                     </Descriptions>
                     
-                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit'>Submit</Button>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, tra, budgets)}>Submit</Button>
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
