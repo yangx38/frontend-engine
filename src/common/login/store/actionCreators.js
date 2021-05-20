@@ -25,6 +25,9 @@ var submitterSubunitsOfGivenNetId = [];
 // make sure the sequence is 1, 2, 3
 export const initializeUserData = (netId) => {
     role = '';
+    fiscalStaffUnitsOfGivenNetId = [];
+    approverBudgetNumberssOfGivenNetId = [];
+    submitterSubunitsOfGivenNetId = [];
     return (dispatch) => {
         return checkWhetherUserIsSystemAdministrator(netId)
             .then(res => checkWhetherUserIsFiscalStaff(netId))
@@ -48,7 +51,7 @@ export const initializeUserData = (netId) => {
 const checkWhetherUserIsSystemAdministrator = (netId) => {
     return axios.get(`http://localhost:8080/api/login/checkWhetherUserIsSystemAdministrator/${netId}`)
         .then(res => {
-            console.log('1 -- checkWhetherUserIsSystemAdministrator', res)
+            console.log('1 -- checkWhetherUserIsSystemAdministrator', res.data)
             if (res.data === 1) role = 'system administrator';
         })
         .catch(error => {
@@ -58,7 +61,7 @@ const checkWhetherUserIsSystemAdministrator = (netId) => {
 const checkWhetherUserIsFiscalStaff = (netId) => {
     return axios.get(`http://localhost:8080/api/login/checkWhetherUserIsFiscalStaff/${netId}`)
         .then(res => {
-            console.log('2 -- checkWhetherUserIsFiscalStaff')
+            console.log('2 -- checkWhetherUserIsFiscalStaff', res.data)
             const fiscalStaffUnitsOfGivenNetIdLength = res.data.fiscalStaffUnitsOfGivenNetId.length;
             if (fiscalStaffUnitsOfGivenNetIdLength > 0) fiscalStaffUnitsOfGivenNetId = res.data.fiscalStaffUnitsOfGivenNetId;
             if (role === '') {
@@ -72,7 +75,7 @@ const checkWhetherUserIsFiscalStaff = (netId) => {
 const checkWhetherUserIsApprover = (netId) => {
     return axios.get(`http://localhost:8080/api/login/checkWhetherUserIsApprover/${netId}`)
         .then(res => {
-            console.log('3 -- checkWhetherUserIsFiscalStaff')
+            console.log('3 -- checkWhetherUserIsApprover', res.data)
             const approverBudgetNumberssOfGivenNetIdLength = res.data.approverBudgetNumberssOfGivenNetId.length;
             if (approverBudgetNumberssOfGivenNetIdLength > 0) approverBudgetNumberssOfGivenNetId = res.data.approverBudgetNumberssOfGivenNetId;
             if (role === '') {
@@ -86,7 +89,7 @@ const checkWhetherUserIsApprover = (netId) => {
 const checkWhetherUserIsSubmitter = (netId) => {
     return axios.get(`http://localhost:8080/api/login/checkWhetherUserIsSubmitter/${netId}`)
         .then(res => {
-            console.log('4 -- checkWhetherUserIsSubmitter')
+            console.log('4 -- checkWhetherUserIsSubmitter', res.data)
             const submitterSubunitsOfGivenNetIdLength = res.data.submitterSubunitsOfGivenNetId.length;
             if (submitterSubunitsOfGivenNetIdLength > 0) submitterSubunitsOfGivenNetId = res.data.submitterSubunitsOfGivenNetId;
             if (role === '') {

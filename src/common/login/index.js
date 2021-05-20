@@ -33,19 +33,25 @@ class Login extends Component {
     }
 
     render() {
-        const { login, role } = this.props;
+        const { login, role, doneChecking } = this.props;
         if (!login) {
             return this.getLoginBox();
         } else {
-            if (role === '') return this.getLoginBox();
-            else if (role === 'system administrator') {
+            if (role === 'system administrator') {
                 return <Redirect to='/systemadministrator/mainpage' />
             }
             else if (role === 'fiscal staff') {
                 return <Redirect to='/fiscalstaff/mainpage' />
             }
+            else if (role === 'approver') {
+                return (<Redirect to='/approver/mainpage' />)
+            }
+            else if (role === 'submitter') {
+                return <Redirect to='/submitter/mainpage' />
+            }
             else {
-                return <Redirect to='/' />
+                if (doneChecking) return <p>You don't have access to this service. Please contact system administrator to add you.</p>
+                else return <p>Loading...</p>
             }
         }
     }
@@ -55,6 +61,7 @@ const mapStateToProps = (state) => {
     return {
         login: state.getIn(['login', 'login']),
         role: state.getIn(['login', 'user', 'role']),
+        doneChecking: state.getIn(['login', 'doneChecking']),
     }
 }
 

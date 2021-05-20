@@ -12,13 +12,13 @@ import {
     // GroupHeader,
 } from './style';
 
-class ApproverMainpage extends Component {
+class SubmitterMainpage extends Component {
     render() {
         const { login, role } = this.props;
-        if (login && role === 'approver') {
+        if (login && role === 'submitter') {
             return (
                 <Fragment>
-                    ApproverMainpageApproverMainpageApproverMainpageApproverMainpageApproverMainpageApproverMainpageApproverMainpage
+                    SubmitterMainpageSubmitterMainpageSubmitterMainpageSubmitterMainpageSubmitterMainpage
                 </Fragment>
             );
         } else return <Redirect to='/' />
@@ -38,4 +38,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ApproverMainpage);
+export default connect(mapStateToProps, mapDispatchToProps)(SubmitterMainpage);

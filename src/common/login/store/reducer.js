@@ -10,12 +10,13 @@ const defaultState = fromJS({
         approverBudgetNumberssOfGivenNetId: '',
         submitterSubunitsOfGivenNetId: '',
     },
+    doneChecking: false,
 });
 
 const reducer = (state = defaultState, action) => {
     switch (action.type) {
         case constants.CHANGE_ROLE:
-            return state.setIn(['user', 'role'], action.role);
+            return state.setIn(['user', 'role'], action.role).set('doneChecking', true);
         case constants.CHANGE_FISCAL_STAFF_UNITS_OF_GIVEN_NETID:
             return state.setIn(['user', 'fiscalStaffUnitsOfGivenNetId'], action.data);
         case constants.CHANGE_APPROVER_BUDGET_NUMBERS_OF_GIVEN_NETID:
@@ -37,6 +38,7 @@ const reducer = (state = defaultState, action) => {
                     approverBudgetNumberssOfGivenNetId: '',
                     submitterSubunitsOfGivenNetId: '',
                 },
+                doneChecking: false,
             }))
         default:
             return state;

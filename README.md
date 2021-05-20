@@ -1,3 +1,10 @@
+-- 如果有缘
+1. 所有 sync check 应该move到后段去
+2. rollback / transaction
+3. jwt
+4. mainpage
+5. 查重
+
 -- API 所有用的
 
 index.js src/common/form

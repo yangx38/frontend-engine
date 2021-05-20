@@ -75,7 +75,7 @@ class Header extends Component {
                                 </Menu>
                             </NavItem>
                         </Link>
-                        <Link to={'/submitrequests'}>
+                        <Link to={'/form/submitrequests'}>
                             <NavItem className='left'>
                                 <Menu mode="horizontal">
                                     <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
@@ -107,7 +107,7 @@ class Header extends Component {
                                 </Menu>
                             </NavItem>
                         </Link>
-                        <Link to={'/submitrequests'}>
+                        <Link to={'/form/submitrequests'}>
                             <NavItem className='left'>
                                 <Menu mode="horizontal">
                                     <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
@@ -130,7 +130,7 @@ class Header extends Component {
                                 </Menu>
                             </NavItem>
                         </Link>
-                        <Link to={'/submitrequests'}>
+                        <Link to={'/form/submitrequests'}>
                             <NavItem className='left'>
                                 <Menu mode="horizontal">
                                     <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
@@ -144,7 +144,7 @@ class Header extends Component {
             } else if (role === 'submitter') {
                 return (
                     <Fragment>
-                        <Link to={'/submitrequests'}>
+                        <Link to={'/form/submitrequests'}>
                             <NavItem className='left'>
                                 <Menu mode="horizontal">
                                     <SubMenu key="SubMenu" title="Submit Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>

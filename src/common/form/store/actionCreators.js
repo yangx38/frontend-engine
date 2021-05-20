@@ -517,7 +517,7 @@ export const submitForm = (netId, formType, unit, subunit, form_data, budgets) =
         'form_subunit': subunit,
         form_data,
         'created_time': timestamp,
-        'approvers_numer_left': budgets.length,
+        // 'approvers_number_left': budgets.length,
         'status': 'under review'
     }
     receipt_number = '';
