@@ -1238,7 +1238,7 @@ class FormForSubmitter extends Component {
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );
-        } else if (formType === 'Traval Reimbursement') {
+        } else if (formType === 'Travel Reimbursement') {
             budgets = [];
             const { trarei_reimbursedbefore, trarei_referencenumber } = trarei;
             const { trarei_requestforself, trarei_requestforself_name, trarei_requestforself_affiliation, trarei_requestforself_email } = trarei;
@@ -1394,7 +1394,7 @@ class FormForSubmitter extends Component {
                     <HomeWrapper>
                         { 
                             formType === 'Pay an Invoice' ? this.getPayAnInvoiceForm() : formType === 'Procard Receipt' ? this.getProcardReceipt() : formType === 'Purchase Request' ? this.getPurchaseRequestForm() : 
-                            formType === 'Reimbursement' ? this.getReimbursementForm() : formType === 'Travel Request' ? this.getTravelRequestForm() : formType === 'Traval Reimbursement' ? this.getTravelReimbursementForm() : null
+                            formType === 'Reimbursement' ? this.getReimbursementForm() : formType === 'Travel Request' ? this.getTravelRequestForm() : formType === 'Travel Reimbursement' ? this.getTravelReimbursementForm() : null
                         }
                         {
                             confirm_modal ? this.getConfirmModal() : null

@@ -37,7 +37,7 @@ class Header extends Component {
                         <Menu.Item key={subunit.concat('pur')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Purchase Request')}}>Purchase Request</Menu.Item>
                         <Menu.Item key={subunit.concat('rei')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Reimbursement')}}>Reimbursement</Menu.Item>
                         <Menu.Item key={subunit.concat('tra')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Travel Request')}}>Travel Request</Menu.Item>
-                        <Menu.Item key={subunit.concat('trarei')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Traval Reimbursement')}}>Traval Reimbursement</Menu.Item>
+                        <Menu.Item key={subunit.concat('trarei')} onClick={()=>{readSu_selectedSubunitANDForm(unit, subunit, 'Travel Reimbursement')}}>Travel Reimbursement</Menu.Item>
                     </SubMenu>
                 )
             }

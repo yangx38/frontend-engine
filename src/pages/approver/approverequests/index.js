@@ -3,7 +3,9 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Table, Tabs, Button, Input, Form, Tag, Select } from 'antd';
+import { Table, Tabs, Button, Input, Form, Tag, Select, Space } from 'antd';
+import Highlighter from 'react-highlight-words';
+import { SearchOutlined } from '@ant-design/icons';
 
 import {
     HomeWrapper,
@@ -14,6 +16,11 @@ import {
 } from './style';
 
 class ApproverApproveRequests extends Component {
+    state = {
+        searchText: '',
+        searchedColumn: '',
+    };
+
     componentDidMount() {
         const { login, email } = this.props;
         const { getFormsFromApproverNetId } = this.props;
@@ -22,6 +29,72 @@ class ApproverApproveRequests extends Component {
             getFormsFromApproverNetId(netId);
         }
     }
+
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                ref={node => {
+                    this.searchInput = node;
+                }}
+                placeholder={`Search ${dataIndex}`}
+                value={selectedKeys[0]}
+                onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                style={{ marginBottom: 8, display: 'block' }}
+                />
+                <Space>
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon={<SearchOutlined />}
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    Search
+                </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+                </Button>
+                
+                </Space>
+            </div>
+        ),
+        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+        onFilter: (value, record) =>
+          record[dataIndex]
+            ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+            : '',
+        onFilterDropdownVisibleChange: visible => {
+          if (visible) {
+            setTimeout(() => this.searchInput.select(), 100);
+          }
+        },
+        render: text =>
+          this.state.searchedColumn === dataIndex ? (
+            <Highlighter
+              highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+              searchWords={[this.state.searchText]}
+              autoEscape
+              textToHighlight={text ? text.toString() : ''}
+            />
+          ) : (
+            text
+          ),
+      });
+
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
 
     getFormTable() {
         const { ft_allforms } = this.props;
@@ -32,37 +105,43 @@ class ApproverApproveRequests extends Component {
               title: 'Tracking #',
               dataIndex: '_id',
               key: '_id',
-              sorter: (a, b) => a._id.localeCompare(b._id)
+              sorter: (a, b) => a._id.localeCompare(b._id),
+              ...this.getColumnSearchProps('_id'),
             },
             {
               title: 'Unit',
               dataIndex: 'form_unit',
               key: 'form_unit',
-              sorter: (a, b) => a.form_unit.localeCompare(b.form_unit)
+              sorter: (a, b) => a.form_unit.localeCompare(b.form_unit),
+              ...this.getColumnSearchProps('form_unit'),
             },
             {
               title: 'Subunit',
               dataIndex: 'form_subunit',
               key: 'form_subunit',
-              sorter: (a, b) => a.form_subunit.toString().localeCompare(b.form_subunit.toString())
+              sorter: (a, b) => a.form_subunit.toString().localeCompare(b.form_subunit.toString()),
+              ...this.getColumnSearchProps('form_subunit'),
             },
             {
                 title: 'Created By',
                 dataIndex: 'form_creator_netId',
                 key: 'form_creator_netId',
-                sorter: (a, b) => a.form_creator_netId.toString().localeCompare(b.form_creator_netId.toString())
+                sorter: (a, b) => a.form_creator_netId.toString().localeCompare(b.form_creator_netId.toString()),
+                ...this.getColumnSearchProps('form_creator_netId'),
             },
             {
                 title: 'Type',
                 dataIndex: 'form_type',
                 key: 'form_type',
-                sorter: (a, b) => a.form_type.toString().localeCompare(b.form_type.toString())
+                sorter: (a, b) => a.form_type.toString().localeCompare(b.form_type.toString()),
+                ...this.getColumnSearchProps('form_type'),
             },
             {
                 title: 'Status',
                 dataIndex: 'status',
                 key: 'status',
-                sorter: (a, b) => a.status.toString().localeCompare(b.status.toString())
+                sorter: (a, b) => a.status.toString().localeCompare(b.status.toString()),
+                ...this.getColumnSearchProps('status'),
             },
             {
                 title: 'Details',

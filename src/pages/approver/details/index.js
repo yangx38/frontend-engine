@@ -357,7 +357,7 @@ class ApproverDetailPage extends Component {
                     </Descriptions>
                 </Fragment>
             );
-        } else if (form_type === 'Traval Reimbursement') {
+        } else if (form_type === 'Travel Reimbursement') {
             const { trarei_reimbursedbefore, trarei_referencenumber } = form_data;
             const { trarei_requestforself, trarei_requestforself_name, trarei_requestforself_affiliation, trarei_requestforself_email } = form_data;
             const { trarei_budgets } = form_data;
