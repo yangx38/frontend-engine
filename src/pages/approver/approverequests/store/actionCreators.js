@@ -6,7 +6,8 @@ import { fromJS } from 'immutable';
 export const CHANGE_TO_LOGOUT = 'pages/approver/approverequests/CHANGE_TO_LOGOUT';
 // componentDidMount()
 export const GET_FORMSFROMAPPROVERNETID = 'pages/approver/approverequests/GET_FORMSFROMAPPROVERNETID';
-
+// getFormTable()
+export const SET_FT_SELECTEDDETAILS = 'pages/approver/approverequests/SET_FT_SELECTEDDETAILS';
 
 // **************** Actions ****************
 // logout()
@@ -30,3 +31,8 @@ export const getFormsFromApproverNetId = (netId) => {
             })
     }
 }
+// getFormTable()
+export const directToRequestDetailsPage = (data) => ({
+    type: SET_FT_SELECTEDDETAILS,
+    data: fromJS(data)
+})

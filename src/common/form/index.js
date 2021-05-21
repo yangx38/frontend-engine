@@ -929,7 +929,7 @@ class FormForSubmitter extends Component {
             })
             return (
                 <div className='confirmBox'>
-                    <Descriptions title="Pay an Invoice · Shipping Address">
+                    <Descriptions title="Pay an Invoice · Shipping Address" size='small'>
                         <Descriptions.Item label="Full Name">{pay_fullname}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 1">{pay_addressline1}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 2">{pay_addressline2}</Descriptions.Item>
@@ -938,13 +938,13 @@ class FormForSubmitter extends Component {
                         <Descriptions.Item label="Zip Code">{pay_zipcode}</Descriptions.Item>
                         <Descriptions.Item label="Country">{pay_country}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Pay an Invoice · Vendor Information" column={2}>
+                    <Descriptions title="Pay an Invoice · Vendor Information" column={2} size='small'>
                         <Descriptions.Item label="Vendor Name">{pay_vendorname}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Email">{pay_vendoremail}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Phone">{pay_vendorphone}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Website">{pay_vendorwebsite}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Pay an Invoice · Items" column={2} bordered>
+                    <Descriptions title="Pay an Invoice · Items" column={2} bordered size='small'>
                         { pay_allitemsJS }
                     </Descriptions>
 
@@ -996,16 +996,16 @@ class FormForSubmitter extends Component {
             })
             return (
                 <div className='confirmBox'>
-                    <Descriptions title="Procard Receipt · Card Information">
+                    <Descriptions title="Procard Receipt · Card Information" size='small'>
                         <Descriptions.Item label="Cardholder">{pro_cardholder}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Procard Receipt · Vendor Information" column={2}>
+                    <Descriptions title="Procard Receipt · Vendor Information" column={2} size='small'>
                         <Descriptions.Item label="Vendor Name">{pro_vendorname}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Email">{pro_vendoremail}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Phone">{pro_vendorphone}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Website">{pro_vendorwebsite}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Procard Receipt · Items" column={2} bordered>
+                    <Descriptions title="Procard Receipt · Items" column={2} bordered size='small'>
                         { pro_allitemsJS }
                     </Descriptions>
                     { pro_allitems.length > 0 ? <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, pro, budgets)}>Submit</Button> : <Button type="primary" shape='round' size='large' className='confirmModelSubmit' disabled>Submit</Button>}
@@ -1057,7 +1057,7 @@ class FormForSubmitter extends Component {
             })
             return (
                 <div className='confirmBox'>
-                    <Descriptions title="Purchase Request · Shipping Address">
+                    <Descriptions title="Purchase Request · Shipping Address" size='small'>
                         <Descriptions.Item label="Full Name">{pur_fullname}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 1">{pur_addressline1}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 2">{pur_addressline2}</Descriptions.Item>
@@ -1066,13 +1066,13 @@ class FormForSubmitter extends Component {
                         <Descriptions.Item label="Zip Code">{pur_zipcode}</Descriptions.Item>
                         <Descriptions.Item label="Country">{pur_country}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Purchase Request · Vendor Information" column={2}>
+                    <Descriptions title="Purchase Request · Vendor Information" column={2} size='small'>
                         <Descriptions.Item label="Vendor Name">{pur_vendorname}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Email">{pur_vendoremail}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Phone">{pur_vendorphone}</Descriptions.Item>
                         <Descriptions.Item label="Vendor Website">{pur_vendorwebsite}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Purchase Request · Items" column={2} bordered>
+                    <Descriptions title="Purchase Request · Items" column={2} bordered size='small'>
                         { pur_allitemsJS }
                     </Descriptions>
                     { pur_allitems.length > 0 ? <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, pur, budgets)}>Submit</Button> : <Button type="primary" shape='round' size='large' className='confirmModelSubmit' disabled>Submit</Button>}
@@ -1125,7 +1125,7 @@ class FormForSubmitter extends Component {
             })
             return (
                 <div className='confirmBox'>
-                    <Descriptions title="Reimbursement · Requester Information">
+                    <Descriptions title="Reimbursement · Requester Information" size='small'>
                         <Descriptions.Item label="Reimbursement for" span={3}>{rei_reimbursementfor}</Descriptions.Item>
                         { 
                             rei_reimbursementfor === 'On behalf of someone' ? 
@@ -1137,7 +1137,7 @@ class FormForSubmitter extends Component {
                         }
                         <Descriptions.Item label="Individual to be reimbursed" span={3}>{rei_individualtobereimbursed}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="Reimbursement · Delivery Method">
+                    <Descriptions title="Reimbursement · Delivery Method" size='small'>
                         <Descriptions.Item label="Preferred Payment Method" span={3}>{rei_preferredpaymentmethod}</Descriptions.Item>
                         { 
                             rei_preferredpaymentmethod === 'Mail the check' ? 
@@ -1152,7 +1152,7 @@ class FormForSubmitter extends Component {
                             </Fragment> : null
                         }
                     </Descriptions>
-                    <Descriptions title="Reimbursement · Items" column={2} bordered>
+                    <Descriptions title="Reimbursement · Items" column={2} bordered size='small'>
                         { rei_allitemsJS }
                     </Descriptions>
                     { rei_allitems.length > 0 ? <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, rei, budgets)}>Submit</Button> : <Button type="primary" shape='round' size='large' className='confirmModelSubmit' disabled>Submit</Button>}
@@ -1190,7 +1190,7 @@ class FormForSubmitter extends Component {
             const { tra_hotelname, tra_unitpayhotel_address, tra_unitpayhotel_numberofpeople, tra_unitpayhotel_zip, tra_unitpayhotel_checkkindate, tra_unitpayhotel_checkoutdate, tra_unitpayhotel_amount, tra_unitpayhotel_link, tra_unitpayhotel_hotelnote } = tra_unitpayhotel;
             return (
                 <div className='confirmBox'>
-                    <Descriptions title="Travel Request · Travel Information" column={2} >
+                    <Descriptions title="Travel Request · Travel Information" column={2} size='small'>
                         <Descriptions.Item label="Legal First Name">{tra_legalfirstname}</Descriptions.Item>
                         <Descriptions.Item label="Legal Last Name">{tra_legallastname}</Descriptions.Item>
                         <Descriptions.Item label="Departure">{tra_departure}</Descriptions.Item>
@@ -1199,10 +1199,10 @@ class FormForSubmitter extends Component {
                         <Descriptions.Item label="Returning Date">{tra_returning}</Descriptions.Item>
                         <Descriptions.Item label="Reason" span={2}>{tra_reason}</Descriptions.Item>
                     </Descriptions>
-                    <Descriptions title="" column={2} bordered>
+                    <Descriptions title="" column={2} bordered size='small'>
                         { tra_allitemsJS }
                     </Descriptions>
-                    <Descriptions title="" column={2}>
+                    <Descriptions title="" column={2} size='small'>
                         <Descriptions.Item labelStyle={{color:'#6F42C1', fontWeight:'bold'}} label="Unit to pay the flight?" span={2}>{tra_whetherunitpayflight}</Descriptions.Item>
                         { 
                             tra_whetherunitpayflight === 'Yes' ? 
@@ -1331,7 +1331,7 @@ class FormForSubmitter extends Component {
             })
             return (
                 <div className='confirmBox'>
-                    <Descriptions title="Travel Reimbursement · Travel Reimbursement">
+                    <Descriptions title="Travel Reimbursement · Travel Reimbursement" size='small'>
                         <Descriptions.Item label="Reimbursed before this trip?" span={3}>{trarei_reimbursedbefore}</Descriptions.Item>
                         { trarei_reimbursedbefore === 'Yes' ? <Descriptions.Item label="Reference Number" span={3}>{trarei_referencenumber}</Descriptions.Item> : null }
                         <Descriptions.Item label="Requesting this reimbursement for yourself" span={3}>{trarei_requestforself}</Descriptions.Item>
@@ -1345,10 +1345,10 @@ class FormForSubmitter extends Component {
                             : null 
                         }
                     </Descriptions>
-                    <Descriptions title="" column={2} bordered>
+                    <Descriptions title="" column={2} bordered size='small'>
                         { trarei_allitemsJS }
                     </Descriptions>
-                    <Descriptions title="" column={2} >
+                    <Descriptions title="" column={2} size='small'>
                         <Descriptions.Item label="US Citizen or Permanent Resident?" span={2}>{trarei_whethercitizen}</Descriptions.Item>
                         { trarei_passportJS }
                         { trarei_i94JS }
@@ -1363,7 +1363,7 @@ class FormForSubmitter extends Component {
                             : null 
                         }
                     </Descriptions>
-                    <Descriptions title="Travel Reimbursement · Travel Costs" column={2} bordered>
+                    <Descriptions title="Travel Reimbursement · Travel Costs" column={2} bordered size='small'>
                         { serviceJS }
                         <Descriptions.Item label="Are you claiming meal per diem?" span={2}>{trarei_whetherclaimmealperdiem}</Descriptions.Item>
                         {
@@ -1378,7 +1378,7 @@ class FormForSubmitter extends Component {
                         }
                     </Descriptions>
                     
-                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, tra, budgets)}>Submit</Button>
+                    <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitForm(netId, formType, unit, subunit, trarei, budgets)}>Submit</Button>
                     <div><Tag icon={<ExclamationCircleOutlined />} color="warning" className='confirmModelWarn'>Note: You cannot modify the form after submission</Tag></div>
                 </div>
             );

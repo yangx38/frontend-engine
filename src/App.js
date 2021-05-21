@@ -17,6 +17,7 @@ import FiscalStaffApproveRequests from './pages/fiscalstaff/approverequests';
 // approver
 import ApproverMainpage from './pages/approver/mainpage';
 import ApproverApproveRequests from './pages/approver/approverequests';
+import ApproverDetailPage from './pages/approver/details';
 // submitter
 import SubmitterMainpage from './pages/submitter/mainpage';
 
@@ -41,6 +42,7 @@ class App extends Component {
             {/* approver */}
             <Route path='/approver/mainpage' exact component={ApproverMainpage}></Route>
             <Route path='/approver/approverequests' exact component={ApproverApproveRequests}></Route>
+            <Route path='/approver/approverequests/requestdetails' exact component={ApproverDetailPage}></Route>
             {/* submitter */}
             <Route path='/submitter/mainpage' exact component={SubmitterMainpage}></Route>
           </BrowserRouter>

@@ -73,8 +73,8 @@ class ApproverApproveRequests extends Component {
         ];
         return (
             <Fragment>
-                <Table className='tableCursor' columns={formTableColumns} dataSource={ft_allformsJS} size="small" 
-                onRow={(columns, index) => { return { onClick: () => directToRequestDetailsPage(columns, index) }; }} />
+                <Table className='tableCursor' columns={formTableColumns} dataSource={ft_allformsJS} size="small" pagination={{ pageSize: 50 }}
+                    onRow={(columns, index) => { return { onClick: () => directToRequestDetailsPage(columns, index) }; }} />
             </Fragment>
         );
     }
@@ -85,7 +85,7 @@ class ApproverApproveRequests extends Component {
             return (
                 <Fragment>
                     <HomeWrapper>
-                        {this.getFormTable()}
+                        { this.getFormTable() }
                     </HomeWrapper>
                 </Fragment>
             );
@@ -108,9 +108,9 @@ const mapDispatchToProps = (dispatch) => {
         getFormsFromApproverNetId(netId) {
             dispatch(actionCreators.getFormsFromApproverNetId(netId));
         },
+        // getFormTable()
         directToRequestDetailsPage(columns, index) {
-            console.log(columns)
-            console.log(index)
+            dispatch(actionCreators.directToRequestDetailsPage(columns));
         }
     }
 }
