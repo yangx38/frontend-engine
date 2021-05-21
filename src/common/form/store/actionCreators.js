@@ -509,7 +509,7 @@ export const onFinishTravelReimbursementForm = (data) => {
 var receipt_number = '';
 // getConfirmModal()
 export const submitForm = (netId, formType, unit, subunit, form_data, budgets) => {
-    const timestamp = Date.now();
+    const timestamp = new Date(Date.now());
     const data = {
         'form_creator_netId': netId,
         'form_type': formType,

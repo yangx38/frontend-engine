@@ -5,6 +5,7 @@ import Immutable from 'immutable';
 import { actionCreators } from './store';
 import { actionCreators as loginActionCreators } from '../login/store';
 import { actionCreators as formActionCreators } from '../form/store';
+import { actionCreators as approverApproveRequestsActionCreators } from '../../pages/approver/approverequests/store';
 import { actionCreators as sysmtemAdminUnitsBudgetsPeopleActionCreators } from '../../pages/systemadmin/unitsbudgetspeople/store';
 import { Menu } from 'antd';
 
@@ -198,6 +199,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(loginActionCreators.logout());
             dispatch(formActionCreators.logout());
             dispatch(sysmtemAdminUnitsBudgetsPeopleActionCreators.logout());
+            dispatch(approverApproveRequestsActionCreators.logout());
         },
         readSu_selectedSubunitANDForm(unit, subunit, formType) {
             dispatch(formActionCreators.setConfirmModal());
