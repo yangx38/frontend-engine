@@ -27,3 +27,9 @@ export const SubtitleWrapper = styled.div`
     font-size: 14px;
     color: #6F42C1;
 `
+export const CommentWrapper = styled.div`
+    overflow: hidden;
+    width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+`

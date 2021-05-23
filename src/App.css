@@ -160,3 +160,22 @@ th {
 .confirmModelWarnSecond {
     margin-left: 330px !important;
 }
+.budgetTabs {
+    margin: 0 auto !important;
+}
+.budgetCard {
+    margin-bottom: 10px !important;
+}
+.approveBtn {
+    color: #f6f5ff !important;
+    background-color: #1aab4d !important;
+    float: right !important;
+}
+.denialBtn {
+    color: #f6f5ff !important;
+    background-color: #ff4d4f !important;
+    float: right !important;
+}
+.approveDeclineBudget {
+    padding-bottom: 150px !important;
+}

@@ -3,13 +3,15 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Space, Radio, Upload, message, Typography, Divider, Checkbox, Tag, Descriptions } from 'antd';
-import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Row, Descriptions, Timeline, Comment, Form, Input, Select, Tabs } from 'antd';
+import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import { actionCreators as approverApproveRequestsActionCreators } from '../approverequests/store';
 
 import {
     HomeWrapper,
     TitleWrapper,
     SubtitleWrapper,
+    CommentWrapper,
     // DirectText,
     // Nav,
     // GroupHeader,
@@ -19,6 +21,8 @@ class ApproverDetailPage extends Component {
     getFormDetailPage() {
         const { ft_selected_formdata } = this.props;
         const { form_type, form_data } = ft_selected_formdata.toJS();
+        
+        const { backToTable } = this.props;
 
         if (form_type === 'Pay an Invoice') {
             const { pay_fullname, pay_addressline1, pay_addressline2, pay_city, pay_state, pay_zipcode, pay_country } = form_data;
@@ -28,10 +32,10 @@ class ApproverDetailPage extends Component {
             pay_allitems.map((pay_allitem, idx) => {
                 const { expensedescription, businesspurpose, category, fullamount, } = pay_allitem;
                 pay_allitemsJS.push(<Descriptions.Item key={idx} labelStyle={{background:'#d4bdff'}} label="Item#" span={2}>{idx+1}</Descriptions.Item>);
-                pay_allitemsJS.push(<Descriptions.Item label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
-                pay_allitemsJS.push(<Descriptions.Item label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
-                pay_allitemsJS.push(<Descriptions.Item label="Category">{category}</Descriptions.Item>);
-                pay_allitemsJS.push(<Descriptions.Item label="Full Amount">${fullamount}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item key={'expensedescription'} label="Expense Description" span={2}>{expensedescription}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item key={'businesspurpose'} label="Business Purpose" span={2}>{businesspurpose}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item key={'category'} label="Category">{category}</Descriptions.Item>);
+                pay_allitemsJS.push(<Descriptions.Item key={'fullamount'} label="Full Amount">${fullamount}</Descriptions.Item>);
                 const { pay_budgets } = pay_allitem;
                 pay_budgets.map((pay_budget, budget_idx) => {
                     const { budget_number, budget_amount, budget_task, budget_project, budget_option} = pay_budget;
@@ -60,7 +64,7 @@ class ApproverDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Pay an Invoice · Shipping Address" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary">Back to Form Table</Button></Link>}>
+                    <Descriptions title="Pay an Invoice · Shipping Address" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Full Name">{pay_fullname}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 1">{pay_addressline1}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 2">{pay_addressline2}</Descriptions.Item>
@@ -121,7 +125,7 @@ class ApproverDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Procard Receipt · Card Information" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary">Back to Form Table</Button></Link>}>
+                    <Descriptions title="Procard Receipt · Card Information" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary"  onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Cardholder">{pro_cardholder}</Descriptions.Item>
                     </Descriptions>
                     <Descriptions title="Procard Receipt · Vendor Information" column={2} size='small'>
@@ -177,7 +181,7 @@ class ApproverDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Purchase Request · Shipping Address" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary">Back to Form Table</Button></Link>}>
+                    <Descriptions title="Purchase Request · Shipping Address" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Full Name">{pur_fullname}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 1">{pur_addressline1}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 2">{pur_addressline2}</Descriptions.Item>
@@ -240,7 +244,7 @@ class ApproverDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Reimbursement · Requester Information" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary">Back to Form Table</Button></Link>}>
+                    <Descriptions title="Reimbursement · Requester Information" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Reimbursement for" span={3}>{rei_reimbursementfor}</Descriptions.Item>
                         { 
                             rei_reimbursementfor === 'On behalf of someone' ? 
@@ -333,7 +337,7 @@ class ApproverDetailPage extends Component {
             
             return (
                 <Fragment>
-                    <Descriptions title="Travel Request · Travel Information" column={2} size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary">Back to Form Table</Button></Link>}>
+                    <Descriptions title="Travel Request · Travel Information" column={2} size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Legal First Name">{tra_legalfirstname}</Descriptions.Item>
                         <Descriptions.Item label="Legal Last Name">{tra_legallastname}</Descriptions.Item>
                         <Descriptions.Item label="Departure">{tra_departure}</Descriptions.Item>
@@ -448,7 +452,7 @@ class ApproverDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Travel Reimbursement · Travel Reimbursement" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary">Back to Form Table</Button></Link>}>
+                    <Descriptions title="Travel Reimbursement · Travel Reimbursement" size='small' extra={<Link to={'/approver/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Reimbursed before this trip?" span={3}>{trarei_reimbursedbefore}</Descriptions.Item>
                         { trarei_reimbursedbefore === 'Yes' ? <Descriptions.Item label="Reference Number" span={3}>{trarei_referencenumber}</Descriptions.Item> : null }
                         <Descriptions.Item label="Requesting this reimbursement for yourself" span={3}>{trarei_requestforself}</Descriptions.Item>
@@ -499,17 +503,134 @@ class ApproverDetailPage extends Component {
         }
     }
 
+    getUsedBudget() {
+        const { email, ft_selected_formdata, selected_budgetIdx } = this.props;
+        const { used_budget, _id } = ft_selected_formdata.toJS();
+        const netId = email.split('@')[0];
+        const { TextArea } = Input;
+        const { TabPane } = Tabs;
+
+        const { selectBudget, onFinishCommentApprove, onFinishCommentDecline } = this.props;
+
+        var budget_cardlist = [];
+        used_budget.map((budget, idx) => {
+            const { budgetnumber, budgetamount, approvers, status } = budget;
+            var approved_budget = 0;
+            var approvers_list = [];
+            for (let i = 0; i < approvers.length; i++) {
+                if (status[i] == 1) {
+                    approved_budget = 1;
+                    approvers_list.push(<Fragment><p>{`${approvers[i]} `}<CheckCircleTwoTone twoToneColor="#52c41a" /> </p></Fragment>)
+                } else {
+                    approvers_list.push(<Fragment><p>{`${approvers[i]} `}<CloseCircleTwoTone twoToneColor="#ff3030" /> </p></Fragment>)
+                }
+            }
+            budget_cardlist.push(
+                <Col span={6}>
+                    { approved_budget === 0 ? <Card className='budgetCard' title={`${budgetnumber} $${budgetamount}`} headStyle={{background:'#ff9999'}} onClick={() => selectBudget(idx)}>{ approvers_list }</Card> : 
+                    <Card className='budgetCard' title={`${budgetnumber} $${budgetamount}`} headStyle={{background:'#beff9e'}}>{ approvers_list }</Card>}
+                </Col>
+            );
+        })
+
+        var qualify = 0;
+        if (selected_budgetIdx !== '') {
+            const { approvers } = used_budget[selected_budgetIdx]
+            for (let i = 0; i < approvers.length; i++) {
+                if (approvers[i] === netId) {
+                    qualify = 1;
+                    break;
+                }
+            }
+        }
+        return (
+            <Fragment>
+                { budget_cardlist }
+                { 
+                    selected_budgetIdx === '' ? <SubtitleWrapper>Click to select a Budget (Unclickable if already approved)</SubtitleWrapper> 
+                    : qualify === 0 ? <SubtitleWrapper>Sorry, you're not qualified to approve this budget.</SubtitleWrapper> 
+                    :  
+                        <Fragment>
+                            <SubtitleWrapper>Budgets Selected: {used_budget[selected_budgetIdx].budgetnumber}, ${used_budget[selected_budgetIdx].budgetamount}</SubtitleWrapper>
+                            <Tabs defaultActiveKey="1" className='budgetTabs'>
+                                <TabPane tab="Approve" key="1">
+                                    <Comment content={
+                                        <Form name="budget_approveform" initialValues={{ remember: true, }} onFinish={(values) => onFinishCommentApprove(values, selected_budgetIdx, netId, _id)}>
+                                            <Form.Item label="Comment" name="comment" rules={[ { required: true, message: 'Please input your comment!', }, ]} >
+                                                <TextArea rows={3} />
+                                            </Form.Item>
+                                            <Form.Item>
+                                                <Button htmlType="submit" className='approveBtn'>Approve</Button>
+                                            </Form.Item>
+                                        </Form>} />
+                                </TabPane>
+                                <TabPane tab="Decline" key="2">
+                                    <Comment content={
+                                        <Form name="budget_approveform" initialValues={{ remember: true, }} onFinish={onFinishCommentDecline}>
+                                            <Form.Item label="Comment" name="comment" rules={[ { required: true, message: 'Please input your comment!', }, ]} >
+                                                <TextArea rows={3} />
+                                            </Form.Item>
+                                            <Form.Item>
+                                                <Button htmlType="submit" className='denialBtn'>Decline</Button>
+                                            </Form.Item>
+                                        </Form>} />
+                                </TabPane>
+                            </Tabs>
+                        </Fragment> 
+                }
+            </Fragment>
+        );
+    }
+
+    getTimeline() {
+        const { ft_selected_formdata } = this.props;
+        const {  created_time, form_creator_netId, _id, used_budget } = ft_selected_formdata.toJS();
+        var timeline_list = [];
+        used_budget.map((budget) => {
+            const { budgetnumber, budgetamount, approver_comment, approver_comment_time, approvers, status } = budget;
+            if (approver_comment !== '') {
+                const idx = status.indexOf(1)
+                timeline_list.push({approver_comment_time, approver_comment, budgetnumber, budgetamount, 'approver': approvers[idx]});
+            }
+        })
+        timeline_list = timeline_list.sort((a, b) => a.approver_comment_time.localeCompare(b.approver_comment_time))
+
+        var timeline_items = [];
+        timeline_list.map((budget) => {
+            const { budgetnumber, budgetamount, approver_comment, approver_comment_time, approver } = budget;
+            timeline_items.push(<Timeline.Item label={`${approver_comment_time}`}>{approver} commented {approver_comment} on budget {budgetnumber}, amount ${budgetamount}</Timeline.Item>)
+        })
+
+        return (
+            <Timeline mode={'left'}>
+                <Timeline.Item label={`${created_time}`}>{form_creator_netId} created ticket {_id}</Timeline.Item>
+                { timeline_items }
+            </Timeline>
+        );
+    }
+
     render() {
         const { login, role, ft_selected_formdata } = this.props;
         if (login && role !== '') {
             const { form_subunit, form_creator_netId, form_type, _id, form_unit } = ft_selected_formdata.toJS();
             return (
-                <Fragment>
+                <div className='approveDeclineBudget'>
+                    {/* Form Content */}
                     { ft_selected_formdata !== '' ? <Fragment> <TitleWrapper>{form_subunit} @ {form_unit}, {form_type}</TitleWrapper><SubtitleWrapper>created by {form_creator_netId}, tracking# {_id}</SubtitleWrapper></Fragment> : <TitleWrapper>Please Select Form First</TitleWrapper>}
+                    <HomeWrapper> { this.getFormDetailPage() } </HomeWrapper>
+
+                    {/* Audit Trail */}
+                    { ft_selected_formdata !== '' ? <Fragment><TitleWrapper>Audit Trail</TitleWrapper><SubtitleWrapper>Pacific Time Zone</SubtitleWrapper></Fragment> : null}
+                    <HomeWrapper> { ft_selected_formdata !== '' ? this.getTimeline() : null} </HomeWrapper>
+
+                    {/* Approve / Decline Budgets */}
+                    { ft_selected_formdata !== '' ? <Fragment><TitleWrapper>Approve / Decline Budgets</TitleWrapper><SubtitleWrapper>Budgets Used</SubtitleWrapper></Fragment> : null}
                     <HomeWrapper>
-                        { this.getFormDetailPage() }
+                        <Row gutter={16}>
+                            { ft_selected_formdata !== '' ? this.getUsedBudget() : null}
+                        </Row>
                     </HomeWrapper>
-                </Fragment>
+                </div>
             );
         } else return <Redirect to='/' />
     }
@@ -518,14 +639,27 @@ class ApproverDetailPage extends Component {
 const mapStateToProps = (state) => {
     return {
         login: state.getIn(['login', 'login']),
+        email: state.getIn(['login', 'profileObj', 'email']),
         role: state.getIn(['login', 'user', 'role']),
         ft_selected_formdata: state.getIn(['approver_approverequests', 'ft_selected_formdata']),
+        selected_budgetIdx: state.getIn(['approver_approverequests', 'selected_budgetIdx']),
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-       
+        selectBudget(idx) {
+            dispatch(approverApproveRequestsActionCreators.selectBudget(idx))
+        },
+        backToTable() {
+            dispatch(approverApproveRequestsActionCreators.backToTable())
+        },
+        onFinishCommentApprove(values, idx, netId, _id) {
+            dispatch(approverApproveRequestsActionCreators.onFinishCommentApprove(values, idx, netId, _id));
+        },
+        onFinishCommentDecline() {
+            console.log('b')
+        }
     }
 }
 

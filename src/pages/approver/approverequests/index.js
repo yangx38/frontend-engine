@@ -33,24 +33,11 @@ class ApproverApproveRequests extends Component {
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div style={{ padding: 8 }}>
-                <Input
-                ref={node => {
-                    this.searchInput = node;
-                }}
-                placeholder={`Search ${dataIndex}`}
-                value={selectedKeys[0]}
-                onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                style={{ marginBottom: 8, display: 'block' }}
-                />
+                <Input ref={node => { this.searchInput = node; }} placeholder={`Search ${dataIndex}`} value={selectedKeys[0]} style={{ marginBottom: 8, display: 'block' }}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])} onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)} />
                 <Space>
-                <Button
-                    type="primary"
-                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    icon={<SearchOutlined />}
-                    size="small"
-                    style={{ width: 90 }}
-                >
+                <Button type="primary" icon={<SearchOutlined />} size="small" style={{ width: 90 }}
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)} >
                     Search
                 </Button>
                 <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
@@ -61,10 +48,7 @@ class ApproverApproveRequests extends Component {
             </div>
         ),
         filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-          record[dataIndex]
-            ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-            : '',
+        onFilter: (value, record) => record[dataIndex] ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()): '',
         onFilterDropdownVisibleChange: visible => {
           if (visible) {
             setTimeout(() => this.searchInput.select(), 100);
@@ -72,15 +56,8 @@ class ApproverApproveRequests extends Component {
         },
         render: text =>
           this.state.searchedColumn === dataIndex ? (
-            <Highlighter
-              highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-              searchWords={[this.state.searchText]}
-              autoEscape
-              textToHighlight={text ? text.toString() : ''}
-            />
-          ) : (
-            text
-          ),
+            <Highlighter highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }} searchWords={[this.state.searchText]} autoEscape textToHighlight={text ? text.toString() : ''} />
+          ) : ( text ),
       });
 
     handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -138,10 +115,10 @@ class ApproverApproveRequests extends Component {
             },
             {
                 title: 'Status',
-                dataIndex: 'status',
-                key: 'status',
-                sorter: (a, b) => a.status.toString().localeCompare(b.status.toString()),
-                ...this.getColumnSearchProps('status'),
+                dataIndex: 'form_status',
+                key: 'form_status',
+                sorter: (a, b) => a.form_status.toString().localeCompare(b.form_status.toString()),
+                ...this.getColumnSearchProps('form_status'),
             },
             {
                 title: 'Details',

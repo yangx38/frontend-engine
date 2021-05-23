@@ -509,16 +509,16 @@ export const onFinishTravelReimbursementForm = (data) => {
 var receipt_number = '';
 // getConfirmModal()
 export const submitForm = (netId, formType, unit, subunit, form_data, budgets) => {
-    const timestamp = new Date(Date.now());
+    const timestamp = new Date(Date.now()).toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
     const data = {
         'form_creator_netId': netId,
         'form_type': formType,
         'form_unit': unit,
         'form_subunit': subunit,
         form_data,
+        'approval_needed': budgets.length,
         'created_time': timestamp,
-        // 'approvers_number_left': budgets.length,
-        'status': 'under review'
+        'form_status': 'under review'
     }
     receipt_number = '';
     return (dispatch) => {

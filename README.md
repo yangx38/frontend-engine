@@ -1,9 +1,10 @@
 -- 如果有缘
 1. 所有 sync check 应该move到后段去
-2. rollback / transaction
+2. log 持久化
 3. jwt
 4. mainpage
 5. 查重
+6. rollback / transaction
 
 -- API 所有用的
 
