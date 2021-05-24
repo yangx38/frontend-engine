@@ -23,7 +23,7 @@ class Header extends Component {
         const fiscalStaffUnitsOfGivenNetIdJS = Immutable.List(fiscalStaffUnitsOfGivenNetId).toJS();
         const approverBudgetNumberssOfGivenNetIdJS = Immutable.List(approverBudgetNumberssOfGivenNetId).toJS();
         const { SubMenu } = Menu;
-        const { readSu_selectedSubunitANDForm, readFs_SelectedUnit, readAp_SelectedBudgetNumber } = this.props;
+        const { readSu_selectedSubunitANDForm, readFs_SelectedUnit, readAp_SelectedBudgetNumber, approveRequestClick } = this.props;
         const submitterSubunitsOfGivenNetIdList = [];
         submitterSubunitsOfGivenNetIdJS.map(item => {
             const { unit, subunits } = item;
@@ -68,8 +68,8 @@ class Header extends Component {
                             </NavItem>
                         </Link>
                         <Link to={'/approver/approverequests'}>
-                            <NavItem className='left'>
-                                <Menu mode="horizontal">
+                            <NavItem className='left' onClick={approveRequestClick}>
+                                <Menu mode="horizontal" >
                                     <SubMenu key="SubMenu" title="Approve Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
                                         { approverBudgetNumbersOfGivenNetIdList }
                                     </SubMenu>
@@ -100,8 +100,8 @@ class Header extends Component {
                             </NavItem>
                         </Link>
                         <Link to={'/approver/approverequests'}>
-                            <NavItem className='left'>
-                                <Menu mode="horizontal">
+                            <NavItem className='left' onClick={approveRequestClick}>
+                                <Menu mode="horizontal" >
                                     <SubMenu key="SubMenu" title="Approve Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
                                         { approverBudgetNumbersOfGivenNetIdList }
                                     </SubMenu>
@@ -123,8 +123,8 @@ class Header extends Component {
                 return (
                     <Fragment>
                         <Link to={'/approver/approverequests'}>
-                            <NavItem className='left'>
-                                <Menu mode="horizontal">
+                            <NavItem className='left' onClick={approveRequestClick}>
+                                <Menu mode="horizontal" >
                                     <SubMenu key="SubMenu" title="Approve Request" style={{fontSize:'14px', textAlign:'center', color:'#626262'}}>
                                         { approverBudgetNumbersOfGivenNetIdList }
                                     </SubMenu>
@@ -210,6 +210,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         readAp_SelectedBudgetNumber(budgetnumber) {
             console.log(budgetnumber)
+        },
+        approveRequestClick() {
+            dispatch(approverApproveRequestsActionCreators.backToTable());
         }
     }
 }
