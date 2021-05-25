@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import Immutable from 'immutable';
 import { Button, Card, Col, Row, Descriptions, Timeline, Comment, Form, Input, Select, Tabs } from 'antd';
-import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import { CheckCircleTwoTone, ExclamationCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
 import { actionCreators as approverApproveRequestsActionCreators } from '../approverequests/store';
 
 import {
@@ -518,17 +518,23 @@ class ApproverDetailPage extends Component {
             var approved_budget = 0;
             var approvers_list = [];
             for (let i = 0; i < approvers.length; i++) {
-                if (status[i] == 1) {
+                if (status[i] === 1) {
                     approved_budget = 1;
                     approvers_list.push(<Fragment><p>{`${approvers[i]} `}<CheckCircleTwoTone twoToneColor="#52c41a" /> </p></Fragment>)
+                } else if (status[i] === 0) {
+                    approvers_list.push(<Fragment><p>{`${approvers[i]} `}<ExclamationCircleTwoTone twoToneColor="#d48806" /> </p></Fragment>)
                 } else {
+                    approved_budget = -1;
                     approvers_list.push(<Fragment><p>{`${approvers[i]} `}<CloseCircleTwoTone twoToneColor="#ff3030" /> </p></Fragment>)
                 }
             }
             budget_cardlist.push(
                 <Col span={6}>
-                    { approved_budget === 0 ? <Card className='budgetCard' title={`${budgetnumber} $${budgetamount}`} headStyle={{background:'#ff9999'}} onClick={() => selectBudget(idx)}>{ approvers_list }</Card> : 
-                    <Card className='budgetCard' title={`${budgetnumber} $${budgetamount}`} headStyle={{background:'#beff9e'}}>{ approvers_list }</Card>}
+                    { 
+                        approved_budget === 1 ? <Card className='budgetCard' title={`${budgetnumber} $${budgetamount}`} headStyle={{background:'#beff9e'}}>{ approvers_list }</Card> : 
+                        approved_budget === 0 ? <Card className='budgetCard' title={`${budgetnumber} $${budgetamount}`} headStyle={{background:'#fcd490'}} onClick={() => selectBudget(idx)}>{ approvers_list }</Card> :
+                        <Card className='budgetCard' title={`${budgetnumber} $${budgetamount}`} headStyle={{background:'#ff9999'}}>{ approvers_list }</Card> 
+                    }
                 </Col>
             );
         })
@@ -547,11 +553,11 @@ class ApproverDetailPage extends Component {
             <Fragment>
                 { budget_cardlist }
                 { 
-                    selected_budgetIdx === '' ? <SubtitleWrapper>Click to select a Budget (Unclickable if already approved)</SubtitleWrapper> 
+                    selected_budgetIdx === '' ? <SubtitleWrapper>Click to select a Budget (Unclickable if already been approved / declined)</SubtitleWrapper> 
                     : qualify === 0 ? <SubtitleWrapper>Sorry, you're not qualified to approve this budget.</SubtitleWrapper> 
                     :  
                         <Fragment>
-                            <SubtitleWrapper>Budgets Selected: {used_budget[selected_budgetIdx].budgetnumber}, ${used_budget[selected_budgetIdx].budgetamount}</SubtitleWrapper>
+                            <SubtitleWrapper>Budgets Selected: <span className="budgetSelected">{used_budget[selected_budgetIdx].budgetnumber}, ${used_budget[selected_budgetIdx].budgetamount}</span></SubtitleWrapper>
                             <Tabs defaultActiveKey="1" className='budgetTabs'>
                                 <TabPane tab="Approve" key="1">
                                     <Comment content={
@@ -566,7 +572,7 @@ class ApproverDetailPage extends Component {
                                 </TabPane>
                                 <TabPane tab="Decline" key="2">
                                     <Comment content={
-                                        <Form name="budget_approveform" initialValues={{ remember: true, }} onFinish={onFinishCommentDecline}>
+                                        <Form name="budget_approveform" initialValues={{ remember: true, }} onFinish={(values) => onFinishCommentDecline(values, selected_budgetIdx, netId, _id)}>
                                             <Form.Item label="Comment" name="comment" rules={[ { required: true, message: 'Please input your comment!', }, ]} >
                                                 <TextArea rows={3} />
                                             </Form.Item>
@@ -589,7 +595,8 @@ class ApproverDetailPage extends Component {
         used_budget.map((budget) => {
             const { budgetnumber, budgetamount, approver_comment, approver_comment_time, approvers, status } = budget;
             if (approver_comment !== '') {
-                const idx = status.indexOf(1)
+                var idx = status.indexOf(1)
+                if (idx === -1) idx = status.indexOf(-1)
                 timeline_list.push({approver_comment_time, approver_comment, budgetnumber, budgetamount, 'approver': approvers[idx]});
             }
         })
@@ -598,7 +605,7 @@ class ApproverDetailPage extends Component {
         var timeline_items = [];
         timeline_list.map((budget) => {
             const { budgetnumber, budgetamount, approver_comment, approver_comment_time, approver } = budget;
-            timeline_items.push(<Timeline.Item label={`${approver_comment_time}`}>{approver} commented {approver_comment} on budget {budgetnumber}, amount ${budgetamount}</Timeline.Item>)
+            timeline_items.push(<Timeline.Item label={`${approver_comment_time}`}>{approver} commented "{approver_comment}" on budget {budgetnumber}, amount ${budgetamount}</Timeline.Item>)
         })
 
         return (
@@ -657,8 +664,8 @@ const mapDispatchToProps = (dispatch) => {
         onFinishCommentApprove(values, idx, netId, _id) {
             dispatch(approverApproveRequestsActionCreators.onFinishCommentApprove(values, idx, netId, _id));
         },
-        onFinishCommentDecline() {
-            console.log('b')
+        onFinishCommentDecline(values, idx, netId, _id) {
+            dispatch(approverApproveRequestsActionCreators.onFinishCommentDecline(values, idx, netId, _id));
         }
     }
 }
