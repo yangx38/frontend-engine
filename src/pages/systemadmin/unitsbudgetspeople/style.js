@@ -54,5 +54,4 @@ export const ModalFooter = styled.div`
     line-height: 50px;
     text-align: center;
     padding: 0 20px;
-    background-color: yellow;
 `

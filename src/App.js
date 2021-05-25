@@ -21,6 +21,8 @@ import ApproverDetailPage from './pages/approver/details';
 // submitter
 import SubmitterMainpage from './pages/submitter/mainpage';
 import SubmitterMyRequests from './pages/submitter/myrequests';
+import SubmitterDetailPage from './pages/submitter/details';
+
 
 class App extends Component {
   render() {
@@ -47,6 +49,7 @@ class App extends Component {
             {/* submitter */}
             <Route path='/submitter/mainpage' exact component={SubmitterMainpage}></Route>
             <Route path='/submitter/myrequests' exact component={SubmitterMyRequests}></Route>
+            <Route path='/submitter/myrequests/requestdetails' exact component={SubmitterDetailPage}></Route>
           </BrowserRouter>
         </div>
       </Provider>

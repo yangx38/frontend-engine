@@ -121,6 +121,9 @@ class Header extends Component {
                                 </Menu>
                             </NavItem>
                         </Link>
+                        <Link to={'/submitter/myrequests'}>
+                            <NavItem className='left unitbudget'>My Requests</NavItem>
+                        </Link>
                     </Fragment>
                 );
             } else if (role === 'approver') {
@@ -144,6 +147,9 @@ class Header extends Component {
                                 </Menu>
                             </NavItem>
                         </Link>
+                        <Link to={'/submitter/myrequests'}>
+                            <NavItem className='left unitbudget'>My Requests</NavItem>
+                        </Link>
                     </Fragment>
                 );
             } else if (role === 'submitter') {
@@ -157,6 +163,9 @@ class Header extends Component {
                                     </SubMenu>
                                 </Menu>
                             </NavItem>
+                        </Link>
+                        <Link to={'/submitter/myrequests'}>
+                            <NavItem className='left unitbudget'>My Requests</NavItem>
                         </Link>
                     </Fragment>
                 );

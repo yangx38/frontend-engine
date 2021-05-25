@@ -19,6 +19,9 @@ const reducer = (state = defaultState, action) => {
             return state.set('ft_allforms', action.data);
         case constants.SET_FT_SELECTEDDETAILS:
             return state.set('ft_selected_formdata', action.data);
+        // From SubmitterDetailPage
+        case constants.BACK_TO_TABLE:
+            return state.set('ft_selected_formdata', '');
         default:
             return state;
     }
