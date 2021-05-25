@@ -3,7 +3,8 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
     all_budget: [],
-    confirm_modal: false, 
+    confirm_modal: false,
+    receipt_number: '',
     tra: {
         whetherUnitPayFlight: '',
         whetherUnitPayHotel: '',
@@ -37,6 +38,7 @@ const reducer = (state = defaultState, action) => {
             return state.merge(fromJS({
                 all_budget: [],
                 confirm_modal: false,
+                receipt_number: '',
                 tra: {
                     whetherUnitPayFlight: '',
                     whetherUnitPayHotel: '',
@@ -62,8 +64,8 @@ const reducer = (state = defaultState, action) => {
                     trarei: {},
                 },
             }))
-        case constants.SET_CONFIRMMODAL:
-            return state.set('confirm_modal', false);
+        case constants.RESET_CONFIRMMODAL_RECEIPTNUMBER:
+            return state.set('confirm_modal', false).set('receipt_number', '');
         // componentDidMount()
         case constants.GET_ALL_BUDGET:
             return state.set('all_budget', action.data);
@@ -105,6 +107,39 @@ const reducer = (state = defaultState, action) => {
             return state.setIn(['traRei', 'mealProvided'], action.data);
         case constants.SUBMIT_TRAVELREIMBURSEMENT: 
             return state.setIn(['form_data', 'trarei'], action.trarei_formdata).set('confirm_modal', true);
+        // getConfirmModal()
+        case constants.UPDATE_RECEIPTNUMBER:
+            return state.merge(fromJS({
+                confirm_modal: false,
+                receipt_number: action.data,
+                tra: {
+                    whetherUnitPayFlight: '',
+                    whetherUnitPayHotel: '',
+                },
+                traRei: {
+                    reimbursedBefore: '',
+                    requestForSelf: '',
+                    whetherCitizen: '',
+                    whetherPersonalTravelInclude: '',
+                    claimMealPerDiem: '',
+                    mealProvided: '',
+                },
+                rei: {
+                    whetherReimbursementFor: '',
+                    preferredPaymentMethod: '',
+                },
+                form_data: {
+                    pay: {},
+                    pro: {},
+                    pur: {},
+                    rei: {},
+                    tra: {},
+                    trarei: {},
+                },
+            }))
+        // render()
+        case constants.SUBMIT_ANOTHERREQUEST:
+            return state.set('receipt_number', '');
         default:
             return state;
     }

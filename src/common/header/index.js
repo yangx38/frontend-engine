@@ -202,7 +202,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(approverApproveRequestsActionCreators.logout());
         },
         readSu_selectedSubunitANDForm(unit, subunit, formType) {
-            dispatch(formActionCreators.setConfirmModal());
+            dispatch(formActionCreators.setConfirmModal_and_ReceiptNumber());
             dispatch(actionCreators.readSu_selectedSubunitANDForm(unit, subunit, formType))
         },
         readFs_SelectedUnit(unit) {

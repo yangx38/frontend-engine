@@ -79,7 +79,7 @@ class ApproverApproveRequests extends Component {
         const { directToRequestDetailsPage } = this.props;
         const formTableColumns = [
             {
-              title: 'Tracking #',
+              title: 'Receipt #',
               dataIndex: '_id',
               key: '_id',
               sorter: (a, b) => a._id.localeCompare(b._id),

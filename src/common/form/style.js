@@ -17,3 +17,13 @@ export const HomeWrapper = styled.div`
     margin: 0 auto;
     padding-bottom: 100px;
 `
+export const SubtitleWrapper = styled.div`
+    overflow: hidden;
+    width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    height: 18px;
+    line-height: 18px;
+    font-size: 14px;
+    color: #6F42C1;
+`

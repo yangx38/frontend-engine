@@ -28,8 +28,8 @@ export const Nav = styled.div`
 `
 export const NavItem = styled.div`
     line-height: 54px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 4px;
+    margin-right: 4px;
     cursor: pointer;
     font-size: 15px;
     color: #626262;

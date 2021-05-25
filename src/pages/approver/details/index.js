@@ -11,7 +11,6 @@ import {
     HomeWrapper,
     TitleWrapper,
     SubtitleWrapper,
-    CommentWrapper,
     // DirectText,
     // Nav,
     // GroupHeader,
@@ -557,7 +556,7 @@ class ApproverDetailPage extends Component {
                     : qualify === 0 ? <SubtitleWrapper>Sorry, you're not qualified to approve this budget.</SubtitleWrapper> 
                     :  
                         <Fragment>
-                            <SubtitleWrapper>Budgets Selected: <span className="budgetSelected">{used_budget[selected_budgetIdx].budgetnumber}, ${used_budget[selected_budgetIdx].budgetamount}</span></SubtitleWrapper>
+                            <SubtitleWrapper>Budgets Selected: <span className="textSelected">{used_budget[selected_budgetIdx].budgetnumber}, ${used_budget[selected_budgetIdx].budgetamount}</span></SubtitleWrapper>
                             <Tabs defaultActiveKey="1" className='budgetTabs'>
                                 <TabPane tab="Approve" key="1">
                                     <Comment content={
@@ -623,7 +622,7 @@ class ApproverDetailPage extends Component {
             return (
                 <div className='approveDeclineBudget'>
                     {/* Form Content */}
-                    { ft_selected_formdata !== '' ? <Fragment> <TitleWrapper>{form_subunit} @ {form_unit}, {form_type}</TitleWrapper><SubtitleWrapper>created by {form_creator_netId}, tracking# {_id}</SubtitleWrapper></Fragment> : <TitleWrapper>Please Select Form First</TitleWrapper>}
+                    { ft_selected_formdata !== '' ? <Fragment> <TitleWrapper>{form_subunit} @ {form_unit}, {form_type}</TitleWrapper><SubtitleWrapper>created by {form_creator_netId}, Receipt# {_id}</SubtitleWrapper></Fragment> : <TitleWrapper>Please Select Form First</TitleWrapper>}
                     <HomeWrapper> { this.getFormDetailPage() } </HomeWrapper>
 
                     {/* Audit Trail */}

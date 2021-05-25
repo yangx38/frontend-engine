@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 // ****************  Types  ****************
 // logout()
 export const CHANGE_TO_LOGOUT = 'common/form/CHANGE_TO_LOGOUT';
-export const SET_CONFIRMMODAL = 'common/form/SET_CONFIRMMODAL';
+export const RESET_CONFIRMMODAL_RECEIPTNUMBER = 'common/form/RESET_CONFIRMMODAL_RECEIPTNUMBER';
 // componentDidMount()
 export const GET_ALL_BUDGET = 'common/form/GET_ALL_BUDGET';
 // getPayAnInvoiceForm()
@@ -29,14 +29,18 @@ export const CHANGE_WHETHERPERSONALTRAVELINCLUDE = 'common/form/CHANGE_WHETHERPE
 export const CHANGE_CLAIMMEALPERDIEM = 'common/form/CHANGE_CLAIMMEALPERDIEM';
 export const CHANGE_WASMEALPROVIDED = 'common/form/CHANGE_WASMEALPROVIDED';
 export const SUBMIT_TRAVELREIMBURSEMENT = 'common/form/SUBMIT_TRAVELREIMBURSEMENT';
+// getConfirmModal()
+export const UPDATE_RECEIPTNUMBER = 'common/form/UPDATE_RECEIPTNUMBER';
+// render()
+export const SUBMIT_ANOTHERREQUEST = 'common/form/SUBMIT_ANOTHERREQUEST';
 
 // **************** Actions ****************
 // logout()
 export const logout = () => ({
     type: CHANGE_TO_LOGOUT
 })
-export const setConfirmModal = () => ({
-    type: SET_CONFIRMMODAL
+export const setConfirmModal_and_ReceiptNumber = () => ({
+    type: RESET_CONFIRMMODAL_RECEIPTNUMBER
 })
 // componentDidMount()
 const getAllBudgetsAction = (data) => ({
@@ -508,6 +512,10 @@ export const onFinishTravelReimbursementForm = (data) => {
 }
 var receipt_number = '';
 // getConfirmModal()
+export const updateReceiptNumberAction = (data) => ({
+    type: UPDATE_RECEIPTNUMBER,
+    data
+})
 export const submitForm = (netId, formType, unit, subunit, form_data, budgets) => {
     const timestamp = new Date(Date.now()).toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
     const data = {
@@ -531,7 +539,7 @@ export const submitForm = (netId, formType, unit, subunit, form_data, budgets) =
                 })
             })
             .then(res => {
-                //dispatch(changeFiscalStaffUnitsOfGivenNetId(fiscalStaffUnitsOfGivenNetId))
+                dispatch(updateReceiptNumberAction(receipt_number))
             })
             .catch(error => {
                 console.log(error)
@@ -574,3 +582,7 @@ const updateApproversOnForm = (budgetnumber, budget_amount, receipt_number) => {
             console.log(error)
         })
 }
+// render()
+export const submitAnotherRequest = () => ({
+    type: SUBMIT_ANOTHERREQUEST,
+})

@@ -10,6 +10,7 @@ import { MinusCircleOutlined, PlusOutlined, UploadOutlined, CloseCircleOutlined,
 import {
     TitleWrapper,
     HomeWrapper,
+    SubtitleWrapper,
 } from './style';
 
 class FormForSubmitter extends Component {
@@ -1386,20 +1387,33 @@ class FormForSubmitter extends Component {
       }
 
     render() {
-        const { login, role, unit, subunit, formType, confirm_modal } = this.props;
+        const { login, role, unit, subunit, formType, confirm_modal, receipt_number } = this.props;
+        const { submitAnotherRequest } = this.props;
+
         if (login && role !== '') {
             return (
                 <Fragment>
-                    { subunit !== '' && unit !== '' && formType !== '' ? <TitleWrapper>{subunit} @ {unit}, {formType}</TitleWrapper> : <TitleWrapper>Please Select Subunit & Form Type First</TitleWrapper>}
-                    <HomeWrapper>
-                        { 
-                            formType === 'Pay an Invoice' ? this.getPayAnInvoiceForm() : formType === 'Procard Receipt' ? this.getProcardReceipt() : formType === 'Purchase Request' ? this.getPurchaseRequestForm() : 
-                            formType === 'Reimbursement' ? this.getReimbursementForm() : formType === 'Travel Request' ? this.getTravelRequestForm() : formType === 'Travel Reimbursement' ? this.getTravelReimbursementForm() : null
-                        }
-                        {
-                            confirm_modal ? this.getConfirmModal() : null
-                        }
-                    </HomeWrapper>
+                    { receipt_number !== '' ? 
+                        <Fragment>
+                            <TitleWrapper>Request Submitted</TitleWrapper> 
+                            <SubtitleWrapper>Receipt Number: <span className="textSelected">{receipt_number}</span></SubtitleWrapper>
+                            <Button type="primary" shape='round' size='large' className='confirmModelSubmit' onClick={() => submitAnotherRequest()} >Submit Another Request</Button>
+                        </Fragment>
+                        : 
+                        <Fragment>
+                            { subunit !== '' && unit !== '' && formType !== '' ? <TitleWrapper>{subunit} @ {unit}, {formType}</TitleWrapper> : <TitleWrapper>Please Select Subunit & Form Type First</TitleWrapper>}
+                            <HomeWrapper>
+                                { 
+                                    formType === 'Pay an Invoice' ? this.getPayAnInvoiceForm() : formType === 'Procard Receipt' ? this.getProcardReceipt() : formType === 'Purchase Request' ? this.getPurchaseRequestForm() : 
+                                    formType === 'Reimbursement' ? this.getReimbursementForm() : formType === 'Travel Request' ? this.getTravelRequestForm() : formType === 'Travel Reimbursement' ? this.getTravelReimbursementForm() : null
+                                }
+                                {
+                                    confirm_modal ? this.getConfirmModal() : null
+                                }
+                            </HomeWrapper>
+                        </Fragment>
+                    }
+                    
                 </Fragment>
             );
         } else return <Redirect to='/' />
@@ -1433,6 +1447,7 @@ const mapStateToProps = (state) => {
         rei: state.getIn(['form', 'form_data', 'rei']),
         tra: state.getIn(['form', 'form_data', 'tra']),
         trarei: state.getIn(['form', 'form_data', 'trarei']),
+        receipt_number: state.getIn(['form', 'receipt_number']),
     }
 }
 
@@ -1517,6 +1532,10 @@ const mapDispatchToProps = (dispatch) => {
         // getConfirmModal()
         submitForm(netId, formType, unit, subunit, form_data, budgets) {
             dispatch(actionCreators.submitForm(netId, formType, unit, subunit, form_data, budgets));
+        },
+        // render()
+        submitAnotherRequest() {
+            dispatch(actionCreators.submitAnotherRequest());
         }
     }
 }
