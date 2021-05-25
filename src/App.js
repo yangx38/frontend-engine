@@ -20,6 +20,7 @@ import ApproverApproveRequests from './pages/approver/approverequests';
 import ApproverDetailPage from './pages/approver/details';
 // submitter
 import SubmitterMainpage from './pages/submitter/mainpage';
+import SubmitterMyRequests from './pages/submitter/myrequests';
 
 class App extends Component {
   render() {
@@ -45,6 +46,7 @@ class App extends Component {
             <Route path='/approver/approverequests/requestdetails' exact component={ApproverDetailPage}></Route>
             {/* submitter */}
             <Route path='/submitter/mainpage' exact component={SubmitterMainpage}></Route>
+            <Route path='/submitter/myrequests' exact component={SubmitterMyRequests}></Route>
           </BrowserRouter>
         </div>
       </Provider>
