@@ -14,6 +14,7 @@ import SystemAdminUnitsBudgetsPeople from './pages/systemadmin/unitsbudgetspeopl
 // fiscal staff
 import FiscalStaffMainpage from './pages/fiscalstaff/mainpage';
 import FiscalStaffApproveRequests from './pages/fiscalstaff/approverequests';
+import FiscalStaffDetailPage from './pages/fiscalstaff/details';
 // approver
 import ApproverMainpage from './pages/approver/mainpage';
 import ApproverApproveRequests from './pages/approver/approverequests';
@@ -42,6 +43,7 @@ class App extends Component {
             {/* fiscal staff */}
             <Route path='/fiscalstaff/mainpage' exact component={FiscalStaffMainpage}></Route>
             <Route path='/fiscalstaff/approverequests' exact component={FiscalStaffApproveRequests}></Route>
+            <Route path='/fiscalstaff/approverequests/requestdetails' exact component={FiscalStaffDetailPage}></Route>
             {/* approver */}
             <Route path='/approver/mainpage' exact component={ApproverMainpage}></Route>
             <Route path='/approver/approverequests' exact component={ApproverApproveRequests}></Route>

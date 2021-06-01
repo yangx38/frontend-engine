@@ -5,6 +5,7 @@ import Immutable from 'immutable';
 import { actionCreators } from './store';
 import { actionCreators as loginActionCreators } from '../login/store';
 import { actionCreators as formActionCreators } from '../form/store';
+import { actionCreators as fiscalstaffApproveRequestsActionCreators } from '../../pages/fiscalstaff/approverequests/store';
 import { actionCreators as approverApproveRequestsActionCreators } from '../../pages/approver/approverequests/store';
 import { actionCreators as submitterMyRequestsActionCreators } from '../../pages/submitter/myrequests/store';
 import { actionCreators as sysmtemAdminUnitsBudgetsPeopleActionCreators } from '../../pages/systemadmin/unitsbudgetspeople/store';
@@ -212,6 +213,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(loginActionCreators.logout());
             dispatch(formActionCreators.logout());
             dispatch(sysmtemAdminUnitsBudgetsPeopleActionCreators.logout());
+            dispatch(fiscalstaffApproveRequestsActionCreators.logout());
             dispatch(approverApproveRequestsActionCreators.logout());
             dispatch(submitterMyRequestsActionCreators.logout());
         },

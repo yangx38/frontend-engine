@@ -5,7 +5,7 @@ import { actionCreators } from './store';
 import Immutable from 'immutable';
 import { Button, Card, Col, Row, Descriptions, Timeline, Comment, Form, Input, Select, Tabs } from 'antd';
 import { CheckCircleTwoTone, ExclamationCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
-import { actionCreators as submitterMyRequestsActionCreators } from '../myrequests/store';
+import { actionCreators as fiscalstaffApproveRequestsActionCreators } from '../approverequests/store';
 
 import {
     HomeWrapper,
@@ -16,7 +16,7 @@ import {
     // GroupHeader,
 } from './style';
 
-class SubmitterDetailPage extends Component {
+class ApproverDetailPage extends Component {
     getFormDetailPage() {
         const { ft_selected_formdata } = this.props;
         const { form_type, form_data } = ft_selected_formdata.toJS();
@@ -63,7 +63,7 @@ class SubmitterDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Pay an Invoice · Shipping Address" size='small' extra={<Link to={'/submitter/myrequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
+                    <Descriptions title="Pay an Invoice · Shipping Address" size='small' extra={<Link to={'/fiscalstaff/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Full Name">{pay_fullname}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 1">{pay_addressline1}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 2">{pay_addressline2}</Descriptions.Item>
@@ -124,7 +124,7 @@ class SubmitterDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Procard Receipt · Card Information" size='small' extra={<Link to={'/submitter/myrequests'}><Button type="primary"  onClick={backToTable}>Back to Form Table</Button></Link>}>
+                    <Descriptions title="Procard Receipt · Card Information" size='small' extra={<Link to={'/fiscalstaff/approverequests'}><Button type="primary"  onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Cardholder">{pro_cardholder}</Descriptions.Item>
                     </Descriptions>
                     <Descriptions title="Procard Receipt · Vendor Information" column={2} size='small'>
@@ -180,7 +180,7 @@ class SubmitterDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Purchase Request · Shipping Address" size='small' extra={<Link to={'/submitter/myrequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
+                    <Descriptions title="Purchase Request · Shipping Address" size='small' extra={<Link to={'/fiscalstaff/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Full Name">{pur_fullname}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 1">{pur_addressline1}</Descriptions.Item>
                         <Descriptions.Item label="Address Line 2">{pur_addressline2}</Descriptions.Item>
@@ -243,7 +243,7 @@ class SubmitterDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Reimbursement · Requester Information" size='small' extra={<Link to={'/submitter/myrequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
+                    <Descriptions title="Reimbursement · Requester Information" size='small' extra={<Link to={'/fiscalstaff/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Reimbursement for" span={3}>{rei_reimbursementfor}</Descriptions.Item>
                         { 
                             rei_reimbursementfor === 'On behalf of someone' ? 
@@ -336,7 +336,7 @@ class SubmitterDetailPage extends Component {
             
             return (
                 <Fragment>
-                    <Descriptions title="Travel Request · Travel Information" column={2} size='small' extra={<Link to={'/submitter/myrequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
+                    <Descriptions title="Travel Request · Travel Information" column={2} size='small' extra={<Link to={'/fiscalstaff/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Legal First Name">{tra_legalfirstname}</Descriptions.Item>
                         <Descriptions.Item label="Legal Last Name">{tra_legallastname}</Descriptions.Item>
                         <Descriptions.Item label="Departure">{tra_departure}</Descriptions.Item>
@@ -451,7 +451,7 @@ class SubmitterDetailPage extends Component {
             })
             return (
                 <Fragment>
-                    <Descriptions title="Travel Reimbursement · Travel Reimbursement" size='small' extra={<Link to={'/submitter/myrequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
+                    <Descriptions title="Travel Reimbursement · Travel Reimbursement" size='small' extra={<Link to={'/fiscalstaff/approverequests'}><Button type="primary" onClick={backToTable}>Back to Form Table</Button></Link>}>
                         <Descriptions.Item label="Reimbursed before this trip?" span={3}>{trarei_reimbursedbefore}</Descriptions.Item>
                         { trarei_reimbursedbefore === 'Yes' ? <Descriptions.Item label="Reference Number" span={3}>{trarei_referencenumber}</Descriptions.Item> : null }
                         <Descriptions.Item label="Requesting this reimbursement for yourself" span={3}>{trarei_requestforself}</Descriptions.Item>
@@ -602,16 +602,16 @@ const mapStateToProps = (state) => {
         login: state.getIn(['login', 'login']),
         email: state.getIn(['login', 'profileObj', 'email']),
         role: state.getIn(['login', 'user', 'role']),
-        ft_selected_formdata: state.getIn(['submitter_myrequests', 'ft_selected_formdata']),
+        ft_selected_formdata: state.getIn(['fiscalstaff_approverequests', 'ft_selected_formdata']),
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         backToTable() {
-            dispatch(submitterMyRequestsActionCreators.backToTable())
+            dispatch(fiscalstaffApproveRequestsActionCreators.backToTable())
         },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubmitterDetailPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ApproverDetailPage);
